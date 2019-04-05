@@ -12,7 +12,7 @@ import numpy as np
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 10
+batchsize = 200
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/img_snaps1.npy")
@@ -40,6 +40,6 @@ val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.n
 model = u_net_superres_model.create_u_net_superres_model(input_size=input_size)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=20, callbacks=[cp_callback, tensorboard],
+model.fit_generator(train_data_generator,  epochs=30, callbacks=[cp_callback, tensorboard],
                     validation_data=val_data_generator, shuffle=True)
 
