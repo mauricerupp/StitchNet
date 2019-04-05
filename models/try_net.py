@@ -1,5 +1,4 @@
 import loss
-import numpy as np
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *

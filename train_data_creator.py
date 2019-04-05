@@ -52,16 +52,19 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         # save target, snaps and the covered area as numpy arrays and all the paths in one array
         img_target = np.array(img_target)
         covered_pixels = np.array(covered_pixels)
+        #plt.imshow(covered_pixels[:,:,0])
+        #plt.show()
+
         img_target = np.concatenate((img_target, covered_pixels), axis=2)
-        np.save(target_dir + "/" + "img_target" + str(sample_count), img_target)
-        targets_paths.append(target_dir + "/" + "img_target" + str(sample_count) + ".npy")
+        np.save(target_dir + "/" + "target" + str(sample_count), img_target)
+        targets_paths.append(target_dir + "/" + "target" + str(sample_count) + ".npy")
 
         img_snaps = np.array(img_snaps)
-        np.save(snap_dir + "/" + "img_snaps" + str(sample_count), img_snaps)
-        snaps_paths.append(snap_dir + "/" + "img_snaps" + str(sample_count) + ".npy")
+        np.save(snap_dir + "/" + "snaps" + str(sample_count), img_snaps)
+        snaps_paths.append(snap_dir + "/" + "snaps" + str(sample_count) + ".npy")
 
         #plt.imshow(img_overlapse)
-       # plt.show()
+        #plt.show()
 
         # update the overall coverage
         coverage += np.count_nonzero(covered_pixels) / covered_pixels.size
@@ -89,7 +92,7 @@ def create_snap_path_translation(img_target, snaps_per_sample, snap_size):
     (h_snap, w_snap) = (snap_size[0], snap_size[1])
 
     # initialize the top left corner of the first snap roughly in the top middle
-    top_left_corner = np.array([ran.randint(0, int(h_target - 1.5*h_snap)), ran.randint(int(w_target / 5), int(w_target - 1.5*w_snap))])
+    top_left_corner = np.array([ran.randint(0, int(h_target / 3)), ran.randint(w_snap, int(w_target / 2))])
     img_snaps = img_target[top_left_corner[0]: top_left_corner[0] + h_snap,
                top_left_corner[1]: top_left_corner[1] + w_snap]
     angle = 0
@@ -201,14 +204,14 @@ def scale_img(img, des_size):
     return cv2.resize(img, (new_size[1], new_size[0]))
 
 
-create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/RAW_train',
-                     '/home/maurice/Dokumente/Try_Models/coco_try/train/targets',
-                     '/home/maurice/Dokumente/Try_Models/coco_try/train/snaps',
-                     '/home/maurice/Dokumente/Try_Models/coco_try/train',
+create_training_data('/data/cvg/maurice/unprocessed/coco_train',
+                     '/data/cvg/maurice/processed/coco/train/targets',
+                     '/data/cvg/maurice/processed/coco/train/snaps',
+                     '/data/cvg/maurice/processed/coco/train/',
                      (400, 600), (100, 150), 8)
 
-create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/RAW_val',
-                     '/home/maurice/Dokumente/Try_Models/coco_try/val/targets',
-                     '/home/maurice/Dokumente/Try_Models/coco_try/val/snaps',
-                     '/home/maurice/Dokumente/Try_Models/coco_try/val',
+create_training_data('/data/cvg/maurice/unprocessed/coco_val',
+                     '/data/cvg/maurice/processed/coco/val/targets',
+                     '/data/cvg/maurice/processed/coco/val/snaps',
+                     '/data/cvg/maurice/processed/coco/val/',
                      (400, 600), (100, 150), 8)
