@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 # Set the constants
 # where we would output the sample images if needed:
 TRAINDIR = '/home/maurice/Dokumente/Try_Models/coco_try/test'
-# amount of frames we take per picture:
+
+os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 
 # initialize the global variables
