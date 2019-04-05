@@ -64,6 +64,3 @@ def create_u_net_superres_model(pretrained_weights=None, input_size=None):
         model.load_weights(pretrained_weights)
 
     return model
-
-mod = create_u_net_superres_model(input_size=(100,150,24))
-plot_model(mod, to_file='unet-superres_1.png')
