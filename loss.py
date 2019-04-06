@@ -11,4 +11,4 @@ def my_loss_l1(y_true, y_pred):
     """
     covered_area = y_true[:, :, :, -3:]
     y_true = y_true[:, :, :, :-3]
-    return K.mean(K.abs(y_true - y_pred) * covered_area)
+    return K.sum(K.abs(y_true - y_pred) * covered_area)
