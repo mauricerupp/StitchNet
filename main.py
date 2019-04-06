@@ -20,10 +20,10 @@ input_size = x_0.shape
 x_0 = None
 
 # name the model
-NAME = "Image-Stitcher-u-net-{}".format(int(time.time()))
+NAME = "Image-Stitcher-u-net-superres1{}".format(int(time.time()))
 
 # make a TensorBoard
-tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/tb_logs{}'.format(NAME))
+tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/tb_logs/{}'.format(NAME))
 
 # create checkpoint callbacks to store the training weights
 checkpoint_path = '/data/cvg/maurice/logs/weight_logs'
