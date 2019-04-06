@@ -40,6 +40,6 @@ val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.n
 model = u_net_superres_model.create_u_net_superres_model(input_size=input_size)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=15, callbacks=[cp_callback, tensorboard],
+model.fit_generator(train_data_generator,  epochs=10, callbacks=[cp_callback, tensorboard],
                     validation_data=val_data_generator, shuffle=True)
 
