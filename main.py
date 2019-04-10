@@ -36,7 +36,7 @@ val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.n
                                                  paths_dir_val + "/targets_paths.npy", batchsize)
 
 # setup the model
-model = u_net_convtrans_model1.create_u_net_superres_model(input_size=input_size)
+model = u_net_convtrans_model1.create_model(input_size=input_size)
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=10, callbacks=[cp_callback, tensorboard],
