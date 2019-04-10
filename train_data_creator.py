@@ -68,11 +68,11 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         #plt.show()
 
         img_target = np.concatenate((img_target, covered_pixels), axis=2)
-        np.save(target_dir + "/" + "target" + str(sample_count), img_target)
+        np.savez(target_dir + "/" + "target" + str(sample_count), img_target)
         targets_paths.append(target_dir + "/" + "target" + str(sample_count) + ".npy")
 
         img_snaps = np.array(img_snaps)
-        np.save(snap_dir + "/" + "snaps" + str(sample_count), img_snaps)
+        np.savez(snap_dir + "/" + "snaps" + str(sample_count), img_snaps)
         snaps_paths.append(snap_dir + "/" + "snaps" + str(sample_count) + ".npy")
 
         #plt.imshow(img_overlapse)
@@ -85,8 +85,8 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         overlapse += (np.count_nonzero(img_overlapse !=1)-np.count_nonzero(img_overlapse == 0)) / img_overlapse.size
 
     # save the paths as numpy arrays
-    np.save(paths_dir + "/targets_paths", targets_paths)
-    np.save(paths_dir + "/snaps_paths", snaps_paths)
+    np.savez(paths_dir + "/targets_paths", targets_paths)
+    np.savez(paths_dir + "/snaps_paths", snaps_paths)
 
     print("Coverage of the created dataset is {:.2%}".format(coverage / sample_count))
     print("Overlapse of the created dataset is {:.2%}".format(overlapse / sample_count))

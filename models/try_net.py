@@ -1,4 +1,4 @@
-import loss
+import l1_loss
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
@@ -15,7 +15,7 @@ def try_net(pretrained_weights=None, input_size=None):
     conv2 = Conv2D(3, 1, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(up2)
 
     model = Model(inputs=inputs, outputs=conv2)
-    model.compile(optimizer='adam', loss=loss.my_loss_l1, metrics=['accuracy'])
+    model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
     model.summary()
 
     if pretrained_weights:

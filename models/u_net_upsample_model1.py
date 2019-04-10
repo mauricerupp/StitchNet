@@ -1,4 +1,4 @@
-import loss
+import l1_loss
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
@@ -52,36 +52,12 @@ def create_u_net_superres_model(pretrained_weights=None, input_size=None):
     merge9 = concatenate([conv1, up9], axis=3)
     conv9 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(merge9)
     conv9 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv9)
-    # super-res-net:
-    #1. zero padding 2. conv 64 3, 3. relu, inputsize = outputsize!
-    conv10 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv9)
-    conv11 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv10)
-    conv12 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv11)
-    conv13 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv12)
-    conv14 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv13)
-    conv15 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv14)
-    conv16 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv15)
-    conv17 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv16)
-    conv18 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv17)
-    conv19 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv18)
-    conv20 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv19)
-    conv21 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv20)
-    conv22 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv21)
-    conv23 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv22)
-    conv24 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv23)
-    conv25 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv24)
-    conv26 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv25)
-    conv27 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv26)
-    conv28 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv27)
-    conv29 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv28)
-    conv30 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv29)
-    conv31 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv30)
     up10 = Conv2D(64, 2, activation='relu', padding='same', kernel_initializer='he_normal')(
-        UpSampling2D(size=(2, 2))(conv31))
+        UpSampling2D(size=(2, 2))(conv9))
     up11 = UpSampling2D(size=(2, 2))(up10)
     out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(up11)
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer='adam', loss=loss.my_loss_l1, metrics=['accuracy'])
+    model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
     model.summary()
 
     if pretrained_weights:

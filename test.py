@@ -1,6 +1,6 @@
 import numpy as np
 import math
-import loss
+import l1_loss
 import tensorflow.keras.backend as K
 import tensorflow as tf
 
