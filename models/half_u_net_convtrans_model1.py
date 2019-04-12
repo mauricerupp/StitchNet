@@ -2,7 +2,7 @@ import l1_loss
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
-from tensorflow.python.keras.layers import Conv2D, MaxPooling2D, UpSampling2D, ZeroPadding2D
+from tensorflow.python.keras.optimizers import *
 from tensorflow.python.keras.utils import plot_model
 
 
@@ -11,8 +11,8 @@ def create_model(pretrained_weights=None, input_size=None):
     This arcitecture was inspired by the approach of progressive upsampling of the image
     with increased depth of the receptive field opposed to standard u-nets:
     each first layer has a filter of 5x5 instead of 3x3 and the second has a dilation of 3 instead of 1
-
-    also the learning rate was set higher than the initial value (0.001)
+    also the initial learning rate was set higher than the initial value (0.001), this is due to the
+    depth of the network, which is quite deep
     :param pretrained_weights:
     :param input_size:
     :return:
@@ -69,13 +69,10 @@ def create_model(pretrained_weights=None, input_size=None):
 
     out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(conv10)
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
+    model.compile(optimizer=Adam(lr=0.01), loss=l1_loss.my_loss_l1, metrics=['accuracy'])
     model.summary()
 
     if pretrained_weights:
         model.load_weights(pretrained_weights)
 
     return model
-
-mod = create_model(input_size=(128,128,27))
-plot_model(mod, to_file="half_unet_convtrans_1.png")
