@@ -3,10 +3,16 @@ import l1_loss
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D, UpSampling2D, ZeroPadding2D
-from tensorflow.python.keras.utils import plot_model
 
 
-def create_u_net_superres_model(pretrained_weights=None, input_size=None):
+def create_model(pretrained_weights=None, input_size=None):
+    """
+    This model was inspired by "Accurate Image Super Resolution Using Very Deep CNNs"
+    but the upsampling happens in the end, which is wrongly implemented
+    :param pretrained_weights:
+    :param input_size:
+    :return:
+    """
     inputs = Input(input_size)
     conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(inputs)
     conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv1)
@@ -53,7 +59,7 @@ def create_u_net_superres_model(pretrained_weights=None, input_size=None):
     conv9 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(merge9)
     conv9 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv9)
     # super-res-net:
-    #1. zero padding 2. conv 64 3, 3. relu, inputsize = outputsize!
+    # 1. zero padding 2. conv 64 3, 3. relu, inputsize = outputsize!
     conv10 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv9)
     conv11 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv10)
     conv12 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv11)
