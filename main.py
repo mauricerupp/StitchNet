@@ -19,7 +19,7 @@ input_size = x_0.shape
 x_0 = None
 
 # name the model
-NAME = "half_u_net_convtrans_model1"
+NAME = "u-net-convtrans-model2"
 
 # make a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
