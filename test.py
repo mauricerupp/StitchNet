@@ -4,13 +4,6 @@ import l1_loss
 import tensorflow.keras.backend as K
 import tensorflow as tf
 
-y_true1 = np.array([[[0, 2, 1, 1,1,1],[4, 2, 1,0,0,0]], [[3, 0, 5,1,1,1],[4, 4, 1,0,0,0]]])
-print(y_true1.shape)
-y_true1 = y_true1[0:1, 0:1]
-print(y_true1.shape)
-print(y_true1)
-print(4 * (100, 150))
-np.load()
 
 """
 y_true1 = np.array([[[0, 2, 1, 1,1,1],[4, 2, 1,0,0,0]], [[3, 0, 5,1,1,1],[4, 4, 1,0,0,0]]])
@@ -25,4 +18,15 @@ loss = loss.my_loss_l1(y_true, y_pred)
 print(sess.run(loss))
 print(loss.eval())
 sess.close()
+
+
+
+
+y_true1 = np.array([[[0, 2, 1, 1,1,1],[4, 2, 1,0,0,0]], [[3, 0, 5,1,1,1],[4, 4, 1,0,0,0]]])
+print(y_true1.shape)
+y_true1 = y_true1[0:1, 0:1]
+print(y_true1.shape)
+print(y_true1)
+print(4 * (100, 150))
+np.load()
 """
