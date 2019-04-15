@@ -281,6 +281,7 @@ create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/snaps',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train',
                      (256, 256), (128, 128), 9)
+
 """
 create_training_data('/data/cvg/maurice/unprocessed/coco_train',
                      '/data/cvg/maurice/processed/coco/train/targets',
