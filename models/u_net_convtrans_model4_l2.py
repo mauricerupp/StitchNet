@@ -1,4 +1,4 @@
-import l1_loss
+import l2_loss
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
@@ -8,7 +8,7 @@ from tensorflow.python.keras.utils import plot_model
 
 def create_model(pretrained_weights=None, input_size=None):
     """
-    like model3, but with a full receptive field
+    like model3, but with a full receptive field and l2_loss
     receptive field from start to highest filter level: 120/128
     :param pretrained_weights:
     :param input_size:
@@ -59,8 +59,9 @@ def create_model(pretrained_weights=None, input_size=None):
     conv9 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv9)
     convtrans1 = Conv2DTranspose(32, 2, activation='relu', padding='same', kernel_initializer='he_normal', strides=(2,2))(conv9)
     out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(convtrans1)
+
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
+    model.compile(optimizer='adam', loss=l2_loss.my_loss_l2, metrics=['accuracy'])
     #model.summary()
 
     if pretrained_weights:
