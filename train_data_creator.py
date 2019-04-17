@@ -43,7 +43,7 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
             img_target = cv2.warpAffine(img_target, M, (h, w))
 
         # reshape the target to a size where we have enough space to move around
-        img_target = resize_img(img_target, (5*snap_size[0], 5*snap_size[1]))
+        img_target = resize_img(img_target, (4*snap_size[0], 4*snap_size[1]))
 
         # create the stack of image snaps of the target image w/ shape (h, w, 3 * snaps_per_sample)
         img_snaps, covered_pixels, img_overlapse, center_corner = create_snap_path_translation(img_target, snaps_per_sample, snap_size)
@@ -159,6 +159,7 @@ def create_snap_path_translation(img_target, snaps_per_sample, snap_size):
     h_center = int(top_left_corners_list[0] / snaps_per_sample + snap_size[0] / 2)
     w_center = int(top_left_corners_list[1] / snaps_per_sample + snap_size[1] / 2)
     center_corner = (h_center, w_center)
+    img_snaps = shuffle(img_snaps)
     assert img_snaps.shape == (h_snap, w_snap, 3 * snaps_per_sample) #since there are 3 channels per snap
     return img_snaps, covered_area, img_overlapse, center_corner
 
@@ -273,6 +274,20 @@ def crop(img, center, size):
     img = img[up:under, left:right]
     assert img.shape[:2] == (size[0], size[1])
     return img
+
+
+def shuffle(array):
+    """
+    shuffle the order of the images of an array, meaning the triplets of the third dimension of the array
+    :param array:
+    """
+    arr = np.arange(int(array.shape[2] / 3))
+    np.random.shuffle(arr)
+    shuffled = np.zeros_like(array)
+    for i in range(arr.shape[0]): #wrong since we have 1-er steps and not 3er steps
+        shuffled[3*i:3*i+2] = array[3*arr[i]:3*arr[i]+2]
+
+    return shuffled
 
 
 """

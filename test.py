@@ -4,22 +4,19 @@ import l1_loss
 import tensorflow.keras.backend as K
 import tensorflow as tf
 import u_net_convtrans_model2
+import u_net_convtrans_model3
 import cv2
 import scipy.misc
 
-model = u_net_convtrans_model2.create_model(pretrained_weights='/home/maurice/Dokumente/'
-                                                               'BA-Models_logs/u-net-convtrans-model2/weight_logs/',
-                                            input_size=(128,128,27))
-tester = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/snaps/snaps1.npy')
-tester = np.expand_dims(tester, axis=0)
-target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target1.npy')
-print(tester.shape)
-rgb = scipy.misc.toimage(target[:, :, :-3])
-scipy.misc.imshow(rgb)
-pred = model.predict(tester)
-print(pred.shape)
-print(pred)
-rgb = scipy.misc.toimage(pred[0, :, :, :])
+arr = np.arange(20)
+print(arr)
+np.random.shuffle(arr)
+print(arr)
+target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target4.npy')
+covered_area = target[:, :, -3:]
+target = target[:, :, :-3]
+target = target * covered_area
+rgb = scipy.misc.toimage(target)
 scipy.misc.imshow(rgb)
 
 """
