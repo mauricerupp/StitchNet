@@ -284,8 +284,9 @@ def shuffle(array):
     arr = np.arange(int(array.shape[2] / 3))
     np.random.shuffle(arr)
     shuffled = np.zeros_like(array)
-    for i in range(arr.shape[0]): #wrong since we have 1-er steps and not 3er steps
-        shuffled[3*i:3*i+2] = array[3*arr[i]:3*arr[i]+2]
+    print(shuffled.shape)
+    for i in range(arr.shape[0]):
+        shuffled[:,:,3*i:3*i+3] = array[:,:,3*arr[i]:3*arr[i]+3]
 
     return shuffled
 

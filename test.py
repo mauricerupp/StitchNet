@@ -8,16 +8,10 @@ import u_net_convtrans_model3
 import cv2
 import scipy.misc
 
-arr = np.arange(20)
-print(arr)
-np.random.shuffle(arr)
-print(arr)
-target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target4.npy')
-covered_area = target[:, :, -3:]
-target = target[:, :, :-3]
-target = target * covered_area
-rgb = scipy.misc.toimage(target)
-scipy.misc.imshow(rgb)
+tester = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/snaps/snaps1.npy')
+print(tester.shape)
+te = tester[:,:,:3]
+print(te.shape)
 
 """
 y_true1 = np.array([[[0, 2, 1, 1,1,1],[4, 2, 1,0,0,0]], [[3, 0, 5,1,1,1],[4, 4, 1,0,0,0]]])
