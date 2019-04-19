@@ -2,7 +2,6 @@ import l1_loss
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
-from tensorflow.python.keras.layers import Conv2D, MaxPooling2D, UpSampling2D, ZeroPadding2D
 from tensorflow.python.keras.utils import plot_model
 
 
@@ -60,7 +59,8 @@ def create_model(pretrained_weights=None, input_size=None):
     conv9 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv9)
     convtrans1 = Conv2DTranspose(32, 2, activation='relu', padding='same', kernel_initializer='he_normal',
                                  strides=(2, 2))(conv9)
-    out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(convtrans1)
+    dense1 = Dense(32, activation='relu', kernel_initializer='he_normal')(convtrans1)
+    out = Dense(3, activation='relu', kernel_initializer='he_normal')(dense1)
     model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
     #model.summary()
