@@ -44,6 +44,6 @@ for mod in models:
     model = mod.create_model(input_size=input_size)
 
     # train the model
-    model.fit_generator(train_data_generator,  epochs=17, callbacks=[cp_callback, tensorboard],
+    model.fit_generator(train_data_generator,  epochs=15, callbacks=[cp_callback, tensorboard],
                         validation_data=val_data_generator, shuffle=True)
 
