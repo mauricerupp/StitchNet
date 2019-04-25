@@ -14,13 +14,13 @@ import numpy as np
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 2
+batchsize = 10
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-models = [u_net_convtrans_model3_deblur, u_net_convtrans_model4, u_net_convtrans_model4_deblur]
+models = [u_net_convtrans_model4, u_net_convtrans_model4_deblur]
 
 for mod in models:
     # name the model
