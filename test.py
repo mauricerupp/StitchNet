@@ -10,8 +10,6 @@ import scipy.misc
 
 tester = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/snaps/snaps1.npy')
 print(tester.shape)
-te = tester[:,:,:3]
-print(te.shape)
 
 """
 y_true1 = np.array([[[0, 2, 1, 1,1,1],[4, 2, 1,0,0,0]], [[3, 0, 5,1,1,1],[4, 4, 1,0,0,0]]])

@@ -290,7 +290,7 @@ def shuffle(array):
     return shuffled
 
 
-"""
+
 create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/targets',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/snaps',
@@ -309,3 +309,4 @@ create_training_data('/data/cvg/maurice/unprocessed/coco_val',
                      '/data/cvg/maurice/processed/coco/val/snaps',
                      '/data/cvg/maurice/processed/coco/val/',
                      (256, 256), (128, 128), 9)
+"""
