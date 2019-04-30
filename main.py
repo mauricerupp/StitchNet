@@ -8,6 +8,7 @@ from tensorflow.python.keras.callbacks import TensorBoard
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import cv2
 
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
@@ -58,16 +59,16 @@ def image_predictor(epoch, logs):
 
         # save the result
         fig = plt.figure()
-        fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch + 1), fontsize=20)
+        fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch), fontsize=20)
         ax1 = fig.add_subplot(1, 3, 1)
         ax1.set_title('Y_True')
-        plt.imshow(y_true, interpolation='nearest')
+        plt.imshow(y_true[..., ::-1], interpolation='nearest')
         ax2 = fig.add_subplot(1, 3, 2)
         ax2.set_title('Y_True covered')
-        plt.imshow(covered_target, interpolation='nearest')
+        plt.imshow(covered_target[..., ::-1], interpolation='nearest')
         ax3 = fig.add_subplot(1, 3, 3)
         ax3.set_title('Prediction of model')
-        plt.imshow(y_pred[0], interpolation='nearest')
+        plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
         plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
 
 
