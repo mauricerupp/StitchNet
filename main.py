@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 83
+batchsize = 80
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
@@ -67,9 +67,7 @@ def image_predictor(epoch, logs):
         plt.imshow(covered_target, interpolation='nearest')
         ax3 = fig.add_subplot(1, 3, 3)
         ax3.set_title('Prediction of model')
-        plt.imshow(y_pred, interpolation='nearest')
-        figManager = plt.get_current_fig_manager()
-        figManager.window.showMaximized()
+        plt.imshow(y_pred[0], interpolation='nearest')
         plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch))
 
 

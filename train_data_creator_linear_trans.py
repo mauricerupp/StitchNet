@@ -282,12 +282,19 @@ def get_random_angle(h, w, point):
             return ran.uniform(math.pi + 0.2, 1.5*math.pi - 0.2)
 
 
-"""
+
 create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/targets',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/snaps',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train',
                      (256, 256), (128, 128), 5)
+
+create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
+                     '/home/maurice/Dokumente/Try_Models/coco_try/val/targets',
+                     '/home/maurice/Dokumente/Try_Models/coco_try/val/snaps',
+                     '/home/maurice/Dokumente/Try_Models/coco_try/val',
+                     (256, 256), (128, 128), 5)
+
 
 """
 create_training_data('/data/cvg/maurice/unprocessed/coco_train',
@@ -301,3 +308,5 @@ create_training_data('/data/cvg/maurice/unprocessed/coco_val',
                      '/data/cvg/maurice/processed/coco/val/snaps',
                      '/data/cvg/maurice/processed/coco/val/',
                      (256, 256), (128, 128), 5)
+
+"""
