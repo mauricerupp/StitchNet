@@ -34,7 +34,6 @@ def create_model(pretrained_weights=None, input_size=None):
 
     up7 = Conv2D(256, 2, activation='relu', padding='same', kernel_initializer='he_normal')(
         UpSampling2D(size=(2, 2))(conv6))
-    up7 = ZeroPadding2D(((1, 0), (1, 0)))(up7)
 
     merge7 = concatenate([conv3, up7], axis=3)
     conv7 = Conv2D(256, 3, activation='relu', padding='same', kernel_initializer='he_normal')(merge7)
@@ -42,7 +41,6 @@ def create_model(pretrained_weights=None, input_size=None):
 
     up8 = Conv2D(128, 2, activation='relu', padding='same', kernel_initializer='he_normal')(
         UpSampling2D(size=(2, 2))(conv7))
-    up8 = ZeroPadding2D(((0, 0), (1, 0)))(up8)
     merge8 = concatenate([conv2, up8], axis=3)
     conv8 = Conv2D(128, 3, activation='relu', padding='same', kernel_initializer='he_normal')(merge8)
     conv8 = Conv2D(128, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv8)
@@ -57,7 +55,7 @@ def create_model(pretrained_weights=None, input_size=None):
     out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(convtrans2)
     model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
-    #model.summary()
+    model.summary()
 
     if pretrained_weights:
         model.load_weights(pretrained_weights)

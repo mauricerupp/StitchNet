@@ -63,7 +63,7 @@ def create_model(pretrained_weights=None, input_size=None):
     out = Dense(3, activation='relu', kernel_initializer='he_normal')(dense1)
     model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
-    #model.summary()
+    model.summary()
 
     if pretrained_weights:
         model.load_weights(pretrained_weights)
