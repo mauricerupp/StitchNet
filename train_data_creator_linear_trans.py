@@ -61,10 +61,13 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         #plt.imshow(img_overlapse)
         #plt.show()
 
+        """
         # save the frame as an image (debugging)
         cv2.imwrite(os.path.join(TRAINDIR, 'pic{}-.jpeg'.format(sample_count)), img_target)
-
-        
+        """
+        assert img_target.shape[:2] == (target_size)
+        assert covered_pixels.shape[:2] == (target_size)
+        assert img_snaps.shape == (snap_size[0], snap_size[1], 3*snaps_per_sample)
         # save target, snaps and the covered area as numpy arrays and all the paths in one array
         img_target = np.array(img_target)
         covered_pixels = np.array(covered_pixels)
@@ -87,7 +90,6 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
 
         # update the overall overlapse
         overlapse += (np.count_nonzero(img_overlapse !=1)-np.count_nonzero(img_overlapse == 0)) / np.count_nonzero(img_overlapse)
-
     # save the paths as numpy arrays
     np.save(paths_dir + "/targets_paths", targets_paths)
     np.save(paths_dir + "/snaps_paths", snaps_paths)
