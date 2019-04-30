@@ -58,7 +58,7 @@ def image_predictor(epoch, logs):
 
         # save the result
         fig = plt.figure()
-        fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch), fontsize=20)
+        fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch + 1), fontsize=20)
         ax1 = fig.add_subplot(1, 3, 1)
         ax1.set_title('Y_True')
         plt.imshow(y_true, interpolation='nearest')
@@ -68,7 +68,7 @@ def image_predictor(epoch, logs):
         ax3 = fig.add_subplot(1, 3, 3)
         ax3.set_title('Prediction of model')
         plt.imshow(y_pred[0], interpolation='nearest')
-        plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch))
+        plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
 
 
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
