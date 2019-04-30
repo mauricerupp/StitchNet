@@ -35,7 +35,7 @@ cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only
 # create a tester, that predicts the same few images after every epoch and stores them as png
 # we take 4 from the training and 4 from the validation set
 def image_predictor(epoch, logs):
-    for i in range(8):
+    for i in range(1,9):
         # load X
         if i%2 == 0:
             x_pred = np.load('/data/cvg/maurice/processed/coco/train/snaps/snaps{}.npy'.format(i))

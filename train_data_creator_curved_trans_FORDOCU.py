@@ -21,11 +21,14 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
     assert snaps_per_sample > 0
     snaps_paths = []
     targets_paths = []
+    global coverage
+    global sample_count
+    global overlapse
+    sample_count = 0
+    coverage = 0
+    overlapse = 0
 
     for img in os.listdir(raw_dir):
-        global coverage
-        global sample_count
-        global overlapse
 
         # read the image
         img_target = cv2.imread(os.path.join(raw_dir, img))
