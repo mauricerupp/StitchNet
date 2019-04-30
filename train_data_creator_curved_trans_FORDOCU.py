@@ -4,12 +4,6 @@ import cv2
 import random as ran
 import math
 import matplotlib.pyplot as plt
-
-
-# Set the constants
-# where we would output the sample images if needed:
-TRAINDIR = '/home/maurice/Dokumente/Try_Models/coco_try/test'
-
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 
@@ -37,6 +31,9 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         img_target = cv2.imread(os.path.join(raw_dir, img))
         (h, w) = img_target.shape[:2]
 
+        figtemp = plt.imshow(cv2.cvtColor(img_target, cv2.COLOR_BGR2RGB))
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-initial.png".format(sample_count))
+        
         # if the image is upright, turn it by 90 degrees
         if h > w:
             center = (w // 2, h // 2)
@@ -51,13 +48,19 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
             img_target = cv2.warpAffine(img_target, M, (h, w))
             (h, w) = img_target.shape[:2]
 
+        figtemp = plt.imshow(cv2.cvtColor(img_target, cv2.COLOR_BGR2RGB))
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-rotated.png".format(sample_count))
+
         # reshape the target to a size where we have enough space to move around if its to small
         # since h <= w, we can only adjust it with h
         if h < target_size[0]:
             img_target = cv2.resize(img_target, (int(w*(target_size[0]/h)), target_size[0])) # (w, h) contrary to all
 
+        figtemp = plt.imshow(cv2.cvtColor(img_target, cv2.COLOR_BGR2RGB))
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-zoomed.png".format(sample_count))
+
         # create the stack of image snaps of the target image w/ shape (h, w, 3 * snaps_per_sample)
-        img_snaps, covered_pixels, img_overlapse, middle_frame_center = create_linear_translation_path(img_target, snaps_per_sample, snap_size)
+        img_snaps, covered_pixels, img_overlapse, middle_frame_center = create_curved_translation_path(img_target, snaps_per_sample, snap_size)
         sample_count += 1
 
         # crop the target around the covered area
@@ -69,10 +72,6 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         #plt.imshow(img_overlapse)
         #plt.show()
 
-        """
-        # save the frame as an image (debugging)
-        cv2.imwrite(os.path.join(TRAINDIR, 'pic{}-.jpeg'.format(sample_count)), img_target)
-        """
         assert img_target.shape[:2] == (target_size)
         assert covered_pixels.shape[:2] == (target_size)
         assert img_snaps.shape == (snap_size[0], snap_size[1], 3*snaps_per_sample)
@@ -90,6 +89,17 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         np.save(snap_dir + "/" + "snaps" + str(sample_count), img_snaps)
         snaps_paths.append(snap_dir + "/" + "snaps" + str(sample_count) + ".npy")
 
+        temp= img_target[:,:,:-3]
+        fig5 = plt.imshow(temp[...,::-1])
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-target-cropped.png".format(sample_count - 1))
+
+        temp = covered_pixels * temp
+        fig7 = plt.imshow(temp[..., ::-1])
+        plt.savefig( "/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-coveredtarget-cropped.png".format(sample_count - 1))
+
+        fig8 = plt.imshow(img_overlapse)
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-cropped.png".format(sample_count - 1))
+
         # update the overall coverage
         coverage += np.count_nonzero(covered_pixels) / covered_pixels.size
 
@@ -104,7 +114,7 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
     print("Your data is stored in:" + str(raw_dir) + "and " + str(snap_dir))
 
 
-def create_linear_translation_path(img_target, snaps_per_sample, snap_size):
+def create_curved_translation_path(img_target, snaps_per_sample, snap_size):
 
     # initialization of local variables
     h_target = img_target.shape[0]
@@ -123,6 +133,15 @@ def create_linear_translation_path(img_target, snaps_per_sample, snap_size):
 
     covered_area[top_left_corner[0]: top_left_corner[0] + h_snap,
     top_left_corner[1]: top_left_corner[1] + w_snap][:] = 1
+
+    temp = covered_area * img_target
+    fig1 = plt.imshow(temp[...,::-1])
+
+    global sample_count
+    plt.savefig("/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-{}.png".format(sample_count, 0))
+
+    #global sample_count
+    #plt.savefig("/home/maurice/Dokumente/BA/Docu_linear_trainingdata/img{}-{}.png".format(sample_count, iterationCount))
 
     # get an angle according to which quadrant the first corner is (fixed since this is a linear translation)
     angle = get_random_angle(h_target-h_snap, w_target-w_snap, top_left_corner)
@@ -153,6 +172,11 @@ def create_linear_translation_path(img_target, snaps_per_sample, snap_size):
 
         # concatenate the new made snap with the "old" snaps
         img_snaps = np.concatenate((img_snaps, new_snap), axis=2)
+        temp = covered_area * img_target
+        fig1 = plt.imshow(temp[...,::-1])
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-{}.png".format(sample_count, iterationCount + 1))
+        fig2 = plt.imshow(img_overlapse)
+        plt.savefig( "/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-{}-overlapse.png".format(sample_count, iterationCount + 1))
 
     assert img_snaps.shape == (h_snap, w_snap, 3 * snaps_per_sample) #since there are 3 channels per snap
     return img_snaps, covered_area, img_overlapse, middle_frame_center
@@ -280,7 +304,7 @@ def get_random_angle(h, w, point):
             return ran.uniform(math.pi + 0.2, 1.5*math.pi - 0.2)
 
 
-"""
+
 create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/targets',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/snaps',
@@ -299,3 +323,4 @@ create_training_data('/data/cvg/maurice/unprocessed/coco_val',
                      '/data/cvg/maurice/processed/coco/val/snaps',
                      '/data/cvg/maurice/processed/coco/val/',
                      (256, 256), (128, 128), 5)
+"""
