@@ -6,7 +6,7 @@ model_name = u_net_convtrans_model3
 
 model = model_name.create_model(pretrained_weights=
                                 '/home/maurice/Dokumente/BA-Models_logs/unshuffled_samples/{}/weight_logs/'.format(model_name.__name__),
-                                input_size=(128,128,27))
+                                input_size=(128,128,15))
 
 for i in range(1,20):
     # load X
