@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 80
+batchsize = 90
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
@@ -58,7 +58,7 @@ def image_predictor(epoch, logs):
 
         # save the result
         fig = plt.figure()
-        fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch.__name__), fontsize=20)
+        fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch), fontsize=20)
         ax1 = fig.add_subplot(1, 3, 1)
         ax1.set_title('Y_True')
         plt.imshow(y_true, interpolation='nearest')
@@ -70,7 +70,7 @@ def image_predictor(epoch, logs):
         plt.imshow(y_pred, interpolation='nearest')
         figManager = plt.get_current_fig_manager()
         figManager.window.showMaximized()
-        plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch.__name__))
+        plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch))
 
 
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
@@ -85,6 +85,7 @@ val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.n
 model = current_model.create_model(input_size=input_size)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=20, callbacks=[cp_callback, tensorboard, cb_imagepredict],
+model.fit_generator(train_data_generator,  epochs=20,
+                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 

@@ -9,7 +9,14 @@ import cv2
 import scipy.misc
 import os
 import matplotlib.pyplot as plt
-print("hello {}, {}".format(cv2.__name__, 6))
+x = np.array([[10,50,30], [20,30,40]])
+y = np.array([20,30,40])
+
+x2 = np.array([100,20,10])
+y2 = np.array([20,70,60])
+
+plt.plot(x, marker="o", linestyle='-')
+plt.show()
 """
 # load Y
 target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target{}.npy'.format(5))

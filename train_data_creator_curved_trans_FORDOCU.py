@@ -120,6 +120,7 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
 def create_curved_translation_path(img_target, snaps_per_sample, snap_size):
 
     # initialization of local variables
+    top_left_corners_list = []
     h_target = img_target.shape[0]
     w_target = img_target.shape[1]
     covered_area = np.zeros([h_target, w_target, 3], dtype=int)
@@ -143,11 +144,10 @@ def create_curved_translation_path(img_target, snaps_per_sample, snap_size):
     global sample_count
     plt.savefig("/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-{}.png".format(sample_count, 0))
 
-    #global sample_count
-    #plt.savefig("/home/maurice/Dokumente/BA/Docu_linear_trainingdata/img{}-{}.png".format(sample_count, iterationCount))
-
     # get an angle according to which quadrant the first corner is (fixed since this is a linear translation)
     angle = get_random_angle(h_target-h_snap, w_target-w_snap, top_left_corner)
+
+    top_left_corners_list = top_left_corner.copy()
 
     for iterationCount in range(snaps_per_sample -1):
         if iterationCount == int(snaps_per_sample/2):
@@ -160,9 +160,12 @@ def create_curved_translation_path(img_target, snaps_per_sample, snap_size):
         img_overlapse[top_left_corner[0]: top_left_corner[0] + h_snap,
                      top_left_corner[1]: top_left_corner[1] + w_snap] += 1
 
-        # update the position of the top left corner of our snap
-        top_left_corner = update_frame_position(top_left_corner, angle, h_snap, h_target, w_snap, w_target)
+        # update the angle:
+        angle += ran.uniform(-math.pi/3, math.pi/3)
 
+        # update the position of the top left corner of our snap
+        top_left_corner, angle = update_frame_position(top_left_corner, angle, h_snap, h_target, w_snap, w_target)
+        top_left_corners_list += top_left_corner
         # update and save the snap
         new_snap = img_target[top_left_corner[0]: top_left_corner[0] + h_snap,
                     top_left_corner[1]: top_left_corner[1] + w_snap]
@@ -179,7 +182,12 @@ def create_curved_translation_path(img_target, snaps_per_sample, snap_size):
         fig1 = plt.imshow(temp[...,::-1])
         plt.savefig("/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-{}.png".format(sample_count, iterationCount + 1))
         fig2 = plt.imshow(img_overlapse)
+        #plt.show()
         plt.savefig( "/home/maurice/Dokumente/BA/Docu_curved_trainingdata/img{}-{}-overlapse.png".format(sample_count, iterationCount + 1))
+
+    h_center = int(top_left_corners_list[0] / snaps_per_sample + snap_size[0] / 2)
+    w_center = int(top_left_corners_list[1] / snaps_per_sample + snap_size[1] / 2)
+    middle_frame_center = (h_center, w_center)
 
     assert img_snaps.shape == (h_snap, w_snap, 3 * snaps_per_sample) #since there are 3 channels per snap
     return img_snaps, covered_area, img_overlapse, middle_frame_center
@@ -191,7 +199,7 @@ def update_frame_position(topleft_corner, angle, h_snap, h_target, w_snap, w_tar
     assert topleft_corner[1] >= 0
 
     # create the stepsize according to our snap size in order to have overlapping images of around 50%
-    step_size = min(w_snap, h_snap) / ran.uniform(4, 1.5)
+    step_size = min(w_snap, h_snap) / ran.uniform(3, 1.5)
 
     # check if the new frame would be completely inside the picture
     if 0 < topleft_corner[0] + round(step_size * math.sin(angle)) < h_target - h_snap \
@@ -218,7 +226,7 @@ def update_frame_position(topleft_corner, angle, h_snap, h_target, w_snap, w_tar
     topleft_corner[0] = topleft_corner[0] + round(step_size * math.sin(angle))
     topleft_corner[1] = topleft_corner[1] + round(step_size * math.cos(angle))
 
-    return topleft_corner
+    return topleft_corner, (angle % (2*math.pi))
 
 
 def resize_img(img, desired_size):
@@ -312,7 +320,7 @@ create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/targets',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/snaps',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train',
-                     (256, 256), (128, 128), 5)
+                     (256, 256), (128, 128), 7)
 
 """
 create_training_data('/data/cvg/maurice/unprocessed/coco_train',
