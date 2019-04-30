@@ -9,7 +9,7 @@ import cv2
 import scipy.misc
 import os
 import matplotlib.pyplot as plt
-print("hello {}, {}".format(5, 6))
+print("hello {}, {}".format(cv2.__name__, 6))
 """
 # load Y
 target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target{}.npy'.format(5))
