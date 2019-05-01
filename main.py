@@ -1,6 +1,6 @@
 # own classes
 import batch_generator
-import u_net_convtrans_model2
+import u_net_convtrans_model2_HIGH_LR
 
 # packages
 from tensorflow import keras
@@ -13,13 +13,13 @@ import cv2
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 80
+batchsize = 82
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = u_net_convtrans_model2
+current_model = u_net_convtrans_model2_HIGH_LR
 
 # name the model
 NAME = str(current_model.__name__)
@@ -36,7 +36,7 @@ cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only
 # create a tester, that predicts the same few images after every epoch and stores them as png
 # we take 4 from the training and 4 from the validation set
 def image_predictor(epoch, logs):
-    for i in range(1,9):
+    for i in range(1,13):
         # load X
         if i%2 == 0:
             x_pred = np.load('/data/cvg/maurice/processed/coco/train/snaps/snaps{}.npy'.format(i))
@@ -59,7 +59,7 @@ def image_predictor(epoch, logs):
 
         # save the result
         fig = plt.figure()
-        fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch), fontsize=20)
+        fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch + 1), fontsize=20)
         ax1 = fig.add_subplot(1, 3, 1)
         ax1.set_title('Y_True')
         plt.imshow(y_true[..., ::-1], interpolation='nearest')
@@ -84,7 +84,7 @@ val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.n
 model = current_model.create_model(input_size=input_size)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=20,
+model.fit_generator(train_data_generator,  epochs=15,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 

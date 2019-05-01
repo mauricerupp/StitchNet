@@ -2,7 +2,6 @@ import l1_loss
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
-from tensorflow.python.keras.utils import plot_model
 
 
 def create_model(pretrained_weights=None, input_size=None):

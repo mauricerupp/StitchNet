@@ -1,13 +1,4 @@
 import numpy as np
-import math
-import l1_loss
-import tensorflow.keras.backend as K
-import tensorflow as tf
-import u_net_convtrans_model2
-import u_net_convtrans_model3
-import cv2
-import scipy.misc
-import os
 import matplotlib.pyplot as plt
 x = np.array([[10,50,30], [20,30,40]])
 y = np.array([20,30,40])

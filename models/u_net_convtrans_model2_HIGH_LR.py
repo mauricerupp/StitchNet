@@ -2,7 +2,7 @@ import l1_loss
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
-from tensorflow.python.keras.layers import Conv2D, MaxPooling2D
+from tensorflow.python.keras.optimizers import adam
 
 
 def create_model(pretrained_weights=None, input_size=None):
@@ -55,7 +55,7 @@ def create_model(pretrained_weights=None, input_size=None):
 
     out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(convtrans1)
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
+    model.compile(optimizer=adam(lr=0.01), loss=l1_loss.my_loss_l1, metrics=['accuracy'])
     #model.summary()
 
     if pretrained_weights:
