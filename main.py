@@ -22,7 +22,7 @@ x_0 = None
 current_model = u_net_convtrans_model2
 
 # name the model
-NAME = str(current_model.__name__) + "divby255"
+NAME = str(current_model.__name__) + "_divby255"
 
 # create a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
