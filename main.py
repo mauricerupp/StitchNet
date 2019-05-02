@@ -1,6 +1,6 @@
 # own classes
 import batch_generator
-import u_net_convtrans_model2_HIGH_LR
+import u_net_convtrans_model2
 
 # packages
 from tensorflow import keras
@@ -13,16 +13,16 @@ import cv2
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 82
+batchsize = 90
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = u_net_convtrans_model2_HIGH_LR
+current_model = u_net_convtrans_model2
 
 # name the model
-NAME = str(current_model.__name__)
+NAME = str(current_model.__name__) + "divby255"
 
 # create a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
@@ -43,6 +43,8 @@ def image_predictor(epoch, logs):
         else:
             x_pred = np.load('/data/cvg/maurice/processed/coco/val/snaps/snaps{}.npy'.format(i))
         x_pred = np.expand_dims(x_pred, axis=0)
+        # since we train the model with values between 0 and 1 now
+        x_pred = x_pred/255.0
 
         # load Y
         if i%2 == 0:
@@ -55,6 +57,7 @@ def image_predictor(epoch, logs):
 
         # predict y
         y_pred = model.predict(x_pred)
+        y_pred = y_pred * 255.0
         y_pred = np.array(np.rint(y_pred), dtype=int)
 
         # save the result

@@ -1,5 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
+target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target{}.npy'.format(5))
+print(target.shape)
+target = target /255.0
+print(target)
+target = target * 255.0
+print(target)
 x = np.array([[10,50,30], [20,30,40]])
 y = np.array([20,30,40])
 
