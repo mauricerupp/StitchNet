@@ -1,6 +1,6 @@
 # own classes
 import batch_generator
-import u_net_convtrans_model2
+import u_net_convtrans_model2_DENSE
 
 # packages
 from tensorflow import keras
@@ -19,7 +19,7 @@ paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = u_net_convtrans_model2
+current_model = u_net_convtrans_model2_DENSE
 
 # name the model
 NAME = str(current_model.__name__) + "_divby255"
