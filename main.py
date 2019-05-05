@@ -1,6 +1,6 @@
 # own classes
 import batch_generator
-import u_net_convtrans_model2_HIGH_DILATION
+import u_net_convtrans_model2_5x5_Kernel
 
 # packages
 from tensorflow import keras
@@ -19,7 +19,7 @@ paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = u_net_convtrans_model2_HIGH_DILATION
+current_model = u_net_convtrans_model2_5x5_Kernel
 
 # name the model
 NAME = str(current_model.__name__) + "_divby255"
@@ -36,7 +36,7 @@ cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only
 # create a tester, that predicts the same few images after every epoch and stores them as png
 # we take 4 from the training and 4 from the validation set
 def image_predictor(epoch, logs):
-    for i in range(1,13):
+    for i in range(1,15):
         # load X
         if i%2 == 0:
             x_pred = np.load('/data/cvg/maurice/processed/coco/train/snaps/snaps{}.npy'.format(i))
