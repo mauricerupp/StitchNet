@@ -1,6 +1,6 @@
 # own classes
 import batch_generator
-import u_net_convtrans_model2_5x5_Kernel
+import u_net_convtrans_model2_STRIDED
 
 # packages
 from tensorflow import keras
@@ -13,13 +13,13 @@ import cv2
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 60
+batchsize = 100
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = u_net_convtrans_model2_5x5_Kernel
+current_model = u_net_convtrans_model2_STRIDED
 
 # name the model
 NAME = str(current_model.__name__) + "_divby255"

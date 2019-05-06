@@ -1,21 +1,16 @@
 import numpy as np
+import tensorflow as tf
 import matplotlib.pyplot as plt
 
 
 target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target{}.npy'.format(5))
-print(target.shape)
-target = target /255.0
-print(target)
-target = target * 255.0
-print(target)
-x = np.array([[10,50,30], [20,30,40]])
-y = np.array([20,30,40])
+target = target[:, :, :-3]
+shape = target.shape
+mod_vgg16 = tf.keras.applications.vgg16.VGG16(include_top=False,
+                                                  input_shape=shape,
+                                                  input_tensor=target)
 
-x2 = np.array([100,20,10])
-y2 = np.array([20,70,60])
 
-plt.plot(x, marker="o", linestyle='-')
-plt.show()
 """
 # load Y
 target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target{}.npy'.format(5))
