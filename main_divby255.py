@@ -1,6 +1,6 @@
 # own classes
-import batch_generator
-import u_net_convtrans_model2_BATCHNORM
+import batch_generator_divby255
+import u_net_convtrans_model2_STRIDED
 
 # packages
 from tensorflow import keras
@@ -19,10 +19,10 @@ paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = u_net_convtrans_model2_BATCHNORM
+current_model = u_net_convtrans_model2_STRIDED
 
 # name the model
-NAME = str(current_model.__name__)
+NAME = str(current_model.__name__) + "_divby255"
 
 # create a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
@@ -44,7 +44,7 @@ def image_predictor(epoch, logs):
             x_pred = np.load('/data/cvg/maurice/processed/coco/val/snaps/snaps{}.npy'.format(i))
         x_pred = np.expand_dims(x_pred, axis=0)
         # since we train the model with values between 0 and 1 now
-        x_pred = x_pred
+        x_pred = x_pred/255.0
 
         # load Y
         if i%2 == 0:
@@ -57,6 +57,7 @@ def image_predictor(epoch, logs):
 
         # predict y
         y_pred = model.predict(x_pred)
+        y_pred = y_pred * 255.0
         y_pred = np.array(np.rint(y_pred), dtype=int)
 
         # save the result
@@ -77,9 +78,9 @@ def image_predictor(epoch, logs):
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 
 # create a batch generator
-train_data_generator = batch_generator.MyGenerator(paths_dir_train + "/snaps_paths.npy",
+train_data_generator = batch_generator_divby255.MyGenerator(paths_dir_train + "/snaps_paths.npy",
                                                    paths_dir_train + "/targets_paths.npy", batchsize)
-val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.npy",
+val_data_generator = batch_generator_divby255.MyGenerator(paths_dir_val + "/snaps_paths.npy",
                                                  paths_dir_val + "/targets_paths.npy", batchsize)
 
 # setup the model
