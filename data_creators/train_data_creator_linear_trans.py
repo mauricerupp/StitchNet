@@ -282,31 +282,30 @@ def get_random_angle(h, w, point):
             return ran.uniform(math.pi + 0.2, 1.5*math.pi - 0.2)
 
 
-
+"""
 create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/targets',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/snaps',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train',
-                     (256, 256), (128, 128), 5)
+                     (128, 128), (64, 64), 5)
 
 create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      '/home/maurice/Dokumente/Try_Models/coco_try/val/targets',
                      '/home/maurice/Dokumente/Try_Models/coco_try/val/snaps',
                      '/home/maurice/Dokumente/Try_Models/coco_try/val',
-                     (256, 256), (128, 128), 5)
+                     (128, 128), (64, 64), 5)
 
 
 """
-create_training_data('/data/cvg/maurice/unprocessed/coco_train',
-                     '/data/cvg/maurice/processed/coco/train/targets',
-                     '/data/cvg/maurice/processed/coco/train/snaps',
-                     '/data/cvg/maurice/processed/coco/train/',
-                     (256, 256), (128, 128), 5)
+create_training_data('/data/cvg/maurice/unprocessed/coco_smalltrain',
+                     '/data/cvg/maurice/processed/coco_small/train/targets',
+                     '/data/cvg/maurice/processed/coco_small/train/snaps',
+                     '/data/cvg/maurice/processed/coco_small/train/',
+                     (128, 128), (64, 64), 5)
 
-create_training_data('/data/cvg/maurice/unprocessed/coco_val',
-                     '/data/cvg/maurice/processed/coco/val/targets',
-                     '/data/cvg/maurice/processed/coco/val/snaps',
-                     '/data/cvg/maurice/processed/coco/val/',
-                     (256, 256), (128, 128), 5)
+create_training_data('/data/cvg/maurice/unprocessed/coco_smallval',
+                     '/data/cvg/maurice/processed/coco_small/val/targets',
+                     '/data/cvg/maurice/processed/coco_small/val/snaps',
+                     '/data/cvg/maurice/processed/coco_small/val/',
+                     (128, 128), (64, 64), 5)
 
-"""
