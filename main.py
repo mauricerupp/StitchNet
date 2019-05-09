@@ -19,7 +19,7 @@ paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = u_net_convtrans_model2_FULLBATCHNORM
+current_model = u_net_convtrans_model2_FULLBATCHNORM    
 
 # name the model
 NAME = str(current_model.__name__)
