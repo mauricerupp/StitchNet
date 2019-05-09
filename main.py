@@ -38,18 +38,18 @@ def image_predictor(epoch, logs):
     for i in range(1,15):
         # load X
         if i%2 == 0:
-            x_pred = np.load('/data/cvg/maurice/processed/coco/train/snaps/snaps{}.npy'.format(i))
+            x_pred = np.load('/data/cvg/maurice/processed/coco_small/train/snaps/snaps{}.npy'.format(i))
         else:
-            x_pred = np.load('/data/cvg/maurice/processed/coco/val/snaps/snaps{}.npy'.format(i))
+            x_pred = np.load('/data/cvg/maurice/processed/coco_small/val/snaps/snaps{}.npy'.format(i))
         x_pred = np.expand_dims(x_pred, axis=0)
         # since we train the model with values between 0 and 1 now
         x_pred = x_pred
 
         # load Y
         if i%2 == 0:
-            y_true = np.load('/data/cvg/maurice/processed/coco/train/targets/target{}.npy'.format(i))
+            y_true = np.load('/data/cvg/maurice/processed/coco_small/train/targets/target{}.npy'.format(i))
         else:
-            y_true = np.load('/data/cvg/maurice/processed/coco/val/targets/target{}.npy'.format(i))
+            y_true = np.load('/data/cvg/maurice/processed/coco_small/val/targets/target{}.npy'.format(i))
         covered_area = y_true[:, :, -3:]
         y_true = y_true[:, :, :-3]
         covered_target = y_true * covered_area
