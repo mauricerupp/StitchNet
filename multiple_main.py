@@ -1,9 +1,6 @@
 # own classes
 import batch_generator
-import u_net_convtrans_model3
-import u_net_convtrans_model4
-import u_net_convtrans_model3_deblur
-import u_net_convtrans_model4_deblur
+from unets import u_net_convtrans_model4_deblur, u_net_convtrans_model4
 
 # packages
 from tensorflow import keras

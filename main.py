@@ -1,6 +1,6 @@
 # own classes
 import batch_generator
-import u_net_convtrans_model2_FULLBATCHNORM
+from unets import u_net_convtrans_model2_FULLBATCHNORM
 
 # packages
 from tensorflow import keras
@@ -8,7 +8,6 @@ from tensorflow.python.keras.callbacks import TensorBoard
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import cv2
 
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 

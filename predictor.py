@@ -1,5 +1,5 @@
 import numpy as np
-import u_net_convtrans_model3
+from unets import u_net_convtrans_model3
 from matplotlib import pyplot as plt
 
 model_name = u_net_convtrans_model3
