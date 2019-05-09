@@ -71,6 +71,7 @@ def image_predictor(epoch, logs):
         ax3.set_title('Prediction of model')
         plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
         plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
+        plt.close()
 
 
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
@@ -85,7 +86,7 @@ val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.n
 model = current_model.create_model(input_size=input_size)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=15,
+model.fit_generator(train_data_generator,  epochs=1000,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 
