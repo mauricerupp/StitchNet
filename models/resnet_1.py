@@ -16,9 +16,17 @@ def create_model(pretrained_weights=None, input_size=None):
     inputs = Input(input_size)
     # get features of every image individually and concatenate them
     # all those layers share the same weights
-    conc1 = Lambda(feature_extractor)(inputs)
+    conv1_x = Conv2D(64, 3, activation='relu', padding='same', name='conv1_x')
+    layerstack = []
+
+    for i in range(0, input_size[2], 3):
+        test = conv1_x(inputs[:, :, :, i:i + 3])
+        layerstack.append(test)
+
+    conc1 = concatenate([layerstack[i] for i in range(len(layerstack))], axis=3)
 
     out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(conc1)
+
     model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
     model.summary()

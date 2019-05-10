@@ -87,6 +87,6 @@ model = current_model.create_model(input_size=input_size)
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=1000,
-                    callbacks=[cp_callback, tensorboard],
+                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 
