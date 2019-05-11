@@ -43,12 +43,10 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     out = Add()([RDB_out, global_conv1])
 
     # Upscaling / depth to space
-    out = scale_up(out)
+    out = scale_up(out, G0)
 
     out = Conv2D(G0, kernel_size=3, padding='same')(out)
-    out = Conv2D(G0, kernel_size=3, padding='same')(out)
-    out = Conv2D(G0, kernel_size=3, padding='same')(out)
-    out = Conv2D(G0, kernel_size=3, padding='same')(out)
+
     # since we output a color image, we want 3 filters as the last layer
     out = Conv2D(3, kernel_size=3, padding='same')(out)
 
@@ -92,13 +90,16 @@ def create_RDB(prior_layer, block_name, G0=64, G=32, C=6):
     return feat
 
 
-def scale_up(input_layer):
+def scale_up(input_layer, G0):
     """
     implements the tensorflow depth to space function
     :param input_layer:
     :return:
     """
-    return Lambda(lambda x: tf.depth_to_space(x, block_size=2, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
+    x = Conv2D(G0, kernel_size=3, padding='same', name='upscale_conv_1')(input_layer)
+    x = Conv2D(int(G0 / 2), kernel_size=3, padding='same', name='upscale_conv_2')(x)
+    x = Conv2D(G0 *2, kernel_size=3, padding='same', name='upscale_conv_3')(x)
+    return Lambda(lambda x: tf.depth_to_space(x, block_size=2, data_format='NHWC'), name='Depth_to_Space',)(x)
 
 def feature_extract(input_tensor, C):
     conv = Conv2D(64, kernel_size=3, padding='same', activation='relu', name='feature_conv')
@@ -111,3 +112,4 @@ def feature_extract(input_tensor, C):
     return Concatenate(axis=3)(in_conv_list)
 # ------- END -------- #
 
+mod = create_model(input_size=(64,64,15))

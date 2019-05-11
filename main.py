@@ -19,7 +19,7 @@ x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
 current_model = RDN_1
-NAME = str(current_model.__name__) + str(2)
+NAME = str(current_model.__name__) + str(3)
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -89,7 +89,7 @@ val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.n
 model = current_model.create_model(input_size=(64, 64, 15), G0=64, G=32, D=20, C=6)
 
 model.fit_generator(train_data_generator,  epochs=1000,
-                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
+                    callbacks=[cp_callback, tensorboard],
                     validation_data=val_data_generator)
 
 
