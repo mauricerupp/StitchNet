@@ -1,5 +1,6 @@
 import l1_loss
 
+
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
@@ -22,10 +23,10 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     inputs = Input(input_size)
 
     # extract features for every input image
-    #in_conv =
+    #conv1 = feature_extract(inputs, C)
 
-    global_conv1 = Conv2D(G0, 3, activation='relu', padding='same', name='global_conv1')(inputs)
-    global_conv2 = Conv2D(G0, 3, activation='relu', padding='same', name='global_conv2')(global_conv1)
+    global_conv1 = Conv2D(G0, kernel_size=3, activation='relu', padding='same', name='global_conv1')(inputs)
+    global_conv2 = Conv2D(G0, kernel_size=3, activation='relu', padding='same', name='global_conv2')(global_conv1)
 
     # first RDB
     RDB = create_RDB(global_conv2, 'RDB1', G0, G, C)
@@ -42,14 +43,16 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     out = Add()([RDB_out, global_conv1])
 
     # Upscaling / depth to space
-    out = scale_up(out, C)
+    out = scale_up(out)
+
+    out = Conv2D(G0, kernel_size=3, padding='same')(out)
     # since we output a color image, we want 3 filters as the last layer
-    out = Conv2D(filters=3, kernel_size=3, padding='same')(out)
+    out = Conv2D(3, kernel_size=3, padding='same')(out)
 
     model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
-    model.summary()
-    plot_model(model, to_file='RDN.png')
+    #model.summary()
+    #plot_model(model, to_file='RDN.png')
 
     if pretrained_weights:
         model.load_weights(pretrained_weights)
@@ -85,16 +88,23 @@ def create_RDB(prior_layer, block_name, G0=64, G=32, C=6):
     feat = Add()([feat, prior_layer])
     return feat
 
-def scale_up(input_layer, C):
+
+def scale_up(input_layer):
     """
+    implements the tensorflow depth to space function
     :param input_layer:
-    :param C:
     :return:
     """
-    x = Conv2D(self.c_dim * self.scale ** 2, kernel_size=3, padding='same', name='UP1')(input_layer)
-    return Lambda(lambda x: tf.depth_to_space(x, block_size=self.scale, data_format='NHWC'),name='PixelShuffle',)(x)
+    return Lambda(lambda x: tf.depth_to_space(x, block_size=2, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
 
+def feature_extract(input_tensor, C):
+    conv = Conv2D(64, kernel_size=3, padding='same', activation='relu', name='feature_conv')
+    input_size = input_tensor.get_shape().as_list()
+    in_conv_list = []
+    print(input_tensor[:,:,:,0:3])
+    for i in range(0, input_size[3], 3):
+        in_conv_list.append(conv(input_tensor))
+
+    return Concatenate(axis=3)(in_conv_list)
 # ------- END -------- #
 
-
-mod = create_model(input_size=(64,64,15), G0=64, G=32, D=20, C=6)

@@ -2,7 +2,6 @@ import l1_loss
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
-from tensorflow.python.keras.layers import Conv2D, MaxPooling2D
 import tensorflow as tf
 
 

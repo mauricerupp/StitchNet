@@ -1,8 +1,24 @@
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
+from tensorflow.python.keras.models import *
+from tensorflow.python.keras.layers import *
 
 
+
+
+def newmodel(input_size=(64,64,15)):
+    inputs = Input(input_size)
+    innew = inputs[:,:,:,1:4]
+    out = Conv2D(3, kernel_size=3, padding='same')(innew)
+    conc = Concatenate(axis=3)([out, inputs])
+
+    model = Model(inputs=inputs, outputs=conc)
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
+    model.summary()
+
+mod = newmodel()
+"""
 target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target{}.npy'.format(5))
 target = target[:, :, :-3]
 shape = target.shape
@@ -11,7 +27,7 @@ mod_vgg16 = tf.keras.applications.vgg16.VGG16(include_top=False,
                                                   input_tensor=target)
 
 
-"""
+
 # load Y
 target = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target{}.npy'.format(5))
 target = target[:, :, :-3]
