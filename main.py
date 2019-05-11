@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # ----- Constants ----- #
-batchsize = 60
+batchsize = 20
 paths_dir_train = '/data/cvg/maurice/processed/coco_small/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
