@@ -9,11 +9,13 @@ from tensorflow.python.keras.layers import *
 
 def newmodel(input_size=(64,64,15)):
     inputs = Input(input_size)
-    innew = inputs[:,:,:,1:4]
-    out = Conv2D(3, kernel_size=3, padding='same')(innew)
-    conc = Concatenate(axis=3)([out, inputs])
+    x0 = Lambda(lambda x: x[:, :, :, 0:3])(inputs)
+    x = Conv2D(64, 3, padding='same')(x0)
 
-    model = Model(inputs=inputs, outputs=conc)
+    print(x.shape)
+    print(x0.shape)
+
+    model = Model(inputs=inputs, outputs=x)
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
     model.summary()
 

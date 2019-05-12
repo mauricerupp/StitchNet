@@ -23,9 +23,9 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     inputs = Input(input_size)
 
     # extract features for every input image
-    #conv1 = feature_extract(inputs, C)
+    conv1 = feature_extract(inputs, G0)
 
-    global_conv1 = Conv2D(G0, kernel_size=3, activation='relu', padding='same', name='global_conv1')(inputs)
+    global_conv1 = Conv2D(G0, kernel_size=3, activation='relu', padding='same', name='global_conv1')(conv1)
     global_conv2 = Conv2D(G0, kernel_size=3, activation='relu', padding='same', name='global_conv2')(global_conv1)
 
     # first RDB
@@ -45,7 +45,7 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     # Upscaling / depth to space
     out = scale_up(out, G0)
 
-    out = Conv2D(G0, kernel_size=3, padding='same')(out)
+    out = Conv2D(32, kernel_size=3, padding='same')(out)
 
     # since we output a color image, we want 3 filters as the last layer
     out = Conv2D(3, kernel_size=3, padding='same')(out)
@@ -83,7 +83,7 @@ def create_RDB(prior_layer, block_name, G0=64, G=32, C=6):
 
     # append the last convolutional layer of the RDB to the rest of conv layers
     layerlist.append(conv_layer)
-    out = Concatenate(axis=3)(layerlist)
+    out = Concatenate(axis=3, name=block_name+'_conc')(layerlist)
     # the last conv layer which has a kernel_size of 1
     feat = Conv2D(G0, kernel_size=1, padding='same', activation='relu', name=block_name+'_local_Conv')(out)
     feat = Add()([feat, prior_layer])
@@ -101,15 +101,25 @@ def scale_up(input_layer, G0):
     x = Conv2D(G0 *2, kernel_size=3, padding='same', name='upscale_conv_3')(x)
     return Lambda(lambda x: tf.depth_to_space(x, block_size=2, data_format='NHWC'), name='Depth_to_Space',)(x)
 
-def feature_extract(input_tensor, C):
-    conv = Conv2D(64, kernel_size=3, padding='same', activation='relu', name='feature_conv')
+
+def feature_extract(input_tensor, G0):
+    """
+    Runs every input image seperately through the same Conv-Layer
+    and concatenates all tensors at the end
+    :param input_tensor: the input layer of the extractor
+    :return:
+    """
+    conv = Conv2D(G0, kernel_size=3, padding='same', activation='relu', name='input_feature_conv')
     input_size = input_tensor.get_shape().as_list()
     in_conv_list = []
-    print(input_tensor[:,:,:,0:3])
+    index = 1
     for i in range(0, input_size[3], 3):
-        in_conv_list.append(conv(input_tensor))
+        x = Lambda(lambda x: x[:, :, :, i:i+3], name='img_{}'.format(str(index)))(input_tensor)
+        in_conv_list.append(conv(x))
+        index += 1
 
-    return Concatenate(axis=3)(in_conv_list)
+    return Concatenate(axis=3, name='conc_img_features')(in_conv_list)
 # ------- END -------- #
+
 
 mod = create_model(input_size=(64,64,15))
