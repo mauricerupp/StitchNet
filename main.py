@@ -87,7 +87,7 @@ val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.n
                                                  paths_dir_val + "/targets_paths.npy", batchsize)
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, G0=64, G=32, D=20, C=10)
+model = current_model.create_model(input_size=input_size, G0=64, G=32, D=20, C=6)
 
 model.fit_generator(train_data_generator,  epochs=1000,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
