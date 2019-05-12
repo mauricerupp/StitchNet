@@ -43,7 +43,7 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     out = Add()([RDB_out, global_conv1])
 
     # concatenate the very first extracted features with the output of the residual learning
-    out = Concatenate(axis=3)([out, conv1, inputs])
+    out = Concatenate(axis=3)([out, conv1])
 
     # Upscaling / depth to space
     out = scale_up(out, G0)
