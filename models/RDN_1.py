@@ -45,12 +45,17 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     # concatenate the very first extracted features with the output of the residual learning
     out = Concatenate(axis=3)([out, conv1])
 
-    # Upscaling / depth to space
-    out = scale_up(out, G0)
 
-    out = Conv2D(G0, kernel_size=3, padding='same')(out)
-    out = Conv2D(32, kernel_size=3, padding='same')(out)
-    out = Conv2D(16, kernel_size=3, padding='same')(out)
+    out = Conv2D(12, kernel_size=3, padding='same')(out)
+    # Upscaling / depth to space
+    #out = Conv2D(G0, kernel_size=3, padding='same', name='upscale_conv_1')(out)
+    #out = Conv2D(int(G0 / 2), kernel_size=3, padding='same', name='upscale_conv_2')(out)
+    #out = Conv2D(G0 *2, kernel_size=3, padding='same', name='upscale_conv_3')(out)
+    out = depth_to_space(out, 2)
+
+    out = Conv2D(3, kernel_size=3, padding='same')(out)
+    out = Conv2D(3, kernel_size=3, padding='same')(out)
+    out = Conv2D(3, kernel_size=3, padding='same')(out)
 
     # since we output a color image, we want 3 filters as the last layer
     out = Conv2D(3, kernel_size=3, padding='same')(out)
@@ -95,16 +100,13 @@ def create_RDB(prior_layer, block_name, G0=64, G=32, C=6):
     return feat
 
 
-def scale_up(input_layer, G0):
+def depth_to_space(input_layer, blocksize):
     """
     implements the tensorflow depth to space function
     :param input_layer:
     :return:
     """
-    #x = Conv2D(G0, kernel_size=3, padding='same', name='upscale_conv_1')(input_layer)
-    #x = Conv2D(int(G0 / 2), kernel_size=3, padding='same', name='upscale_conv_2')(x)
-    #x = Conv2D(G0 *2, kernel_size=3, padding='same', name='upscale_conv_3')(x)
-    return Lambda(lambda x: tf.depth_to_space(x, block_size=2, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
+    return Lambda(lambda x: tf.depth_to_space(x, block_size=blocksize, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
 
 
 def feature_extract(input_tensor, G0):
@@ -127,4 +129,4 @@ def feature_extract(input_tensor, G0):
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15))
+mod = create_model(input_size=(64,64,15))

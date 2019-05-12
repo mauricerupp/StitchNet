@@ -31,7 +31,7 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch%10 == 0: # print samples every 10 images
-        for i in range(1,5):
+        for i in range(1, 5):
             # load X
             if i%2 == 0:
                 x_pred = np.load('/data/cvg/maurice/processed/coco_small/train/snaps/snaps{}.npy'.format(i))
