@@ -1,6 +1,6 @@
 # own classes
 import batch_generator_divby255
-from unets import u_net_convtrans_model2_STRIDED
+from models import RDN_1
 
 # packages
 from tensorflow import keras
@@ -12,13 +12,13 @@ import matplotlib.pyplot as plt
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 100
-paths_dir_train = '/data/cvg/maurice/processed/coco/train'
-paths_dir_val = '/data/cvg/maurice/processed/coco/val'
+batchsize = 20
+paths_dir_train = '/data/cvg/maurice/processed/coco_small/train'
+paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = u_net_convtrans_model2_STRIDED
+current_model = RDN_1
 
 # name the model
 NAME = str(current_model.__name__) + "_divby255"
@@ -83,10 +83,10 @@ val_data_generator = batch_generator_divby255.MyGenerator(paths_dir_val + "/snap
                                                  paths_dir_val + "/targets_paths.npy", batchsize)
 
 # setup the model
-model = current_model.create_model(input_size=input_size)
+model = current_model.create_model(input_size=input_size, G0=64, G=32, D=20, C=6)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=15,
-                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
+model.fit_generator(train_data_generator,  epochs=300,
+                    callbacks=[cp_callback, tensorboard],
                     validation_data=val_data_generator)
 
