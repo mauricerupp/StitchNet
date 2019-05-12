@@ -19,7 +19,7 @@ x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
 current_model = RDN_1
-NAME = str(current_model.__name__) + str(9)
+NAME = str(current_model.__name__) + str(10)
 
 
 # ----- Callbacks / Helperfunctions ----- #
