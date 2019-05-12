@@ -49,6 +49,8 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     out = scale_up(out, G0)
 
     out = Conv2D(G0, kernel_size=3, padding='same')(out)
+    out = Conv2D(32, kernel_size=3, padding='same')(out)
+    out = Conv2D(16, kernel_size=3, padding='same')(out)
 
     # since we output a color image, we want 3 filters as the last layer
     out = Conv2D(3, kernel_size=3, padding='same')(out)
@@ -99,10 +101,10 @@ def scale_up(input_layer, G0):
     :param input_layer:
     :return:
     """
-    x = Conv2D(G0, kernel_size=3, padding='same', name='upscale_conv_1')(input_layer)
-    x = Conv2D(int(G0 / 2), kernel_size=3, padding='same', name='upscale_conv_2')(x)
-    x = Conv2D(G0 *2, kernel_size=3, padding='same', name='upscale_conv_3')(x)
-    return Lambda(lambda x: tf.depth_to_space(x, block_size=2, data_format='NHWC'), name='Depth_to_Space',)(x)
+    #x = Conv2D(G0, kernel_size=3, padding='same', name='upscale_conv_1')(input_layer)
+    #x = Conv2D(int(G0 / 2), kernel_size=3, padding='same', name='upscale_conv_2')(x)
+    #x = Conv2D(G0 *2, kernel_size=3, padding='same', name='upscale_conv_3')(x)
+    return Lambda(lambda x: tf.depth_to_space(x, block_size=2, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
 
 
 def feature_extract(input_tensor, G0):
