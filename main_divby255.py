@@ -1,6 +1,6 @@
 # own classes
 import batch_generator_divby255
-from models import RDN_2
+from models import RDN_1
 
 # packages
 from tensorflow import keras
@@ -18,7 +18,7 @@ paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = RDN_2
+current_model = RDN_1
 
 # name the model
 NAME = str(current_model.__name__) + "_D10C6_divby255"
