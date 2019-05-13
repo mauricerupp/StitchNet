@@ -5,6 +5,7 @@ from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
+import datetime
 
 
 def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=6):
@@ -12,6 +13,8 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     RDN implemented from paper 'Residual Dense Network for Image Super-Resolution
     with a custom conv layer which shares weights over all stacked input images
     and a depth-to-space layer at the end of the pipeline
+    This is pretty much the network Paolo described in the meeting (the after-resnet part)
+    and in the beginning the feature-extractor of Givi
     :param G0: filtersize for the last convolutional layer
     :param G: filtersize per convolutional layer
     :param D: amout of residual dense blocks (RDB)
@@ -43,9 +46,9 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     out = Add()([RDB_out, global_conv1])
 
     # concatenate the very first extracted features with the output of the residual learning
-    out = Concatenate(axis=3)([out, conv1])
+    #out = Concatenate(axis=3)([out, conv1])
 
-    out = Conv2D(2*G0, kernel_size=3, padding='same', name='upscale_conv_1')(out)
+    #out = Conv2D(2*G0, kernel_size=3, padding='same', name='upscale_conv_1')(out)
     out = Conv2D(G0, kernel_size=3, padding='same', name='upscale_conv_2')(out)
     out = Conv2D(int(G0 / 2), kernel_size=3, padding='same', name='upscale_conv_3')(out)
 
@@ -62,7 +65,12 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
 
     model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
-    model.summary()
+    #model.summary()
+    # Save the configurations as txt-file
+    with open('RDN ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
+        # Pass the file handle in as a lambda function to make it callable
+        model.summary(print_fn=lambda x: fh.write(x + '\n'))
+
     #plot_model(model, to_file='RDN.png')
 
     if pretrained_weights:
@@ -129,4 +137,4 @@ def feature_extract(input_tensor, G0):
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15))
+mod = create_model(input_size=(64,64,15))
