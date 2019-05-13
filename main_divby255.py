@@ -1,6 +1,6 @@
 # own classes
 import batch_generator_divby255
-from models import RDN_1
+from models import RDN_2
 
 # packages
 from tensorflow import keras
@@ -18,10 +18,10 @@ paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = RDN_1
+current_model = RDN_2
 
 # name the model
-NAME = str(current_model.__name__) + "new2_divby255"
+NAME = str(current_model.__name__) + "TEST1_divby255"
 
 # create a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
@@ -93,7 +93,7 @@ val_data_generator = batch_generator_divby255.MyGenerator(paths_dir_val + "/snap
 model = current_model.create_model(input_size=input_size, G0=64, G=32, D=20, C=6)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=500,
+model.fit_generator(train_data_generator,  epochs=300,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 
