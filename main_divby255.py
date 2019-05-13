@@ -21,7 +21,7 @@ x_0 = None
 current_model = RDN_2
 
 # name the model
-NAME = str(current_model.__name__) + "_D20C6_divby255"
+NAME = str(current_model.__name__) + "_D10C6_divby255"
 
 # create a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
@@ -90,10 +90,10 @@ val_data_generator = batch_generator_divby255.MyGenerator(paths_dir_val + "/snap
                                                  paths_dir_val + "/targets_paths.npy", batchsize)
 
 # setup the model
-model = current_model.create_model(input_size=input_size, G0=64, G=32, D=20, C=6)
+model = current_model.create_model(input_size=input_size, G0=64, G=32, D=10, C=6)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=302,
+model.fit_generator(train_data_generator,  epochs=202,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 

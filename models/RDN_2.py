@@ -68,7 +68,7 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     #with open('RDN ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
     #    model.summary(print_fn=lambda x: fh.write(x + '\n'))
 
-    #plot_model(model, to_file='RDN.png')
+    #plot_model(model, to_file='RDN_2_D{}C{}.png'.format(D, C))
 
     if pretrained_weights:
         model.load_weights(pretrained_weights)
@@ -134,4 +134,4 @@ def feature_extract(input_tensor, G0):
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15))
+#mod = create_model(input_size=(64,64,15), D=3, C=3)
