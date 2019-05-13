@@ -52,7 +52,9 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     out = Conv2D(int(G0 / 2), kernel_size=3, padding='same', name='upscale_conv_2')(out)
     out = Conv2D(G0 * 2, kernel_size=3, padding='same', name='upscale_conv_3')(out)
     out = depth_to_space(out, 2)
+
     out = Conv2D(int(G0 / 2), kernel_size=3, padding='same')(out)
+    out = Conv2D(int(G0 / 4), kernel_size=3, padding='same')(out)
 
     # since we output a color image, we want 3 filters as the last layer
     out = Conv2D(3, kernel_size=3, padding='same')(out)
