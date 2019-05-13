@@ -21,7 +21,7 @@ x_0 = None
 current_model = RDN_2
 
 # name the model
-NAME = str(current_model.__name__) + "TEST1_divby255"
+NAME = str(current_model.__name__) + "TEST2_divby255"
 
 # create a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
