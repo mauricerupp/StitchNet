@@ -30,7 +30,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch%10 == 0: # print samples every 10 images
+    if epoch%100 == 0: # print samples every 10 images
         for i in range(1, 5):
             # load X
             if i%2 == 0:
