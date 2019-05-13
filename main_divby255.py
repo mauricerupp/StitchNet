@@ -35,29 +35,34 @@ cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only
 # create a tester, that predicts the same few images after every epoch and stores them as png
 # we take 4 from the training and 4 from the validation set
 def image_predictor(epoch, logs):
-    if epoch % 100 == 0:
-        for i in range(1,15):
+    """
+    createy a tester, that predicts the same few images after every epoch and stores them as png
+    we take 4 from the training and 4 from the validation set
+    :param epoch:
+    :param logs: has to be given as argument in order to compile
+    """
+    if epoch % 100 == 0:  # print samples every 10 images
+        for i in range(1, 5):
             # load X
-            if i%2 == 0:
-                x_pred = np.load('/data/cvg/maurice/processed/coco/train/snaps/snaps{}.npy'.format(i))
+            if i % 2 == 0:
+                x_pred = np.load('/data/cvg/maurice/processed/coco_small/train/snaps/snaps{}.npy'.format(i))
             else:
-                x_pred = np.load('/data/cvg/maurice/processed/coco/val/snaps/snaps{}.npy'.format(i))
+                x_pred = np.load('/data/cvg/maurice/processed/coco_small/val/snaps/snaps{}.npy'.format(i))
             x_pred = np.expand_dims(x_pred, axis=0)
             # since we train the model with values between 0 and 1 now
-            x_pred = x_pred/255.0
+            x_pred = x_pred
 
             # load Y
-            if i%2 == 0:
-                y_true = np.load('/data/cvg/maurice/processed/coco/train/targets/target{}.npy'.format(i))
+            if i % 2 == 0:
+                y_true = np.load('/data/cvg/maurice/processed/coco_small/train/targets/target{}.npy'.format(i))
             else:
-                y_true = np.load('/data/cvg/maurice/processed/coco/val/targets/target{}.npy'.format(i))
+                y_true = np.load('/data/cvg/maurice/processed/coco_small/val/targets/target{}.npy'.format(i))
             covered_area = y_true[:, :, -3:]
             y_true = y_true[:, :, :-3]
             covered_target = y_true * covered_area
 
             # predict y
             y_pred = model.predict(x_pred)
-            y_pred = y_pred * 255.0
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
@@ -73,6 +78,7 @@ def image_predictor(epoch, logs):
             ax3.set_title('Prediction of model')
             plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
+            plt.close()
 
 
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
