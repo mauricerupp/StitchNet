@@ -21,7 +21,7 @@ x_0 = None
 current_model = RDN_3
 
 # name the model
-NAME = str(current_model.__name__) + "_D20C6_divby255"
+NAME = str(current_model.__name__) + "_minus1_1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -60,7 +60,7 @@ def image_predictor(epoch, logs):
 
             # predict y
             y_pred = model.predict(zero_center(x_pred/255.0)) #since the "raw" images are in [0,255]
-            y_pred = np.array(np.rint(revert_zero_center(y_pred*255.0)), dtype=int)
+            y_pred = np.array(np.rint(revert_zero_center(y_pred)*255.0), dtype=int)
 
             # save the result
             fig = plt.figure()
