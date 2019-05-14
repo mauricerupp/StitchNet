@@ -27,6 +27,6 @@ class MyGenerator(Sequence):
         batch_y = self.targets[idx * self.batch_size:(idx + 1) * self.batch_size]
         # in order to remain the covered area in {0,1}
         return np.array([zero_center(np.load(img_name)/255.0) for img_name in batch_x]), \
-            np.array([np.concatenate([zero_center(np.load(target_name[:,:,:-3])/255.0),
-                                      np.load(target_name[:,:,-3:])], axis=2) for target_name in batch_y])
+            np.array([np.concatenate([zero_center(np.load(target_name)[:,:,:-3]/255.0),
+                                      np.load(target_name)[:,:,-3:]], axis=2) for target_name in batch_y])
 

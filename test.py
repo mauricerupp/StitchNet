@@ -6,7 +6,7 @@ from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 
 
-y_true = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target1.npy')
+y_true = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target1.npy')[:,:,-3:]
 print(y_true.shape)
 y_true = np.concatenate([y_true[:,:,:-3], y_true[:,:,-3:]], axis=2)
 print(y_true.shape)
