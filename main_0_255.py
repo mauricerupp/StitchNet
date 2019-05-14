@@ -1,6 +1,6 @@
 # own classes
-import batch_generator
-from models import RDN_1
+import batch_generator_0_255
+import RDN_1
 
 # packages
 from tensorflow import keras
@@ -81,10 +81,10 @@ cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 
 # ----- Batchgenerator setup ----- #
-train_data_generator = batch_generator.MyGenerator(paths_dir_train + "/snaps_paths.npy",
-                                                   paths_dir_train + "/targets_paths.npy", batchsize)
-val_data_generator = batch_generator.MyGenerator(paths_dir_val + "/snaps_paths.npy",
-                                                 paths_dir_val + "/targets_paths.npy", batchsize)
+train_data_generator = batch_generator_0_255.MyGenerator(paths_dir_train + "/snaps_paths.npy",
+                                                         paths_dir_train + "/targets_paths.npy", batchsize)
+val_data_generator = batch_generator_0_255.MyGenerator(paths_dir_val + "/snaps_paths.npy",
+                                                       paths_dir_val + "/targets_paths.npy", batchsize)
 
 # ----- Model setup ----- #
 model = current_model.create_model(input_size=input_size, G0=64, G=32, D=20, C=6)

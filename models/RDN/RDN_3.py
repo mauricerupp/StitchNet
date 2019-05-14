@@ -13,8 +13,8 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     RDN implemented from paper 'Residual Dense Network for Image Super-Resolution
     with a custom conv layer which shares weights over all stacked input images
     and a depth-to-space layer at the end of the pipeline
-    This is pretty much the network Paolo described in the meeting (the after-resnet part)
-    and in the beginning the feature-extractor of Givi
+    The end of the Network is more similar to the actual paper and the best performing one at the moment
+    Opposite to RDN_1 and RDN_2 I keep the first concatenation present and work inside the RDBs with this one
     :param G0: filtersize for the last convolutional layer
     :param G: filtersize per convolutional layer
     :param D: amout of residual dense blocks (RDB)
@@ -26,13 +26,11 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     inputs = Input(input_size)
 
     # extract features for every input image
-    conv1 = feature_extract(inputs, G0)
+    conv1 = feature_extract(inputs, 64)
 
-    global_conv1 = Conv2D(G0, kernel_size=3, activation='relu', padding='same', name='global_conv1')(conv1)
-    global_conv2 = Conv2D(G0, kernel_size=3, activation='relu', padding='same', name='global_conv2')(global_conv1)
 
     # first RDB
-    RDB = create_RDB(global_conv2, 'RDB1', G0, G, C)
+    RDB = create_RDB(conv1, 'RDB1', G0, G, C)
     RDBlocks_list = [RDB, ]
 
     # add the remaining RDB
@@ -43,31 +41,33 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     RDB_out = Concatenate(axis=3)(RDBlocks_list)
     RDB_out = Conv2D(G0, kernel_size=1, padding='same', name='global_1x1_conv')(RDB_out)
     RDB_out = Conv2D(G0, kernel_size=3, padding='same', name='global_conv3')(RDB_out)
-    out = Add()([RDB_out, global_conv1])
+    out = Add()([RDB_out, conv1])
+
+    # concatenate the very first extracted features with the output of the residual learning
+    out = Concatenate(axis=3)([out, conv1])
 
     # Upscaling / depth to space
-    out = Conv2D(G0, kernel_size=3, padding='same', name='upscale_conv_2')(out)
-    out = Conv2D(int(G0 / 2), kernel_size=3, padding='same', name='upscale_conv_3')(out)
-    out = Conv2D(12, kernel_size=3, padding='same')(out)
+    out = Conv2D(256, kernel_size=3, padding='same', name='upscale_conv_1')(out)
+    out = Conv2D(128, kernel_size=3, padding='same', name='upscale_conv_2')(out)
+    #out = Conv2D(G0 * 2, kernel_size=3, padding='same', name='upscale_conv_3')(out)
     out = depth_to_space(out, 2)
 
-    # fixing layer
-    out = Conv2D(3, kernel_size=3, padding='same')(out)
-    out = Conv2D(3, kernel_size=3, padding='same')(out)
-    out = Conv2D(3, kernel_size=3, padding='same')(out)
+    #out = Conv2D(64, kernel_size=3, padding='same')(out)
+    #out = Conv2D(int(G0 / 4), kernel_size=3, padding='same')(out)
 
     # since we output a color image, we want 3 filters as the last layer
     out = Conv2D(3, kernel_size=3, padding='same')(out)
 
     model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
-    #model.summary()
+
+    model.summary()
 
     # Save the configurations as txt-file
-    #with open('RDN ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
-    #    model.summary(print_fn=lambda x: fh.write(x + '\n'))
+    with open('RDN ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
+        model.summary(print_fn=lambda x: fh.write(x + '\n'))
 
-    #plot_model(model, to_file='RDN_1_D{}C{}.png'.format(D, C))
+    #plot_model(model, to_file='RDN_3_D{}C{}.png'.format(D, C))
 
     if pretrained_weights:
         model.load_weights(pretrained_weights)
@@ -133,4 +133,4 @@ def feature_extract(input_tensor, G0):
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15), D=3, C=3)
+#mod = create_model(input_size=(64,64,15), D=4, C=6, G0=320)
