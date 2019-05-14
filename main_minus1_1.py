@@ -95,7 +95,7 @@ val_data_generator = batch_generator_minus1_1.MyGenerator(paths_dir_val + "/snap
                                                      paths_dir_val + "/targets_paths.npy", batchsize)
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, G=32, D=4, C=6, G0=320)
+model = current_model.create_model(input_size=input_size, G=32, D=4, C=6, G0=320, pixelvalue_range='minus1_1')
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=202,

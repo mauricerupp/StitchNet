@@ -59,7 +59,7 @@ def create_model(pretrained_weights=None, input_size=None):
     convtrans1 = Conv2DTranspose(32, 2, activation='relu', padding='same', kernel_initializer='he_normal', strides=(2,2))(conv9)
     out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(convtrans1)
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
+    model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy'])
     #model.summary()
 
     if pretrained_weights:

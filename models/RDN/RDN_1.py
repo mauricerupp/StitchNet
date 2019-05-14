@@ -60,7 +60,7 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     out = Conv2D(3, kernel_size=3, padding='same')(out)
 
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
+    model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy'])
     model.summary()
 
     # Save the configurations as txt-file

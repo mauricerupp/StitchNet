@@ -120,7 +120,7 @@ def create_model(pretrained_weights=None, input_size=None):
 
     out = Conv2D(filters=3, kernel_size=7, strides=1, padding='same', activation='relu')(deblur_CNN_layer14)
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer='adam', loss=l1_loss.my_loss_l1, metrics=['accuracy'])
+    model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy'])
     #model.summary()
 
     if pretrained_weights:

@@ -53,7 +53,7 @@ def create_model(pretrained_weights=None, input_size=None):
     conv10 = Conv2D(32, 5, activation='relu', padding='same', kernel_initializer='he_normal')(conv10)
     out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv10)
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer=optimizers.Adam(lr=0.005), loss=l1_loss.my_loss_l1, metrics=['accuracy'])
+    model.compile(optimizer=optimizers.Adam(lr=0.005), loss=l1_loss.custom_loss, metrics=['accuracy'])
     model.summary()
 
     if pretrained_weights:
