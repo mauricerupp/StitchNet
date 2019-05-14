@@ -17,5 +17,5 @@ class MyGenerator(Sequence):
         batch_y = self.targets[idx * self.batch_size:(idx + 1) * self.batch_size]
 
         return np.array([np.load(img_name)/255.0 for img_name in batch_x]), \
-               np.array([np.concatenate([np.load(target_name[:, :, :-3])/255.0,
-                                         np.load(target_name[:, :, -3:])], axis=3) for target_name in batch_y])
+               np.array([np.concatenate([np.load(target_name)[:, :, :-3]/255.0,
+                                         np.load(target_name)[:, :, -3:]], axis=3) for target_name in batch_y])

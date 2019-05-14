@@ -98,7 +98,7 @@ val_data_generator = batch_generator_minus1_1.MyGenerator(paths_dir_val + "/snap
 model = current_model.create_model(input_size=input_size, G=32, D=4, C=6, G0=320)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=202,
+model.fit_generator(train_data_generator,  epochs=402,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 
