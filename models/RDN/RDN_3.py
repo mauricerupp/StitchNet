@@ -59,7 +59,7 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     out = Conv2D(3, kernel_size=3, padding='same')(out)
 
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer='adam', loss=l1_loss.custom_loss(pixelvalue_range=pixelvalue_range), metrics=['accuracy'])
+    model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy'])
 
     model.summary()
 
@@ -133,4 +133,4 @@ def feature_extract(input_tensor, G0):
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15), D=4, C=6, G0=320, pixelvalue_range='0_255')
+#mod = create_model(input_size=(64,64,15), D=4, C=6, G0=320)

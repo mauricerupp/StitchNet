@@ -6,8 +6,12 @@ from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 
 
+y_true = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target1.npy')
+print(y_true.shape)
+y_true = np.concatenate([y_true[:,:,:-3], y_true[:,:,-3:]], axis=2)
+print(y_true.shape)
 
-
+"""
 y_true1 = np.array([[[0, 2, 1, 1,1,1],[4, 2, 1,0,0,0]], [[3, 0, 5,1,1,1],[4, 4, 1,0,0,0]]])
 y_true2 = np.array([[[11, 22, 33, 0,0,0],[33, 22, 11,0,0,0]], [[7, 70, 0,0,0,0],[1, 0, 2,1,1,1]]])
 y_true = np.array((y_true1, y_true2))
@@ -27,4 +31,4 @@ y_true1 = y_true1[0:1, 0:1]
 print(y_true1.shape)
 print(y_true1)
 print(4 * (100, 150))
-np.load()
+"""
