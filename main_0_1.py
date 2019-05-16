@@ -21,12 +21,13 @@ x_0 = None
 current_model = RDN_1
 
 # name the model
-NAME = str(current_model.__name__) + "_D20C6_divby255"
+NAME = str(current_model.__name__) + "_0_1"
+
 
 # ----- Callbacks / Helperfunctions ----- #
 def image_predictor(epoch, logs):
     """
-    createy a tester, that predicts the same few images after every epoch and stores them as png
+    creates a tester, that predicts the same few images after every epoch and stores them as png
     we take 4 from the training and 4 from the validation set
     :param epoch:
     :param logs: has to be given as argument in order to compile
@@ -38,6 +39,7 @@ def image_predictor(epoch, logs):
                 x_pred = np.load('/data/cvg/maurice/processed/coco_small/train/snaps/snaps{}.npy'.format(i))
             else:
                 x_pred = np.load('/data/cvg/maurice/processed/coco_small/val/snaps/snaps{}.npy'.format(i))
+            # since predictions happen in a 4D array in Tensorflow
             x_pred = np.expand_dims(x_pred, axis=0)
 
             # load Y
@@ -49,13 +51,14 @@ def image_predictor(epoch, logs):
             y_true = y_true[:, :, :-3]
             covered_target = y_true * covered_area
 
-            # predict y
+            # predict y (since the model is trained on pictures in [0,1])
             y_pred = model.predict(x_pred/255.0)
+            results = model.evaluate(y_pred, y_true/255.0)
             y_pred = np.array(np.rint(y_pred), dtype=int)*255.0
 
             # save the result
             fig = plt.figure()
-            fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch + 1), fontsize=20)
+            fig.suptitle('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(i, epoch + 1, results[1]), fontsize=20)
             ax1 = fig.add_subplot(1, 3, 1)
             ax1.set_title('Y_True')
             plt.imshow(y_true[..., ::-1], interpolation='nearest')
@@ -86,7 +89,7 @@ val_data_generator = batch_generator_0_1.MyGenerator(paths_dir_val + "/snaps_pat
                                                      paths_dir_val + "/targets_paths.npy", batchsize)
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, G0=64, G=32, D=20, C=6)
+model = current_model.create_model(input_size=input_size, G0=64, G=32, D=10, C=6)
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=202,

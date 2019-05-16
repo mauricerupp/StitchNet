@@ -1,6 +1,6 @@
 # own classes
 import batch_generator_minus1_1
-import RDN_3
+import RDN_1
 
 # packages
 from tensorflow import keras
@@ -18,7 +18,7 @@ paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = RDN_3
+current_model = RDN_1
 
 # name the model
 NAME = str(current_model.__name__) + "_minus1_1"
@@ -58,13 +58,14 @@ def image_predictor(epoch, logs):
             y_true = y_true[:, :, :-3]
             covered_target = y_true * covered_area
 
-            # predict y
-            y_pred = model.predict(zero_center(x_pred/255.0)) #since the "raw" images are in [0,255]
+            # predict y (since the model is trained on pictures in [-1,1])
+            y_pred = model.predict(zero_center(x_pred/255.0))
+            results = model.evaluate(y_pred, zero_center(y_true/255.0))
             y_pred = np.array(np.rint(revert_zero_center(y_pred)*255.0), dtype=int)
 
             # save the result
             fig = plt.figure()
-            fig.suptitle('Results of predicting Image {} on epoch {}'.format(i, epoch + 1), fontsize=20)
+            fig.suptitle('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(i, epoch + 1, results[1]), fontsize=20)
             ax1 = fig.add_subplot(1, 3, 1)
             ax1.set_title('Y_True')
             plt.imshow(y_true[..., ::-1], interpolation='nearest') # conversion to RGB
