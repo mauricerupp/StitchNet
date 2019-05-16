@@ -7,7 +7,7 @@ from tensorflow.python.keras.layers import *
 
 
 
-print('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(20, 1 + 1, 423.2342345))
+
 
 
 y_true = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target1.npy')[:,:,-3:]
@@ -32,10 +32,11 @@ print(accuracy.eval())
 print(sess.run(loss))
 sess.close()
 
-equality = tf.equal(y_pred1, y_pred2 / 255.0)
-accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
+equality = np.equal(y_pred1, y_pred2 / 255.0)
+accuracy = np.mean(equality)
 
-print(accuracy.eval())
+print(accuracy)
+print('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(20, 1 + 1, accuracy))
 """
 y_true1 = np.array([[[0, 2, 1, 1,1,1],[4, 2, 1,0,0,0]], [[3, 0, 5,1,1,1],[4, 4, 1,0,0,0]]])
 print(y_true1.shape)

@@ -1,9 +1,8 @@
 # own classes
-import batch_generator_0_1
+from batch_generator_0_1 import *
 import RDN_1
 
 # packages
-import tensorflow as tf
 from tensorflow import keras
 from tensorflow.python.keras.callbacks import TensorBoard
 import os
@@ -54,13 +53,13 @@ def image_predictor(epoch, logs):
 
             # predict y (since the model is trained on pictures in [0,1])
             y_pred = model.predict(x_pred/255.0)
-            equality = tf.equal(y_pred, y_true / 255.0)
-            accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
+            equality = np.equal(y_pred, y_true / 255.0)
+            accuracy = np.mean(equality)
             y_pred = np.array(np.rint(y_pred), dtype=int)*255.0
 
             # save the result
             fig = plt.figure()
-            fig.suptitle('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(i, epoch + 1, accuracy.eval()), fontsize=20)
+            fig.suptitle('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
             ax1 = fig.add_subplot(1, 3, 1)
             ax1.set_title('Y_True')
             plt.imshow(y_true[..., ::-1], interpolation='nearest')
@@ -85,10 +84,8 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only=True, verbose=1)
 
 # ----- Batchgenerator setup ----- #
-train_data_generator = batch_generator_0_1.MyGenerator(paths_dir_train + "/snaps_paths.npy",
-                                                       paths_dir_train + "/targets_paths.npy", batchsize)
-val_data_generator = batch_generator_0_1.MyGenerator(paths_dir_val + "/snaps_paths.npy",
-                                                     paths_dir_val + "/targets_paths.npy", batchsize)
+train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_dir_train + "/targets_paths.npy", batchsize)
+val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize)
 
 # ----- Model setup ----- #
 model = current_model.create_model(input_size=input_size, G0=64, G=32, D=10, C=6)
