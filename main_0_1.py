@@ -55,7 +55,7 @@ def image_predictor(epoch, logs):
             y_pred = model.predict(x_pred/255.0)
             equality = np.equal(y_pred, y_true / 255.0)
             accuracy = np.mean(equality)
-            y_pred = np.array(np.rint(y_pred), dtype=int)*255.0
+            y_pred = np.array(np.rint(y_pred), dtype=int)*255
 
             # save the result
             fig = plt.figure()
@@ -69,6 +69,7 @@ def image_predictor(epoch, logs):
             ax3 = fig.add_subplot(1, 3, 3)
             ax3.set_title('Prediction of model')
             plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
+            print("ytrue: " + str(y_true.dtype) + "y_pred: " + str(y_pred.dtype))
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
             plt.close()
 
