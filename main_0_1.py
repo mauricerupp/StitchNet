@@ -53,7 +53,7 @@ def image_predictor(epoch, logs):
 
             # predict y (since the model is trained on pictures in [0,1])
             y_pred = model.predict(x_pred/255.0)
-            results = model.evaluate(y_pred, y_true/255.0)
+            results = model.evaluate(x_pred/255.0, y_true/255.0)
             y_pred = np.array(np.rint(y_pred), dtype=int)*255.0
 
             # save the result
