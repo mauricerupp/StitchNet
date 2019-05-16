@@ -3,6 +3,7 @@ import batch_generator_0_1
 import RDN_1
 
 # packages
+import tensorflow as tf
 from tensorflow import keras
 from tensorflow.python.keras.callbacks import TensorBoard
 import os
@@ -53,12 +54,13 @@ def image_predictor(epoch, logs):
 
             # predict y (since the model is trained on pictures in [0,1])
             y_pred = model.predict(x_pred/255.0)
-            results = model.evaluate(x_pred/255.0, y_true/255.0)
+            equality = tf.equal(y_pred, y_true / 255.0)
+            accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
             y_pred = np.array(np.rint(y_pred), dtype=int)*255.0
 
             # save the result
             fig = plt.figure()
-            fig.suptitle('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(i, epoch + 1, results[1]), fontsize=20)
+            fig.suptitle('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
             ax1 = fig.add_subplot(1, 3, 1)
             ax1.set_title('Y_True')
             plt.imshow(y_true[..., ::-1], interpolation='nearest')
