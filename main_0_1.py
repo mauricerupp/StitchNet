@@ -55,7 +55,8 @@ def image_predictor(epoch, logs):
             y_pred = model.predict(x_pred/255.0)
             equality = np.equal(y_pred, y_true / 255.0)
             accuracy = np.mean(equality)
-            y_pred = np.array(np.rint(y_pred), dtype=int)*255
+            y_pred *= 255
+            y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
             fig = plt.figure()
