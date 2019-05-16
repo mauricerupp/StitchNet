@@ -88,7 +88,7 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize)
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, G0=64, G=32, D=10, C=6)
+model = current_model.create_model(input_size=input_size, D=4, C=6, G0=320, G=32)
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=202,

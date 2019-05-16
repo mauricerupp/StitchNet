@@ -15,6 +15,7 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     and a depth-to-space layer at the end of the pipeline
     The end of the Network is more similar to the actual paper and the best performing one at the moment
     Opposite to RDN_1 and RDN_2 I keep the first concatenation present and work inside the RDBs with this one
+    Also increased the kernel for this first layer
     :param G0: filtersize for the last convolutional layer
     :param G: filtersize per convolutional layer
     :param D: amout of residual dense blocks (RDB)
@@ -120,7 +121,7 @@ def feature_extract(input_tensor, G0):
     :param input_tensor: the input layer of the extractor
     :return:
     """
-    conv = Conv2D(G0, kernel_size=3, padding='same', activation='relu', name='input_feature_conv')
+    conv = Conv2D(G0, kernel_size=5, padding='same', activation='relu', name='input_feature_conv')
     input_size = input_tensor.get_shape().as_list()
     in_conv_list = []
     index = 1
@@ -133,4 +134,4 @@ def feature_extract(input_tensor, G0):
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15), D=4, C=6, G0=320)
+mod = create_model(input_size=(64,64,15), D=4, C=6, G0=320)
