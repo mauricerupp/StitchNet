@@ -134,4 +134,4 @@ def feature_extract(input_tensor, G0):
 # ------- END -------- #
 
 
-mod = create_model(input_size=(64,64,15), D=4, C=6, G0=320)
+#mod = create_model(input_size=(64,64,15), D=4, C=6, G0=320)
