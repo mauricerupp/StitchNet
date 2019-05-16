@@ -4,12 +4,51 @@ from losses import l1_loss
 import matplotlib.pyplot as plt
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
+import l1_loss
 
 
+from tensorflow.python.keras.models import *
+from tensorflow.python.keras.layers import *
+from tensorflow.python.keras.utils import plot_model
+import tensorflow as tf
+import datetime
+
+def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=6):
+    """
+    A simple residual network with ResBlocks from Givi
+    :param G0: filtersize for the last convolutional layer
+    :param G: filtersize per convolutional layer
+    :param D: amout of residual dense blocks (RDB)
+    :param C: Amount of convolutional layers per RDB
+    :param pretrained_weights:
+    :param input_size:
+    :return:
+    """
+    inputs = Input(input_size)
+    conv = Conv2D(128, kernel_size=3, activation='relu', padding='same', name='global_conv2')(inputs)
+    conv = create_resblock(conv, 'dx', 128, 3, 1, 1, BatchNormalization)
+    model = Model(inputs=inputs, outputs=conv)
+    model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy'])
+    model.summary()
 
 
+def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dilation, normalizer):
+    x = Conv2D(filters=n_filters, kernel_size=kernel_size, padding='same', name='global_conv3')(prior_layer)
+    x = normalizer()(x)
+    x = Activation('relu')(x)
+
+    x = Conv2D(filters=n_filters, kernel_size=kernel_size,
+               strides=stride, dilation_rate=dilation, name=block_name + "conv2")(x)
+
+    x = normalizer()(x)
+
+    return x
+    #return Add()([prior_layer, x])
 
 
+mod = create_model(input_size=(64,64,15))
+
+"""
 y_true = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target1.npy')[:,:,-3:]
 print(y_true.shape)
 y_true = np.concatenate([y_true[:,:,:-3], y_true[:,:,-3:]], axis=2)
@@ -37,7 +76,7 @@ accuracy = np.mean(equality)
 
 print(accuracy)
 print('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(20, 1 + 1, accuracy))
-"""
+
 y_true1 = np.array([[[0, 2, 1, 1,1,1],[4, 2, 1,0,0,0]], [[3, 0, 5,1,1,1],[4, 4, 1,0,0,0]]])
 print(y_true1.shape)
 y_true1 = y_true1[0:1, 0:1]
