@@ -69,7 +69,6 @@ def image_predictor(epoch, logs):
             ax3 = fig.add_subplot(1, 3, 3)
             ax3.set_title('Prediction of model')
             plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
-            print("ytrue: " + str(y_true.dtype) + "y_pred: " + str(y_pred.dtype))
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
             plt.close()
 
