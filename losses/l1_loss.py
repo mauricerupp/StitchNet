@@ -1,9 +1,4 @@
 import tensorflow.keras.backend as K
-import numpy as np
-
-
-def revert_zero_center(in_img):
-    return in_img / 2 + 0.5
 
 
 def custom_loss(y_true, y_pred):

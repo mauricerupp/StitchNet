@@ -1,5 +1,5 @@
 # own classes
-import batch_generator_0_255
+from batch_generator_0_255 import *
 import RDN_1
 
 # packages
@@ -19,18 +19,18 @@ x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
 current_model = RDN_1
-NAME = str(current_model.__name__) + "0_255"
+NAME = str(current_model.__name__) + "_0_255"
 
 
 # ----- Callbacks / Helperfunctions ----- #
 def image_predictor(epoch, logs):
     """
-    createy a tester, that predicts the same few images after every epoch and stores them as png
+    creates a tester, that predicts the same few images after every epoch and stores them as png
     we take 4 from the training and 4 from the validation set
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch%100 == 0: # print samples every 10 images
+    if epoch%50 == 0: # print samples every 10 images
         for i in range(1, 5):
             # load X
             if i%2 == 0:
@@ -81,15 +81,14 @@ cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 
 # ----- Batchgenerator setup ----- #
-train_data_generator = batch_generator_0_255.MyGenerator(paths_dir_train + "/snaps_paths.npy",
+train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy",
                                                          paths_dir_train + "/targets_paths.npy", batchsize)
-val_data_generator = batch_generator_0_255.MyGenerator(paths_dir_val + "/snaps_paths.npy",
-                                                       paths_dir_val + "/targets_paths.npy", batchsize)
+val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize)
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, G0=64, G=32, D=20, C=6)
+model = current_model.create_model(input_size=input_size, G0=64, G=32, D=10, C=6)
 
-model.fit_generator(train_data_generator,  epochs=300,
+model.fit_generator(train_data_generator,  epochs=202,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 
