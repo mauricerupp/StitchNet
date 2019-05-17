@@ -21,6 +21,11 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     :param input_size:
     :return:
     """
+    if normalizer == 'batch':
+        normalizer = BatchNormalization
+    elif normalizer == 'instance':
+        pass
+
     inputs = Input(input_size)
     # first global conv has no normalization
     global_conv1 = Conv2D(filter_size, kernel_size=7, activation='relu', padding='same', name='global_conv1')(inputs)
