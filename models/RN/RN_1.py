@@ -38,10 +38,12 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
         RB = create_resblock(prior_layer=RB, block_name='RB' + str(i),
                              n_filters=filter_size, kernel_size=3, stride=1, dilation=1, normalizer=normalizer)
 
+    out = Concatenate(axis=3)([RB, global_conv1])
     # depth to space
-    out = depth_to_space(RB, 2)
+    out = depth_to_space(out, 2)
 
     # TODO: Add layers here?
+    out = Conv2D(32, kernel_size=5, padding='same', activation='relu')(out)
     out = Conv2D(16, kernel_size=5, padding='same', activation='relu')(out)
     out = Conv2D(8, kernel_size=5, padding='same', activation='relu')(out)
 
@@ -103,4 +105,4 @@ def norm(input_layer, name, normalizer):
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=12, normalizer='batch')
+mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=12, normalizer='batch')
