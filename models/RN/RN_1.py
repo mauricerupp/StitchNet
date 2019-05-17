@@ -21,17 +21,12 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     :param input_size:
     :return:
     """
-    if normalizer == 'batch':
-        normalizer = BatchNormalization
-    elif normalizer == 'instance':
-        pass
-
     inputs = Input(input_size)
     # first global conv has no normalization
     global_conv1 = Conv2D(filter_size, kernel_size=7, activation='relu', padding='same', name='global_conv1')(inputs)
 
     global_conv2 = Conv2D(filter_size, kernel_size=7, padding='same', name='global_conv2')(global_conv1)
-    global_conv2 = normalizer(name="globalconv2_norm1", input_layer=global_conv2)
+    global_conv2 = norm(name="globalconv2_norm1", input_layer=global_conv2, normalizer=normalizer)
     global_conv2 = Activation('relu')(global_conv2)
 
     # first RB
@@ -73,7 +68,7 @@ def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dil
                strides=stride, dilation_rate=dilation,
                name=block_name + "_conv1",
                padding='same')(prior_layer)
-    x = normalizer(name=block_name + "_norm1")(x)
+    x = norm(x, name=block_name + "_norm1", normalizer=normalizer)
     x = Activation('relu')(x)
 
     x = Conv2D(filters=n_filters, kernel_size=kernel_size,
@@ -81,7 +76,7 @@ def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dil
                name=block_name + "_conv2",
                padding='same')(x)
 
-    x = normalizer(name=block_name + "_norm2")(x)
+    x = norm(x, name=block_name + "_norm2", normalizer=normalizer)
 
     return Add()([prior_layer, x])
 
@@ -95,9 +90,15 @@ def depth_to_space(input_layer, blocksize):
     return Lambda(lambda x: tf.depth_to_space(x, block_size=blocksize, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
 
 
-def instance_norm(input_layer, name):
-    return Lambda(lambda x: tf.contrib.layers.instance_norm(x), name=name)(input_layer)
+def norm(input_layer, name, normalizer):
+    if normalizer == 'batch':
+        return BatchNormalization(name=name)(input_layer)
+    elif normalizer == 'instance':
+        return Lambda(lambda x: tf.contrib.layers.instance_norm(x), name=name)(input_layer)
+    else:
+        print("No valid norm")
+        exit()
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=12, normalizer=BatchNormalization)
+#mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=12, normalizer='batch')
