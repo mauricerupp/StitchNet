@@ -21,7 +21,7 @@ x_0 = None
 current_model = RN_1
 
 # name the model
-NAME = str(current_model.__name__) + "_minus1_1"
+NAME = str(current_model.__name__) + "globskip1_minus1_1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -91,7 +91,7 @@ val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_v
 model = current_model.create_model(input_size=input_size, filter_size=128, block_amount=12, normalizer="batch")
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=302,
+model.fit_generator(train_data_generator,  epochs=202,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 
