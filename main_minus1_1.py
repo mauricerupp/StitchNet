@@ -21,7 +21,7 @@ x_0 = None
 current_model = RN_1_globalskips
 
 # name the model
-NAME = str(current_model.__name__) + "_INSTANCE"
+NAME = str(current_model.__name__) + "1_INSTANCE"
 
 
 # ----- Callbacks / Helperfunctions ----- #

@@ -38,7 +38,7 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
         RB = create_resblock(prior_layer=RB, block_name='RB' + str(i),
                              n_filters=filter_size, kernel_size=3, stride=1, dilation=1, normalizer=normalizer)
 
-    out = Concatenate(axis=3)([RB, global_conv2])
+    out = Concatenate(axis=3)([RB, global_conv1])
     # depth to space
     out = depth_to_space(out, 2)
 
