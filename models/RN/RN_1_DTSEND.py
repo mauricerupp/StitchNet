@@ -99,7 +99,7 @@ def norm(input_layer, name, normalizer):
     if normalizer == 'batch':
         return BatchNormalization(name=name)(input_layer)
     elif normalizer == 'instance':
-        return InstanceNormalization()(input_layer)(input_layer)
+        return InstanceNormalization()(input_layer)
     else:
         print("No valid norm")
         exit()
