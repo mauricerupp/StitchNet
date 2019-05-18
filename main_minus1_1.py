@@ -1,6 +1,6 @@
 # own classes
 from batch_generator_minus1_1 import *
-import RN_1_DTSEND
+import RN_1
 
 # packages
 from tensorflow import keras
@@ -18,7 +18,7 @@ paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = RN_1_DTSEND
+current_model = RN_1
 
 # name the model
 NAME = str(current_model.__name__) + "_INSTANCE"
