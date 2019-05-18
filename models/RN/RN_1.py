@@ -1,4 +1,5 @@
 import l1_loss
+from group_normalization import InstanceNormalization
 
 
 from tensorflow.python.keras.models import *
@@ -6,6 +7,7 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
+
 
 # TODO: implement instancenorm
 
@@ -96,11 +98,11 @@ def norm(input_layer, name, normalizer):
     if normalizer == 'batch':
         return BatchNormalization(name=name)(input_layer)
     elif normalizer == 'instance':
-        return Lambda(lambda x: tf.contrib.layers.instance_norm(x), name=name)(input_layer)
+        return InstanceNormalization()(input_layer)
     else:
         print("No valid norm")
         exit()
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=12, normalizer='batch')
+mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=12, normalizer='instance')

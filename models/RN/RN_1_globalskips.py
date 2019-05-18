@@ -1,5 +1,5 @@
 import l1_loss
-
+from group_normalization import InstanceNormalization
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
@@ -98,7 +98,7 @@ def norm(input_layer, name, normalizer):
     if normalizer == 'batch':
         return BatchNormalization(name=name)(input_layer)
     elif normalizer == 'instance':
-        return Lambda(lambda x: tf.contrib.layers.instance_norm(x), name=name)(input_layer)
+        return InstanceNormalization()(input_layer)
     else:
         print("No valid norm")
         exit()
