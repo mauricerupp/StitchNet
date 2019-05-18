@@ -21,7 +21,7 @@ x_0 = None
 current_model = RN_1_DTSEND
 
 # name the model
-NAME = str(current_model.__name__) + "_minus1_1"
+NAME = str(current_model.__name__) + "_INSTANCE"
 
 
 # ----- Callbacks / Helperfunctions ----- #
