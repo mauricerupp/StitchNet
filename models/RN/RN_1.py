@@ -48,7 +48,7 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     out = Conv2D(3, kernel_size=5, padding='same', activation='tanh')(out)
 
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.01), loss=l1_loss.custom_loss, metrics=['accuracy'])
+    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001), loss=l1_loss.custom_loss, metrics=['accuracy'])
     model.summary()
 
     # Save the configurations as txt-file
