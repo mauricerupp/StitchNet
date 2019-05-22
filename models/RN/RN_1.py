@@ -9,9 +9,6 @@ import tensorflow as tf
 import datetime
 
 
-# TODO: implement instancenorm
-
-
 def create_model(pretrained_weights=None, input_size=None, filter_size=128, block_amount = 12, normalizer=None):
     """
     A simple residual network with ResBlocks from Givi
@@ -95,9 +92,9 @@ def depth_to_space(input_layer, blocksize):
 
 
 def norm(input_layer, name, normalizer):
-    if normalizer == 'batch':
+    if normalizer.lower() == 'batch':
         return BatchNormalization(name=name)(input_layer)
-    elif normalizer == 'instance':
+    elif normalizer.lower() == 'instance':
         return InstanceNormalization()(input_layer)
     else:
         print("No valid norm")
