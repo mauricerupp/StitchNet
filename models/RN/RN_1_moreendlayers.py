@@ -8,8 +8,6 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
-# TODO: implement instancenorm
-
 
 def create_model(pretrained_weights=None, input_size=None, filter_size=128, block_amount = 12, normalizer=None):
     """
