@@ -1,6 +1,6 @@
 # own classes
 from batch_generator_minus1_1 import *
-import RN_1
+import RN_2
 
 # packages
 from tensorflow import keras
@@ -18,10 +18,10 @@ paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = RN_1
+current_model = RN_2
 
 # name the model
-NAME = str(current_model.__name__) + "_moreRB_BATCH"
+NAME = str(current_model.__name__) + "_BATCH"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -88,7 +88,7 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize)
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, filter_size=128, block_amount=20, normalizer="batch")
+model = current_model.create_model(input_size=input_size, filter_size=128, block_amount=12, normalizer="batch")
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=202,
