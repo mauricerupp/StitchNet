@@ -21,7 +21,7 @@ x_0 = None
 current_model = RN_1
 
 # name the model
-NAME = str(current_model.__name__) + "_batch_moreblocks"
+NAME = str(current_model.__name__) + "_moreRB_BATCH"
 
 
 # ----- Callbacks / Helperfunctions ----- #
