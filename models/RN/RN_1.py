@@ -55,7 +55,7 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     #with open('RDN ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
     #    model.summary(print_fn=lambda x: fh.write(x + '\n'))
 
-    plot_model(model, to_file='RN_1.png')
+    #plot_model(model, to_file='RN_1.png')
 
     if pretrained_weights:
         model.load_weights(pretrained_weights)
