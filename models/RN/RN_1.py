@@ -93,13 +93,13 @@ def depth_to_space(input_layer, blocksize):
 
 def norm(input_layer, name, normalizer):
     if normalizer.lower() == 'batch':
-        return BatchNormalization(name=name)(input_layer)
+        return BatchNormalization(name=name, axis=3)(input_layer)
     elif normalizer.lower() == 'instance':
-        return InstanceNormalization()(input_layer)
+        return InstanceNormalization(axis=3)(input_layer)
     else:
         print("No valid norm")
         exit()
 # ------- END -------- #
 
 
-#mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=20, normalizer='batch')
+mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=20, normalizer='batch')
