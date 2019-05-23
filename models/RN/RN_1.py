@@ -102,4 +102,4 @@ def norm(input_layer, name, normalizer):
 # ------- END -------- #
 
 
-mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=20, normalizer='batch')
+#mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=20, normalizer='batch')
