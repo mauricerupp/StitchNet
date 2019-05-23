@@ -1,5 +1,5 @@
 # own classes
-from batch_generator_0_255 import *
+from batch_generator import *
 import RDN_1
 
 # packages

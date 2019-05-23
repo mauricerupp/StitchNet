@@ -1,5 +1,5 @@
 # own classes
-from batch_generator_0_1 import *
+from batch_generator import *
 import RDN_1
 
 # packages
@@ -85,8 +85,8 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only=True, verbose=1)
 
 # ----- Batchgenerator setup ----- #
-train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_dir_train + "/targets_paths.npy", batchsize)
-val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize)
+train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_dir_train + "/targets_paths.npy", batchsize, '0,1')
+val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '0,1')
 
 # ----- Model setup ----- #
 model = current_model.create_model(input_size=input_size, G0=64, G=32, D=10, C=6)
