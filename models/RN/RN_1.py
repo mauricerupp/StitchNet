@@ -12,12 +12,11 @@ import datetime
 def create_model(pretrained_weights=None, input_size=None, filter_size=128, block_amount = 12, normalizer=None):
     """
     A simple residual network with ResBlocks from Givi
-    :param G0: filtersize for the last convolutional layer
-    :param G: filtersize per convolutional layer
-    :param D: amout of residual dense blocks (RDB)
-    :param C: Amount of convolutional layers per RDB
     :param pretrained_weights:
     :param input_size:
+    :param filter_size:
+    :param block_amount:
+    :param normalizer:
     :return:
     """
     inputs = Input(input_size)

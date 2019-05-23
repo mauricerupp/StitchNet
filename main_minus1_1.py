@@ -40,7 +40,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 50 == 0:  # print samples every 50 images
+    if epoch % 100 == 0:  # print samples every 50 images
         for i in range(1, 5):
             # load X
             if i % 2 == 0:
@@ -99,7 +99,7 @@ val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_v
 model = current_model.create_model(input_size=input_size, filter_size=128, block_amount=12, normalizer="batch")
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=252,
+model.fit_generator(train_data_generator,  epochs=752,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 

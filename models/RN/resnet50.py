@@ -11,6 +11,7 @@ from __future__ import print_function
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
+from l1_loss import *
 import tensorflow as tf
 
 import os
@@ -30,10 +31,7 @@ def identity_block(input_tensor, kernel_size, filters, stage, block):
         Output tensor for the block.
     """
     filters1, filters2, filters3 = filters
-    if backend.image_data_format() == 'channels_last':
-        bn_axis = 3
-    else:
-        bn_axis = 1
+    bn_axis = 3
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
 
@@ -82,10 +80,7 @@ def conv_block(input_tensor,
     And the shortcut should have strides=(2, 2) as well
     """
     filters1, filters2, filters3 = filters
-    if backend.image_data_format() == 'channels_last':
-        bn_axis = 3
-    else:
-        bn_axis = 1
+    bn_axis = 3
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
 
@@ -117,7 +112,7 @@ def conv_block(input_tensor,
     return x
 
 
-def ResNet50(input_size=None):
+def create_model(input_size=None):
     """Instantiates the ResNet50 architecture.
     Optionally loads weights pre-trained on ImageNet.
     Note that the data format convention used by the model is
@@ -194,8 +189,10 @@ def ResNet50(input_size=None):
 
     # Create model.
     model = Model(inputs=inputs, outputs=x)
-    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss=l1_loss.custom_loss, metrics=['accuracy'])
+    model.compile(optimizer=tf.keras.optimizers.Adam(), loss=custom_loss, metrics=['accuracy'])
     model.summary()
 
-
     return model
+
+
+mod = create_model(input_size=(64,64,15))
