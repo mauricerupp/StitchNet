@@ -188,9 +188,9 @@ def create_model(input_size=None):
     x = identity_block(x, 3, [256, 256, 1024], stage=4, block='e')
     x = identity_block(x, 3, [256, 256, 1024], stage=4, block='f')
 
-    x = conv_block(x, 3, [512, 512, 2016], stage=5, block='a')
-    x = identity_block(x, 3, [512, 512, 2016], stage=5, block='b')
-    x = identity_block(x, 3, [512, 512, 2016], stage=5, block='c')
+    #x = conv_block(x, 3, [512, 512, 2016], stage=5, block='a')
+    #x = identity_block(x, 3, [512, 512, 2016], stage=5, block='b')
+    #x = identity_block(x, 3, [512, 512, 2016], stage=5, block='c')
 
     x = Conv2D(256, (3, 3),
                strides=(1, 1),
