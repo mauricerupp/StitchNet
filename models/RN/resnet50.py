@@ -53,7 +53,7 @@ def identity_block(input_tensor, kernel_size, filters, stage, block):
                       name=conv_name_base + '2c')(x)
     x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2c')(x)
 
-    x = Add([x, input_tensor])
+    x = Add()([x, input_tensor])
     x = Activation('relu')(x)
     return x
 
@@ -63,7 +63,7 @@ def conv_block(input_tensor,
                filters,
                stage,
                block,
-               strides=(2, 2)):
+               strides=(1, 1)):
     """A block that has a conv layer at shortcut.
     # Arguments
         input_tensor: input tensor
@@ -107,9 +107,17 @@ def conv_block(input_tensor,
     shortcut = BatchNormalization(
         axis=bn_axis, name=bn_name_base + '1')(shortcut)
 
-    x = Add([x, shortcut])
+    x = Add()([x, shortcut])
     x = Activation('relu')(x)
     return x
+
+def depth_to_space(input_layer, blocksize):
+    """
+    implements the tensorflow depth to space function
+    :param input_layer:
+    :return:
+    """
+    return Lambda(lambda x: tf.depth_to_space(x, block_size=blocksize, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
 
 
 def create_model(input_size=None):
@@ -156,16 +164,13 @@ def create_model(input_size=None):
     # Determine proper input shape
     inputs = Input(input_size)
 
-    x = ZeroPadding2D(padding=(3, 3), name='conv1_pad')(inputs)
     x = Conv2D(64, (7, 7),
-                      strides=(2, 2),
-                      padding='valid',
+                      strides=(1, 1),
+                      padding='same',
                       kernel_initializer='he_normal',
-                      name='conv1')(x)
+                      name='conv1')(inputs)
     x = BatchNormalization(axis=3, name='bn_conv1')(x)
     x = Activation('relu')(x)
-    x = ZeroPadding2D(padding=(1, 1), name='pool1_pad')(x)
-    x = MaxPooling2D((3, 3), strides=(2, 2))(x)
 
     x = conv_block(x, 3, [64, 64, 256], stage=2, block='a', strides=(1, 1))
     x = identity_block(x, 3, [64, 64, 256], stage=2, block='b')
@@ -183,16 +188,34 @@ def create_model(input_size=None):
     x = identity_block(x, 3, [256, 256, 1024], stage=4, block='e')
     x = identity_block(x, 3, [256, 256, 1024], stage=4, block='f')
 
-    x = conv_block(x, 3, [512, 512, 2048], stage=5, block='a')
-    x = identity_block(x, 3, [512, 512, 2048], stage=5, block='b')
-    x = identity_block(x, 3, [512, 512, 2048], stage=5, block='c')
+    x = conv_block(x, 3, [512, 512, 2016], stage=5, block='a')
+    x = identity_block(x, 3, [512, 512, 2016], stage=5, block='b')
+    x = identity_block(x, 3, [512, 512, 2016], stage=5, block='c')
 
-    # Create model.
-    model = Model(inputs=inputs, outputs=x)
+    x = Conv2D(512, (3, 3),
+               strides=(1, 1),
+               padding='same',
+               kernel_initializer='he_normal')(x)
+
+    x = Conv2D(128, (3, 3),
+               strides=(1, 1),
+               padding='same',
+               kernel_initializer='he_normal')(x)
+
+    x = depth_to_space(x, 2)
+
+    out = Conv2D(16, kernel_size=5, padding='same', activation='relu')(x)
+    out = Conv2D(8, kernel_size=5, padding='same', activation='relu')(out)
+
+    # since we output a color image, we want 3 filters as the last layer
+    out = Conv2D(3, kernel_size=5, padding='same', activation='tanh')(out)
+
+    # Create model
+    model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer=tf.keras.optimizers.Adam(), loss=custom_loss, metrics=['accuracy'])
     model.summary()
 
     return model
 
 
-mod = create_model(input_size=(64,64,15))
+#mod = create_model(input_size=(64,64,15))
