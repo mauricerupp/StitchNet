@@ -25,6 +25,14 @@ NAME = str(current_model.__name__) + "test"
 
 
 # ----- Callbacks / Helperfunctions ----- #
+def zero_center(in_img):
+    return 2 * in_img - 1
+
+
+def revert_zero_center(in_img):
+    return in_img / 2 + 0.5
+
+
 def image_predictor(epoch, logs):
     """
     createy a tester, that predicts the same few images after every epoch and stores them as png
