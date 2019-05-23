@@ -21,7 +21,7 @@ x_0 = None
 current_model = RN_1
 
 # name the model
-NAME = str(current_model.__name__) + "_low_LR_BATCH"
+NAME = str(current_model.__name__) + "test"
 
 
 # ----- Callbacks / Helperfunctions ----- #
