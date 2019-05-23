@@ -161,17 +161,16 @@ def ResNet50(input_size=None):
     # Determine proper input shape
     inputs = Input(input_size)
 
-
     x = ZeroPadding2D(padding=(3, 3), name='conv1_pad')(inputs)
     x = Conv2D(64, (7, 7),
                       strides=(2, 2),
                       padding='valid',
                       kernel_initializer='he_normal',
                       name='conv1')(x)
-    x = BatchNormalization(axis=bn_axis, name='bn_conv1')(x)
-    x = layers.Activation('relu')(x)
-    x = layers.ZeroPadding2D(padding=(1, 1), name='pool1_pad')(x)
-    x = layers.MaxPooling2D((3, 3), strides=(2, 2))(x)
+    x = BatchNormalization(axis=3, name='bn_conv1')(x)
+    x = Activation('relu')(x)
+    x = ZeroPadding2D(padding=(1, 1), name='pool1_pad')(x)
+    x = MaxPooling2D((3, 3), strides=(2, 2))(x)
 
     x = conv_block(x, 3, [64, 64, 256], stage=2, block='a', strides=(1, 1))
     x = identity_block(x, 3, [64, 64, 256], stage=2, block='b')
@@ -193,45 +192,10 @@ def ResNet50(input_size=None):
     x = identity_block(x, 3, [512, 512, 2048], stage=5, block='b')
     x = identity_block(x, 3, [512, 512, 2048], stage=5, block='c')
 
-    if include_top:
-        x = layers.GlobalAveragePooling2D(name='avg_pool')(x)
-        x = layers.Dense(classes, activation='softmax', name='fc1000')(x)
-    else:
-        if pooling == 'avg':
-            x = layers.GlobalAveragePooling2D()(x)
-        elif pooling == 'max':
-            x = layers.GlobalMaxPooling2D()(x)
-        else:
-            warnings.warn('The output shape of `ResNet50(include_top=False)` '
-                          'has been changed since Keras 2.2.0.')
-
-    # Ensure that the model takes into account
-    # any potential predecessors of `input_tensor`.
-    if input_tensor is not None:
-        inputs = keras_utils.get_source_inputs(input_tensor)
-    else:
-        inputs = img_input
     # Create model.
-    model = models.Model(inputs, x, name='resnet50')
+    model = Model(inputs=inputs, outputs=x)
+    model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss=l1_loss.custom_loss, metrics=['accuracy'])
+    model.summary()
 
-    # Load weights.
-    if weights == 'imagenet':
-        if include_top:
-            weights_path = keras_utils.get_file(
-                'resnet50_weights_tf_dim_ordering_tf_kernels.h5',
-                WEIGHTS_PATH,
-                cache_subdir='models',
-                md5_hash='a7b3fe01876f51b976af0dea6bc144eb')
-        else:
-            weights_path = keras_utils.get_file(
-                'resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5',
-                WEIGHTS_PATH_NO_TOP,
-                cache_subdir='models',
-                md5_hash='a268eb855778b3df3c7506639542a6af')
-        model.load_weights(weights_path)
-        if backend.backend() == 'theano':
-            keras_utils.convert_all_kernels_in_model(model)
-    elif weights is not None:
-        model.load_weights(weights)
 
     return model
