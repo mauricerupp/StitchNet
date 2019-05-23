@@ -192,7 +192,7 @@ def create_model(input_size=None):
     x = identity_block(x, 3, [512, 512, 2016], stage=5, block='b')
     x = identity_block(x, 3, [512, 512, 2016], stage=5, block='c')
 
-    x = Conv2D(512, (3, 3),
+    x = Conv2D(256, (3, 3),
                strides=(1, 1),
                padding='same',
                kernel_initializer='he_normal')(x)
