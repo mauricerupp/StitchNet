@@ -6,15 +6,23 @@ from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 import l1_loss
 
-
+from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
+y_pred1 = np.array([[[0, 255, 2],[33, 22, 11]], [[0, 0, 222],[1, 0, 2]]])
+print(y_pred1)
+print(y_pred1.shape)
+y_pred1 = preprocess_input(y_pred1, mode='torch')
+print(y_pred1)
+print(y_pred1.shape)
+
+"""
 def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=6):
-    """
+    
     A simple residual network with ResBlocks from Givi
     :param G0: filtersize for the last convolutional layer
     :param G: filtersize per convolutional layer
@@ -23,7 +31,6 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     :param pretrained_weights:
     :param input_size:
     :return:
-    """
     inputs = Input(input_size)
     conv = Conv2D(128, kernel_size=3, activation='relu', padding='same', name='global_conv2')(inputs)
     conv = create_resblock(conv, 'dx', 128, 3, 1, 1, BatchNormalization)
@@ -48,7 +55,6 @@ def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dil
 
 mod = create_model(input_size=(64,64,15))
 
-"""
 y_true = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/target1.npy')[:,:,-3:]
 print(y_true.shape)
 y_true = np.concatenate([y_true[:,:,:-3], y_true[:,:,-3:]], axis=2)
