@@ -6,7 +6,7 @@ from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 
 class MyGenerator(Sequence):
 
-    def __init__(self, snaps_paths, targets_paths, batch_size, mode=None):
+    def __init__(self, snaps_paths, targets_paths, batch_size, mode='0_255'):
         self.snaps, self.targets = np.load(snaps_paths), np.load(targets_paths)
         self.batch_size = batch_size
         self.mode = mode
