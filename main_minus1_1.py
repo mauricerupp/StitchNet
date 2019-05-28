@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-import RN_1
+import RDN_1
 
 # packages
 from tensorflow import keras
@@ -12,16 +12,16 @@ import matplotlib.pyplot as plt
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 10
+batchsize = 20
 paths_dir_train = '/data/cvg/maurice/processed/coco_small/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = RN_1
+current_model = RDN_1
 
 # name the model
-NAME = str(current_model.__name__) + "new_l1"
+NAME = str(current_model.__name__) + "_new_l1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -96,8 +96,8 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, filter_size=128, block_amount=12, normalizer="batch")
-#model = current_model.create_model(input_size=input_size)
+#model = current_model.create_model(input_size=input_size, filter_size=128, block_amount=12, normalizer="batch")
+model = current_model.create_model(input_size=input_size)
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=552,
