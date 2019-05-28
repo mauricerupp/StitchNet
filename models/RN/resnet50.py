@@ -14,9 +14,6 @@ from tensorflow.python.keras.utils import plot_model
 from l1_loss import *
 import tensorflow as tf
 
-import os
-import warnings
-
 
 def identity_block(input_tensor, kernel_size, filters, stage, block):
     """The identity block is the block that has no conv layer at shortcut.
@@ -110,6 +107,7 @@ def conv_block(input_tensor,
     x = Add()([x, shortcut])
     x = Activation('relu')(x)
     return x
+
 
 def depth_to_space(input_layer, blocksize):
     """

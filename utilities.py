@@ -4,13 +4,51 @@ from __future__ import print_function
 
 import logging
 import tensorflow as tf
+from tensorflow.python.keras.layers import *
+
+
+# ---- Functions/Layers ---- #
+def depth_to_space(input_layer, blocksize):
+    """
+    implements the tensorflow depth to space function
+    """
+    return Lambda(lambda x: tf.depth_to_space(x, block_size=blocksize, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
+
+
+def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dilation, normalizer):
+    x = Conv2D(filters=n_filters, kernel_size=kernel_size,
+               strides=stride, dilation_rate=dilation,
+               name=block_name + "_conv1",
+               padding='same')(prior_layer)
+    x = normalize(x, name=block_name + "_norm1", normalizer=normalizer)
+    x = Activation('relu')(x)
+
+    x = Conv2D(filters=n_filters, kernel_size=kernel_size,
+               strides=stride, dilation_rate=dilation,
+               name=block_name + "_conv2",
+               padding='same')(x)
+
+    x = normalize(x, name=block_name + "_norm2", normalizer=normalizer)
+
+    return Add()([prior_layer, x])
+
+
+# ---- Normalization ---- #
+def normalize(input_layer, name, normalizer):
+    if normalizer.lower() == 'batch':
+        return BatchNormalization(name=name, axis=3)(input_layer)
+    elif normalizer.lower() == 'instance':
+        return InstanceNormalization(axis=3)(input_layer)
+    else:
+        print("No valid normalize")
+        exit()
 
 
 class GroupNormalization(tf.keras.layers.Layer):
     """Group normalization layer.
     Group Normalization divides the channels into groups and computes
     within each group the mean and variance for normalization.
-    Empirically, its accuracy is more stable than batch norm in a wide
+    Empirically, its accuracy is more stable than batch normalize in a wide
     range of small batch sizes, if learning rate is adjusted linearly
     with batch sizes.
     Relation to Layer Normalization:
@@ -253,7 +291,7 @@ class InstanceNormalization(GroupNormalization):
     """Instance normalization layer.
     Instance Normalization is an specific case of ```GroupNormalization```since
     it normalizes all features of one channel. The Groupsize is equal to the
-    channel size. Empirically, its accuracy is more stable than batch norm in a
+    channel size. Empirically, its accuracy is more stable than batch normalize in a
     wide range of small batch sizes, if learning rate is adjusted linearly
     with batch sizes.
     Arguments
@@ -286,3 +324,4 @@ class InstanceNormalization(GroupNormalization):
 
         kwargs["groups"] = -1
         super(InstanceNormalization, self).__init__(**kwargs)
+

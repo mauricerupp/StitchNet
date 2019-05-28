@@ -1,13 +1,11 @@
 import l1_loss
-from group_normalization import InstanceNormalization
+from utilities import *
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
-
-# TODO: implement instancenorm, global skips
 
 
 def create_model(pretrained_weights=None, input_size=None, filter_size=128, block_amount = 12, normalizer=None):
@@ -26,7 +24,7 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     global_conv1 = Conv2D(filter_size, kernel_size=7, activation='relu', padding='same', name='global_conv1')(inputs)
 
     global_conv2 = Conv2D(filter_size, kernel_size=7, padding='same', name='global_conv2')(global_conv1)
-    global_conv2 = norm(name="globalconv2_norm1", input_layer=global_conv2, normalizer=normalizer)
+    global_conv2 = normalize(name="globalconv2_norm1", input_layer=global_conv2, normalizer=normalizer)
     global_conv2 = Activation('relu')(global_conv2)
 
     # first RB
@@ -64,45 +62,6 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
         model.load_weights(pretrained_weights)
 
     return model
-
-
-# ------- Functions -------- #
-def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dilation, normalizer):
-    x = Conv2D(filters=n_filters, kernel_size=kernel_size,
-               strides=stride, dilation_rate=dilation,
-               name=block_name + "_conv1",
-               padding='same')(prior_layer)
-    x = norm(x, name=block_name + "_norm1", normalizer=normalizer)
-    x = Activation('relu')(x)
-
-    x = Conv2D(filters=n_filters, kernel_size=kernel_size,
-               strides=stride, dilation_rate=dilation,
-               name=block_name + "_conv2",
-               padding='same')(x)
-
-    x = norm(x, name=block_name + "_norm2", normalizer=normalizer)
-
-    return Add()([prior_layer, x])
-
-
-def depth_to_space(input_layer, blocksize):
-    """
-    implements the tensorflow depth to space function
-    :param input_layer:
-    :return:
-    """
-    return Lambda(lambda x: tf.depth_to_space(x, block_size=blocksize, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
-
-
-def norm(input_layer, name, normalizer):
-    if normalizer == 'batch':
-        return BatchNormalization(name=name)(input_layer)
-    elif normalizer == 'instance':
-        return InstanceNormalization()(input_layer)
-    else:
-        print("No valid norm")
-        exit()
-# ------- END -------- #
 
 
 #mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=12, normalizer='batch')

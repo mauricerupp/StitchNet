@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 import l1_loss
+import random
 
 from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import *
@@ -13,6 +14,22 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
+
+def alg(k):
+    x = 0
+    y = 2**k
+
+    while x < y-1:
+        r = random.randint(x, y-1)
+        m = x + (y-x)/2
+        if m <= r:
+            x = m
+        else:
+            y = m
+    return y
+
+print(alg(2))
+"""        
 y_pred1 = np.array([[[0, 255, 2],[33, 22, 11]], [[0, 0, 222],[1, 0, 2]]])
 print(y_pred1)
 print(y_pred1.shape)
@@ -20,7 +37,6 @@ y_pred1 = preprocess_input(y_pred1, mode='torch')
 print(y_pred1)
 print(y_pred1.shape)
 
-"""
 def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=6):
     
     A simple residual network with ResBlocks from Givi
