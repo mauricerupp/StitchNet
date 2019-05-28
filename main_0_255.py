@@ -19,7 +19,7 @@ x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
 current_model = RDN_1
-NAME = str(current_model.__name__) + "_0_255"
+NAME = str(current_model.__name__) + "_0_255_new_l1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -33,7 +33,7 @@ def image_predictor(epoch, logs):
     if epoch%50 == 0: # print samples every 10 images
         for i in range(1, 5):
             # load X
-            if i%2 == 0:
+            if i%100 == 0:
                 x_pred = np.load('/data/cvg/maurice/processed/coco_small/train/snaps/snaps{}.npy'.format(i))
             else:
                 x_pred = np.load('/data/cvg/maurice/processed/coco_small/val/snaps/snaps{}.npy'.format(i))
@@ -86,7 +86,7 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy",
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize)
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, G0=64, G=32, D=10, C=6)
+model = current_model.create_model(input_size=input_size)
 
 model.fit_generator(train_data_generator,  epochs=202,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
