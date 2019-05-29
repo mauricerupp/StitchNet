@@ -1,4 +1,5 @@
 import tensorflow.keras.backend as K
+import tensorflow as tf
 
 
 def custom_loss(y_true, y_pred):
@@ -10,4 +11,8 @@ def custom_loss(y_true, y_pred):
     """
     covered_area = y_true[:, :, :, -3:]
     y_true = y_true[:, :, :, :-3]
-    return K.mean(K.abs(y_true - y_pred) * covered_area, axis=-1)
+    l1 = K.sum(K.abs(y_true - y_pred) * covered_area)
+    nonzero = tf.math.count_nonzero(covered_area, keepdims=False)
+    nonzero = K.cast(nonzero, 'float64')
+    # get the mean absolute error, but the value of the mean is only the actually covered pixels
+    return l1/nonzero

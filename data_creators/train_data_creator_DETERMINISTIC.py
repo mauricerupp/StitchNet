@@ -118,7 +118,7 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
 
     print("Coverage of the created dataset is {:.2%}".format(coverage / sample_count))
     print("Overlapse of the created dataset is {:.2%}".format(overlapse / sample_count))
-    print("Your data is stored in:" + str(raw_dir) + "and " + str(snap_dir))
+    print("Your data is stored in:" + str(target_dir) + " and " + str(snap_dir))
 
 
 def create_fix_translation_path(img_target, snaps_per_sample, snap_size, step_size):

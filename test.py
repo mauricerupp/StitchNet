@@ -14,21 +14,6 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
-
-def alg(k):
-    x = 0
-    y = 2**k
-
-    while x < y-1:
-        r = random.randint(x, y-1)
-        m = x + (y-x)/2
-        if m <= r:
-            x = m
-        else:
-            y = m
-    return y
-
-print(alg(2))
 """        
 y_pred1 = np.array([[[0, 255, 2],[33, 22, 11]], [[0, 0, 222],[1, 0, 2]]])
 print(y_pred1)
@@ -75,6 +60,7 @@ y_true = np.load('/home/maurice/Dokumente/Try_Models/coco_try/train/targets/targ
 print(y_true.shape)
 y_true = np.concatenate([y_true[:,:,:-3], y_true[:,:,-3:]], axis=2)
 print(y_true.shape)
+"""
 
 y_true1 = np.array([[[0, 0.2, 0.1, 1,1,1],[0.4, 0.2, 0.1,0,0,0]], [[0.3, 0.0, 0.5,1,1,1],[0.4, 0.4, 0.1,0,0,0]]])
 y_true2 = np.array([[[0.11, 0.22, 0.33, 0,0,0],[0.33, 0.22, 0.11,0,0,0]], [[0.7, 0.70, 0.0,0,0,0],[0.1, 0.0, 0.2,1,1,1]]])
@@ -89,10 +75,9 @@ loss = l1_loss.custom_loss(y_true, y_pred)
 equality = tf.equal(y_pred1, y_pred2 / 255.0)
 accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
 
-print(accuracy.eval())
 print(sess.run(loss))
 sess.close()
-
+""""
 equality = np.equal(y_pred1, y_pred2 / 255.0)
 accuracy = np.mean(equality)
 
