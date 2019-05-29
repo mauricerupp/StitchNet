@@ -13,6 +13,6 @@ def custom_loss(y_true, y_pred):
     y_true = y_true[:, :, :, :-3]
     l1 = K.sum(K.abs(y_true - y_pred) * covered_area)
     nonzero = tf.math.count_nonzero(covered_area, keepdims=False)
-    nonzero = K.cast(nonzero, 'float64')
+    nonzero = K.cast(nonzero, 'float32')
     # get the mean absolute error, but the value of the mean is only the actually covered pixels
     return l1/nonzero
