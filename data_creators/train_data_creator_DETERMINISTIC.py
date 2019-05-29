@@ -300,11 +300,11 @@ create_training_data('/data/cvg/maurice/unprocessed/coco_smalltrain',
                      '/data/cvg/maurice/processed/coco_small/train/targets',
                      '/data/cvg/maurice/processed/coco_small/train/snaps',
                      '/data/cvg/maurice/processed/coco_small/train/',
-                     (128, 128), (64, 64), 5)
+                     (128, 128), (64, 64), 5, 16)
 
 create_training_data('/data/cvg/maurice/unprocessed/coco_smallval',
                      '/data/cvg/maurice/processed/coco_small/val/targets',
                      '/data/cvg/maurice/processed/coco_small/val/snaps',
                      '/data/cvg/maurice/processed/coco_small/val/',
-                     (128, 128), (64, 64), 5)
+                     (128, 128), (64, 64), 5, 16)
 
