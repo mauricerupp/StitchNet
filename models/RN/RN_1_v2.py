@@ -11,7 +11,7 @@ import datetime
 
 def create_model(pretrained_weights=None, input_size=None, filter_size=128, block_amount=12, normalizer=None):
     """
-    A simple residual network with ResBlocks from Givi
+    A simple residual network and a Convolution layer for every inputimage with shared weights
     :param pretrained_weights:
     :param input_size:
     :param filter_size:
@@ -20,10 +20,10 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     :return:
     """
     inputs = Input(input_size)
-    # first global conv has no normalization
-    global_conv1 = Conv2D(filter_size*2, kernel_size=7, activation='relu', padding='same', name='global_conv1')(inputs)
+    # feature extractor of all images in the same convolution
+    conv1 = feature_extract(inputs, filter=64, kernel=5)
 
-    global_conv2 = Conv2D(filter_size, kernel_size=7, padding='same', name='global_conv2')(global_conv1)
+    global_conv2 = Conv2D(filter_size, kernel_size=3, padding='same', name='global_conv')(conv1)
     global_conv2 = normalize(name="globalconv2_norm1", input_layer=global_conv2, normalizer=normalizer)
     global_conv2 = Activation('relu')(global_conv2)
 
@@ -62,4 +62,4 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     return model
 
 
-mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=20, normalizer='batch')
+#mod = create_model(input_size=(64,64,15), filter_size=320, block_amount=8, normalizer='batch')

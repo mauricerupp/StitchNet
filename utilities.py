@@ -74,14 +74,15 @@ def create_RDB(prior_layer, block_name, G0=64, G=32, C=6):
     return feat
 
 
-def feature_extract(input_tensor, G0):
+def feature_extract(input_tensor, filter, kernel):
     """
     Runs every input image seperately through the same Conv-Layer
     and concatenates all tensors at the end
+    :param G0: filter size of the Convolutional layer
     :param input_tensor: the input layer of the extractor
     :return:
     """
-    conv = Conv2D(G0, kernel_size=3, padding='same', activation='relu', name='input_feature_conv')
+    conv = Conv2D(filter, kernel_size=kernel, padding='same', activation='relu', name='input_feature_conv')
     input_size = input_tensor.get_shape().as_list()
     in_conv_list = []
     index = 1

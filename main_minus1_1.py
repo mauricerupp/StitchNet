@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-import RN_1
+import RN_1_v2
 from utilities import *
 
 # packages
@@ -19,10 +19,10 @@ paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = RN_1
+current_model = RN_1_v2
 
 # name the model
-NAME = str(current_model.__name__) + "_old_l1"
+NAME = str(current_model.__name__) + ""
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -33,7 +33,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 100 == 0:  # print samples every 50 images
+    if epoch % 200 == 0:  # print samples every 50 images
         for i in range(1, 5):
             # load X
             if i % 2 == 0:
@@ -89,11 +89,11 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, filter_size=128, block_amount=12, normalizer="batch")
+model = current_model.create_model(input_size=input_size, filter_size=320, block_amount=8, normalizer="instance")
 #model = current_model.create_model(input_size=input_size)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=1552,
+model.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 
