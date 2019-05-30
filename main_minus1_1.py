@@ -22,7 +22,7 @@ x_0 = None
 current_model = RN_1_v2
 
 # name the model
-NAME = str(current_model.__name__) + "_batchnorm"
+NAME = str(current_model.__name__) + ""
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -89,7 +89,7 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size=input_size, filter_size=320, block_amount=8, normalizer="batch")
+model = current_model.create_model(input_size=input_size, filter_size=320, block_amount=8, normalizer="instance")
 #model = current_model.create_model(input_size=input_size)
 
 # train the model
