@@ -62,4 +62,4 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     return model
 
 
-#mod = create_model(input_size=(64,64,15), filter_size=320, block_amount=8, normalizer='batch')
+#mod = create_model(input_size=(64,64,15), filter_size=480, block_amount=8, normalizer='batch')
