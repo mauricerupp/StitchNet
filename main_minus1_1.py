@@ -1,6 +1,7 @@
 # own classes
 from batch_generator import *
 import RN_1
+from utilities import *
 
 # packages
 from tensorflow import keras
@@ -21,18 +22,10 @@ x_0 = None
 current_model = RN_1
 
 # name the model
-NAME = str(current_model.__name__) + "_old_l1"
+NAME = str(current_model.__name__) + ""
 
 
 # ----- Callbacks / Helperfunctions ----- #
-def zero_center(in_img):
-    return 2 * in_img - 1
-
-
-def revert_zero_center(in_img):
-    return in_img / 2 + 0.5
-
-
 def image_predictor(epoch, logs):
     """
     createy a tester, that predicts the same few images after every epoch and stores them as png

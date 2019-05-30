@@ -7,7 +7,20 @@ import tensorflow as tf
 from tensorflow.python.keras.layers import *
 
 
-# ---- Functions/Layers ---- #
+# ---- Functions ---- #
+def zero_center(in_img):
+    """
+    :param in_img: an image in the scale of [0,1]
+    :return: an image in the scale of [-1,1]
+    """
+    return 2 * in_img - 1
+
+
+def revert_zero_center(in_img):
+    return in_img / 2 + 0.5
+
+
+# ---- Layers ---- #
 def depth_to_space(input_layer, blocksize):
     """
     implements the tensorflow depth to space function
