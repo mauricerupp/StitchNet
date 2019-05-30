@@ -40,6 +40,8 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     out = depth_to_space(RB, 2)
 
     # TODO: Add layers here?
+    #out = Conv2D(64, kernel_size=5, padding='same', activation='relu')(out)
+    #out = Conv2D(32, kernel_size=5, padding='same', activation='relu')(out)
     out = Conv2D(16, kernel_size=5, padding='same', activation='relu')(out)
     out = Conv2D(8, kernel_size=5, padding='same', activation='relu')(out)
 
@@ -62,4 +64,4 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     return model
 
 
-#mod = create_model(input_size=(64,64,15), filter_size=480, block_amount=8, normalizer='batch')
+#mod = create_model(input_size=(64,64,15), filter_size=320, block_amount=8, normalizer='batch')
