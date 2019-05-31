@@ -61,7 +61,7 @@ print(y_true.shape)
 y_true = np.concatenate([y_true[:,:,:-3], y_true[:,:,-3:]], axis=2)
 print(y_true.shape)
 
-
+"""
 y_true1 = np.array([[[0, 0.2, 0.1, 1,1,1],[0.4, 0.2, 0.1,0,0,0]], [[0.3, 0.0, 0.5,1,1,1],[0.4, 0.4, 0.1,0,0,0]]])
 y_true2 = np.array([[[0.11, 0.22, 0.33, 0,0,0],[0.33, 0.22, 0.11,0,0,0]], [[0.7, 0.70, 0.0,0,0,0],[0.1, 0.0, 0.2,1,1,1]]])
 y_true = np.array((y_true1, y_true2))
@@ -83,7 +83,7 @@ accuracy = np.mean(equality)
 
 print(accuracy)
 print('Results of predicting Image {} on epoch {} with an accuracy of {:.2%}'.format(20, 1 + 1, accuracy))
-
+"""
 y_true1 = np.array([[[0, 2, 1, 1,1,1],[4, 2, 1,0,0,0]], [[3, 0, 5,1,1,1],[4, 4, 1,0,0,0]]])
 print(y_true1.shape)
 y_true1 = y_true1[0:1, 0:1]
