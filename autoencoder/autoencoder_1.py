@@ -4,9 +4,7 @@ from utilities import *
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
-import tensorflow as tf
 import tensorflow.keras.backend as K
-import datetime
 
 
 class ConvAutoencoder(object):

@@ -11,16 +11,14 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import cv2
 
 os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 
 # set the constants
 batchsize = 40
-paths_dir_train = '/data/cvg/maurice/processed/coco_small/train'
-paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
-x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
-input_size = x_0.shape
-x_0 = None
+paths_dir = '/data/cvg/maurice/unprocessed/'
+input_size = np.array([64,64,3])
 current_model = ConvAutoencoder
 
 # name the model
@@ -45,7 +43,7 @@ def image_predictor(epoch, logs):
             y_true = np.expand_dims(y_true, axis=0)
 
             # predict y (since the model is trained on pictures in [-1,1]) and we take a random crop
-            y_true = tf.image.random_crop(y_true, (64,64,3))
+            y_true = tf.image.random_crop(y_true, input_size)
             y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
             equality = np.equal(y_pred, zero_center(y_true / 255.0))
             accuracy = np.mean(equality)
@@ -72,8 +70,8 @@ tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NA
 
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", input_size)
-val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", batchsize, input_size)
+train_data_generator = MyGenerator(paths_dir + "/train_snaps_paths.npy", input_size)
+val_data_generator = MyGenerator(paths_dir + "/val_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size)
