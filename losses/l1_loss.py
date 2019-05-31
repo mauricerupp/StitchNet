@@ -13,6 +13,7 @@ def custom_loss(y_true, y_pred):
     covered_area = y_true[:, :, :, -3:]
     y_true = y_true[:, :, :, :-3]
     l1 = K.sum(K.abs(y_true - y_pred) * covered_area)
+    """
     tensor_size = y_pred.get_shape().as_list()
     batch_size = tensor_size[0]
     for i in range(batch_size):
@@ -20,6 +21,7 @@ def custom_loss(y_true, y_pred):
         fig = plt.figure()
         plt.imshow(temp[..., ::-1], interpolation='nearest')
         plt.savefig("/data/cvg/maurice/logs/l1_masks/Lossmask-img{}.png".format(i))
+    """
     nonzero = K.cast(tf.math.count_nonzero(covered_area, keepdims=False), 'float32')
     # get the mean absolute error, but the value of the mean is only the actually covered pixels
     return l1/nonzero

@@ -5,6 +5,7 @@ from __future__ import print_function
 import logging
 import tensorflow as tf
 from tensorflow.python.keras.layers import *
+from tensorflow.python.keras.models import *
 
 
 # ---- Functions ---- #
@@ -92,6 +93,30 @@ def feature_extract(input_tensor, filter, kernel):
         index += 1
 
     return Concatenate(axis=3, name='conc_img_features')(in_conv_list)
+
+
+def encode(input_tensor):
+    """
+    a simple encoder which uses strided convolutions and an increasing amount of filters
+    :param input_tensor:
+    """
+    conv = Conv2D(64, 3, activation='relu', padding='same', name='encoder_conv1')(input_tensor)
+    conv = Conv2D(128, 3, activation='relu', padding='same', name='encoder_conv2', strides=2)(conv)
+    conv = Conv2D(256, 3, activation='relu', padding='same', name='encoder_conv3', strides=2)(conv)
+    conv = Conv2D(256, 3, activation='relu', padding='same', name='encoder_conv4', strides=2)(conv)
+    return Conv2D(256, 3, activation='relu', padding='same', name='encoder_conv5', strides=2)(conv)
+
+
+def decode(input_tensor):
+    """
+    a decoder fitting for function encode
+    :param input_tensor:
+    """
+    conv = Conv2DTranspose(128, 3, activation='relu', padding='same', name='decoder_conv1', strides=2)(input_tensor)
+    conv = Conv2DTranspose(64, 3, activation='relu', padding='same', name='decoder_conv2', strides=2)(conv)
+    conv = Conv2DTranspose(32, 3, activation='relu', padding='same', name='decoder_conv3', strides=2)(conv)
+    conv = Conv2DTranspose(16, 3, activation='relu', padding='same', name='decoder_conv4', strides=2)(conv)
+    return Conv2DTranspose(3, 3, activation='tanh', padding='same', name='decoder_conv5', strides=1)(conv)
 
 
 # ---- Normalization ---- #
