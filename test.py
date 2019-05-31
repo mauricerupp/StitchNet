@@ -17,15 +17,17 @@ import tensorflow as tf
 import datetime
 
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
+batchlist = []
+batchlist.append(img_name)
+batchlist.append(img_name)
 img_size = np.array([64,64,3])
-#test = tf.image.random_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
-te = cv2.imread(img_name)
-print(te.shape)
-te = tf.image.random_crop(te, img_size)
-print(te.shape)
-test = zero_center(np.array(cv2.imread(img_name))/255.0)
-was = np.load('/home/maurice/Dokumente/train_snaps_paths.npy')
-print(was[0])
+test2 = tf.image.random_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
+test3 = tf.image.random_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
+print(test2.shape)
+print(test2.shape)
+test = tf.stack([tf.image.random_crop(zero_center(np.array(cv2.imread(img))/255.0), img_size) for img in batchlist], axis=0)
+print(test.shape)
+
 """        
 y_pred1 = np.array([[[0, 255, 2],[33, 22, 11]], [[0, 0, 222],[1, 0, 2]]])
 print(y_pred1)
