@@ -22,7 +22,7 @@ x_0 = None
 current_model = RN_1_v2
 
 # name the model
-NAME = str(current_model.__name__) + "_smaller_filtersize"
+NAME = str(current_model.__name__) + "_l1_tester"
 
 
 # ----- Callbacks / Helperfunctions ----- #

@@ -11,7 +11,7 @@ import datetime
 
 def create_model(pretrained_weights=None, input_size=None, filter_size=128, block_amount=12, normalizer=None):
     """
-    A simple residual network and a Convolution layer for every inputimage with shared weights
+    A simple residual network and a Convolution layer for every input image with shared weights
     :param pretrained_weights:
     :param input_size:
     :param filter_size:
@@ -31,7 +31,7 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     RB = create_resblock(prior_layer=global_conv2, block_name='RB1',
                          n_filters=filter_size, kernel_size=3, stride=1, dilation=1, normalizer=normalizer)
 
-    # add the remaining RDB
+    # add the remaining RB
     for i in range(2, block_amount + 1):
         RB = create_resblock(prior_layer=RB, block_name='RB' + str(i),
                              n_filters=filter_size, kernel_size=3, stride=1, dilation=1, normalizer=normalizer)
