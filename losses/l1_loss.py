@@ -13,7 +13,7 @@ def custom_loss(y_true, y_pred):
     covered_area = y_true[:, :, :, -3:]
     y_true = y_true[:, :, :, :-3]
     l1 = K.sum(K.abs(y_true - y_pred) * covered_area)
-    for i in range(len(y_true[0])):
+    for i in range(y_true.get_shape().as_list()[0]):
         temp = K.abs(y_true[i] - y_pred[i]) * covered_area[i]
         fig = plt.figure()
         plt.imshow(temp[..., ::-1], interpolation='nearest')
