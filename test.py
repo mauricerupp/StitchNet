@@ -6,6 +6,8 @@ from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 import l1_loss
 import random
+from utilities import *
+import cv2
 
 from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import *
@@ -14,9 +16,16 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
-test = np.load('/home/maurice/Schreibtisch/val_snaps_paths.npy')
-print(test)
-
+img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
+img_size = np.array([64,64,3])
+#test = tf.image.random_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
+te = cv2.imread(img_name)
+print(te.shape)
+te = tf.image.random_crop(te, img_size)
+print(te.shape)
+test = zero_center(np.array(cv2.imread(img_name))/255.0)
+was = np.load('/home/maurice/Dokumente/train_snaps_paths.npy')
+print(was[0])
 """        
 y_pred1 = np.array([[[0, 255, 2],[33, 22, 11]], [[0, 0, 222],[1, 0, 2]]])
 print(y_pred1)
