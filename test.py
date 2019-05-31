@@ -14,7 +14,7 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
-test = np.load('/home/maurice/Schreibtisch/train_snaps_paths.npy')
+test = np.load('/home/maurice/Schreibtisch/val_snaps_paths.npy')
 print(test)
 
 """        
