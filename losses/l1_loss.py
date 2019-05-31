@@ -13,7 +13,7 @@ def custom_loss(y_true, y_pred):
     covered_area = y_true[:, :, :, -3:]
     y_true = y_true[:, :, :, :-3]
     l1 = K.sum(K.abs(y_true - y_pred) * covered_area)
-    tensor_size = y_true.get_shape().as_list()
+    tensor_size = y_pred.get_shape().as_list()
     batch_size = tensor_size[0]
     for i in range(batch_size):
         temp = K.abs(y_true[i] - y_pred[i]) * covered_area[i]
