@@ -17,8 +17,15 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
-testmod = ConvAutoencoder((64,64,3))
-testmod.load_encoder_weights()
+img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
+test = np.array(cv2.imread(img_name))
+input_size = (64,64,3)
+img = random_numpy_crop(test, input_size)
+y_true = np.expand_dims(img, axis=0)
+testmod = ConvAutoencoder(input_size)
+testmod.load_encoder_weights('/home/maurice/Dokumente/encoder_logs/')
+pred = testmod.encoder.predict(y_true)
+print(pred.shape)
 
 """
 size1 = np.array([488, 488,3])
