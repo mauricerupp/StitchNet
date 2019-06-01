@@ -38,14 +38,14 @@ def image_predictor(epoch, logs):
             # load the ground truth
             if i % 2 == 0:
                 list = np.load('/data/cvg/maurice/unprocessed/smalltrain_snaps_paths.npy')
-                y_true = np.array(cv2.imread(list[i]))
+                img = np.array(cv2.imread(list[i]))
             else:
                 list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
-                y_true = np.array(cv2.imread(list[i]))
+                img = np.array(cv2.imread(list[i]))
 
             # predict y (since the model is trained on pictures in [-1,1]) and we take a random crop
-            y_true = random_numpy_crop(y_true, input_size)
-            y_true = np.expand_dims(y_true, axis=0)
+            img = random_numpy_crop(img, input_size)
+            y_true = np.expand_dims(img, axis=0)
             y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
             equality = np.equal(y_pred, zero_center(y_true / 255.0))
             accuracy = np.mean(equality)
@@ -57,7 +57,7 @@ def image_predictor(epoch, logs):
             fig.suptitle('Results of predicting Image {} on epoch {} \nwith an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
             ax1 = fig.add_subplot(1, 2, 1)
             ax1.set_title('Y_True')
-            plt.imshow(y_true[..., ::-1], interpolation='nearest') # conversion to RGB
+            plt.imshow(img[..., ::-1], interpolation='nearest') # conversion to RGB
             ax3 = fig.add_subplot(1, 2, 2)
             ax3.set_title('Prediction of model')
             plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
