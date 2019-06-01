@@ -13,10 +13,10 @@ import matplotlib.pyplot as plt
 import cv2
 import tensorflow as tf
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
+#os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 
 # set the constants
-batchsize = 40
+batchsize = 100
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
@@ -28,7 +28,7 @@ NAME = str(current_model.__name__) + ""
 # ----- Callbacks / Helperfunctions ----- #
 def image_predictor(epoch, logs):
     """
-    createy a tester, that predicts the same few images after every epoch and stores them as png
+    creates a tester, that predicts the same few images after every epoch and stores them as png
     we take 4 from the training and 4 from the validation set
     :param epoch:
     :param logs: has to be given as argument in order to compile

@@ -16,10 +16,8 @@ class ConvAutoencoder(object):
         encoder_layers = encode(inputs)
         decoder_layers = decode(encoder_layers)
 
-        decoder_inputs = Input(K.int_shape(encoder_layers)[1:], name='decoder_input')
         self.encoder = Model(inputs, encoder_layers, name='encoder')
-        self.decoder = Model(decoder_inputs, decoder_layers, name='decoder')
-
+        self.decoder = Model()
         self.autoencoder = Model(inputs=inputs, outputs=decoder_layers, name='autoencoder')
         self.autoencoder.summary()
         self.autoencoder.compile(optimizer='adam', loss='mean_absolute_error', metrics=['accuracy'])
