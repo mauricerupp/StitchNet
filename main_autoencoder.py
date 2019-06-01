@@ -43,6 +43,7 @@ def image_predictor(epoch, logs):
             else:
                 list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
                 y_true = np.array(cv2.imread(list[i]))
+                print(y_true.shape)
             y_true = np.expand_dims(y_true, axis=0)
 
             # predict y (since the model is trained on pictures in [-1,1]) and we take a random crop
