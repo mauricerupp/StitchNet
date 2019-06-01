@@ -1,6 +1,6 @@
 # own classes
 from batch_generator_autoencoder import *
-import autoencoder_1
+from autoencoder_1 import *
 from utilities import *
 from encoder_callback import *
 
@@ -18,7 +18,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 batchsize = 40
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = np.array([64,64,3])
-current_model = autoencoder_1
+current_model = ConvAutoencoder
 
 # name the model
 NAME = str(current_model.__name__) + ""
@@ -73,7 +73,7 @@ train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsiz
 val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
-model = current_model.create_model(input_size)
+model = ConvAutoencoder(input_size)
 
 # create checkpoint callbacks to store the training weights
 checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/'.format(NAME)
@@ -88,6 +88,6 @@ enc_path = '/data/cvg/maurice/logs/{}/encoder_logs/'.format(NAME)
 #model.autoencoder.fit_generator(train_data_generator,  epochs=2002,
 #                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
 #                    validation_data=val_data_generator)
-model.fit_generator(train_data_generator,  epochs=2002,
+model.autoencoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)

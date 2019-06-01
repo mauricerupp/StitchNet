@@ -26,5 +26,6 @@ class MyGenerator(Sequence):
         sess = tf.InteractiveSession()
         with sess.as_default():
             stack = stack.eval()
+        sess.close()
 
         return stack, stack
