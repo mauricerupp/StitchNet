@@ -10,6 +10,7 @@ from tensorflow.python.keras.callbacks import TensorBoard
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import cv2
 import tensorflow as tf
 
 os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
@@ -37,10 +38,10 @@ def image_predictor(epoch, logs):
             # load the ground truth
             if i % 2 == 0:
                 list = np.load('/data/cvg/maurice/unprocessed/smalltrain_snaps_paths.npy')
-                y_true = np.load(list[i])
+                y_true = np.array(cv2.imread(list[i]))
             else:
                 list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
-                y_true = np.load(list[i])
+                y_true = np.array(cv2.imread(list[i]))
             y_true = np.expand_dims(y_true, axis=0)
 
             # predict y (since the model is trained on pictures in [-1,1]) and we take a random crop
