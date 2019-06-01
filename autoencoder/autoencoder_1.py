@@ -12,14 +12,11 @@ class ConvAutoencoder(object):
         # setup to encoding/decoding
         inputs = Input(input_size, name='encoder_input')
         encoder_layers = encode(inputs)
-
-        decoder_inputs = Input(K.int_shape(encoder_layers)[1:], name='decoder_input')
-        decoder_layers = decode(decoder_inputs)
+        decoder_layers = decode(encoder_layers)
 
         self.encoder = Model(inputs, encoder_layers, name='encoder')
-        self.decoder = Model(decoder_inputs, decoder_layers, name='decoder')
 
-        self.autoencoder = Model(self.encoder.inputs, self.decoder(self.encoder.output), name='autoencoder')
+        self.autoencoder = Model(inputs, decoder_layers, name='autoencoder')
         self.autoencoder.summary()
         self.autoencoder.compile(optimizer='adam', loss='mean_absolute_error', metrics=['accuracy'])
 
@@ -27,4 +24,4 @@ class ConvAutoencoder(object):
         self.encoder.load_weights(filepath=path)
 
 
-mod = ConvAutoencoder(input_size=(64,64,3))
+#mod = ConvAutoencoder(input_size=(64,64,3))
