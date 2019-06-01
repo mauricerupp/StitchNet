@@ -22,4 +22,9 @@ class MyGenerator(Sequence):
         stack = tf.stack([random_crop(zero_center(np.array(cv2.imread(img))/255.0), self.img_size)
                           for img in batch], axis=0)
 
+        # convert the stack to a numpy array in order to satisfy Keras
+        sess = tf.InteractiveSession()
+        with sess.as_default():
+            stack = stack.eval()
+
         return stack, stack

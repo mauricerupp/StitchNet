@@ -17,16 +17,20 @@ import tensorflow as tf
 import datetime
 
 
-img_name = '/data/cvg/maurice/unprocessed/coco_train/000000000326.jpg'
+img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
 batchlist = []
 batchlist.append(img_name)
 batchlist.append(img_name)
 img_size = np.array([64,64,3])
 test2 = tf.image.random_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
 test3 = tf.image.random_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
-print(test2.shape)
+print(type(test2))
 print(test2.shape)
 test = tf.stack([tf.image.random_crop(zero_center(np.array(cv2.imread(img))/255.0), img_size) for img in batchlist], axis=0)
+sess = tf.InteractiveSession()
+with sess.as_default():
+    test = test.eval()
+print(type(test))
 print(test.shape)
 """
 y_pred1 = np.array([[[0, 255, 2],[33, 22, 11]], [[0, 0, 222],[1, 0, 2]]])
