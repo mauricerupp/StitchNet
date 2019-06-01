@@ -18,7 +18,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 # set the constants
 batchsize = 40
 paths_dir = '/data/cvg/maurice/unprocessed/'
-input_size = np.array([64,64,3])
+input_size = [64,64,3]
 current_model = ConvAutoencoder
 
 # name the model
