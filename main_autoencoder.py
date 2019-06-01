@@ -18,7 +18,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 # set the constants
 batchsize = 40
 paths_dir = '/data/cvg/maurice/unprocessed/'
-input_size = [64,64,3]
+input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
@@ -39,6 +39,7 @@ def image_predictor(epoch, logs):
             if i % 2 == 0:
                 list = np.load('/data/cvg/maurice/unprocessed/smalltrain_snaps_paths.npy')
                 y_true = np.array(cv2.imread(list[i]))
+                print(y_true.shape)
             else:
                 list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
                 y_true = np.array(cv2.imread(list[i]))
