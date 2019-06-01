@@ -69,8 +69,8 @@ tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NA
 
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "/train_snaps_paths.npy", batchsize, input_size)
-val_data_generator = MyGenerator(paths_dir + "/val_snaps_paths.npy", batchsize, input_size)
+train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, input_size)
+val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size)
