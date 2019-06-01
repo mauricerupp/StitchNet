@@ -36,5 +36,10 @@ class ConvAutoencoder(object):
     def load_encoder_weights(self, path):
         self.encoder.load_weights(filepath=path)
 
+    def train(self, train_data_generator, val_data_generator, callbacks):
+        self.autoencoder.fit_generator(train_data_generator,  epochs=2002,
+                    callbacks=callbacks,
+                    validation_data=val_data_generator)
+
 
 #mod = ConvAutoencoder(input_size=(64,64,3))
