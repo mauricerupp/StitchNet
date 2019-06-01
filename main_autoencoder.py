@@ -82,10 +82,10 @@ cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only
 
 # create the callback for the encoder weights
 enc_path = '/data/cvg/maurice/logs/{}/encoder_logs/'.format(NAME)
-enc_callback = EncoderCheckpoint(enc_path, model.encoder)
+#enc_callback = EncoderCheckpoint(enc_path, model.encoder)
 
 # train the model
 model.autoencoder.fit_generator(train_data_generator,  epochs=2002,
-                    callbacks=[cp_callback, tensorboard, cb_imagepredict, enc_callback],
+                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 
