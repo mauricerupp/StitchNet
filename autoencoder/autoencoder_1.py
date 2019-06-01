@@ -28,7 +28,7 @@ class ConvAutoencoder(object):
 
         #self.encoder = Model(inputs, encoder_layers, name='encoder')
 
-        self.autoencoder = Model(inputs, deconv, name='autoencoder')
+        self.autoencoder = Model(inputs=inputs, outputs=deconv, name='autoencoder')
         self.autoencoder.summary()
         self.autoencoder.compile(optimizer='adam', loss='mean_absolute_error', metrics=['accuracy'])
 
