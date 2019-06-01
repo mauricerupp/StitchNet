@@ -36,13 +36,15 @@ def image_predictor(epoch, logs):
         for i in range(1, 5):
             # load the ground truth
             if i % 2 == 0:
-                y_true = np.load('/data/cvg/maurice/processed/coco_small/train/snaps/snaps{}.npy'.format(i))
+                list = np.load('/data/cvg/maurice/unprocessed/smalltrain_snaps_paths.npy')
+                y_true = np.load(list[i])
             else:
-                y_true = np.load('/data/cvg/maurice/processed/coco_small/val/snaps/snaps{}.npy'.format(i))
+                list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
+                y_true = np.load(list[i])
             y_true = np.expand_dims(y_true, axis=0)
 
             # predict y (since the model is trained on pictures in [-1,1]) and we take a random crop
-            y_true = tf.image.random_crop(y_true, input_size)
+            y_true = random_numpy_crop(y_true, input_size)
             y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
             equality = np.equal(y_pred, zero_center(y_true / 255.0))
             accuracy = np.mean(equality)
@@ -69,8 +71,8 @@ tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NA
 
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, input_size)
-val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
+train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, input_size)
+val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size)
@@ -82,12 +84,9 @@ cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only
 
 # create the callback for the encoder weights
 enc_path = '/data/cvg/maurice/logs/{}/encoder_logs/'.format(NAME)
-#enc_callback = EncoderCheckpoint(enc_path, model.encoder)
+enc_callback = EncoderCheckpoint(enc_path, model.encoder)
 
 # train the model
-#model.autoencoder.fit_generator(train_data_generator,  epochs=2002,
-#                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
-#                    validation_data=val_data_generator)
 model.autoencoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
