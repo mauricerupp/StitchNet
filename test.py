@@ -8,6 +8,7 @@ import l1_loss
 import random
 from utilities import *
 import cv2
+from autoencoder_v1 import *
 
 from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import *
@@ -16,6 +17,10 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
+testmod = ConvAutoencoder((64,64,3))
+testmod.load_encoder_weights()
+
+"""
 size1 = np.array([488, 488,3])
 size2 = np.array([10,10,3])
 
@@ -25,7 +30,7 @@ print(test.shape)
 assert test.shape[2] == size1[2]
 print(random_numpy_crop(test, size1).shape)
 
-"""
+
 batchlist = []
 batchlist.append(img_name)
 batchlist.append(img_name)

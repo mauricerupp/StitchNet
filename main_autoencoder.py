@@ -89,5 +89,5 @@ enc_callback = EncoderCheckpoint(enc_path, model.encoder)
 
 # train the model
 model.autoencoder.fit_generator(train_data_generator,  epochs=2002,
-                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
+                    callbacks=[cp_callback, tensorboard, cb_imagepredict, enc_callback],
                     validation_data=val_data_generator)
