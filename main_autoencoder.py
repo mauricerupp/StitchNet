@@ -16,7 +16,7 @@ import tensorflow as tf
 #os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 
 # set the constants
-batchsize = 2000
+batchsize = 1800
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
