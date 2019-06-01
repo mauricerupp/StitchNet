@@ -16,7 +16,7 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
-size1 = np.array([487, 487,3])
+size1 = np.array([488, 488,3])
 size2 = np.array([10,10,3])
 
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
@@ -24,7 +24,7 @@ test = np.array(cv2.imread(img_name))
 print(test.shape)
 print(random_numpy_crop(test, size1).shape)
 
-
+"""
 batchlist = []
 batchlist.append(img_name)
 batchlist.append(img_name)
@@ -39,7 +39,7 @@ test = np.stack([random_numpy_crop(zero_center(np.array(cv2.imread(img))/255.0),
 #    test = test.eval()
 print(type(test))
 print(test.shape)
-"""
+
 y_pred1 = np.array([[[0, 255, 2],[33, 22, 11]], [[0, 0, 222],[1, 0, 2]]])
 print(y_pred1)
 print(y_pred1.shape)

@@ -6,6 +6,7 @@ import logging
 import tensorflow as tf
 from tensorflow.python.keras.layers import *
 import random
+import cv2
 
 
 # ---- Functions ---- #
@@ -23,9 +24,13 @@ def revert_zero_center(in_img):
 
 def random_numpy_crop(in_img, crop_size):
     img_size = in_img.shape
-    assert img_size[0] >= crop_size[0]
-    assert img_size[1] >= crop_size[1]
     assert img_size[2] == crop_size[2]
+
+    # if the image is too small rescale it to atleast the crop_size
+    if img_size[0] < crop_size[0] or img_size[1] < crop_size[1]:
+        in_img = scale_img(in_img, crop_size)
+        img_size = in_img.shape
+
     top_left_corner = [random.randint(0, int(img_size[0]-crop_size[0])),
                        random.randint(0, int(img_size[1]-crop_size[1]))]
 
@@ -35,6 +40,22 @@ def random_numpy_crop(in_img, crop_size):
     assert out.shape[1] == crop_size[1]
     assert out.shape[2] == crop_size[2]
     return out
+
+
+def scale_img(img, des_size):
+    old_size = img.shape[:2]
+    h_ratio = des_size[0] / old_size[0]
+    w_ratio = des_size[1] / old_size[1]
+
+    # find out how to scale it, so that it still covers the whole area
+    if h_ratio * old_size[1] > des_size[1]:
+        ratio = h_ratio
+    else:
+        ratio = w_ratio
+
+    # resize the image while keeping its ratio so its not warped
+    new_size = tuple([int(round(x*ratio)) for x in old_size])
+    return cv2.resize(img, (new_size[1], new_size[0]))
 
 
 # ---- Layers ---- #
