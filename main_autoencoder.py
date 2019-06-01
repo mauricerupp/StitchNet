@@ -16,7 +16,7 @@ import tensorflow as tf
 #os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 
 # set the constants
-batchsize = 100
+batchsize = 1000
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
@@ -37,10 +37,10 @@ def image_predictor(epoch, logs):
         for i in range(1, 5):
             # load the ground truth
             if i % 2 == 0:
-                list = np.load('/data/cvg/maurice/unprocessed/smalltrain_snaps_paths.npy')
+                list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
                 img = np.array(cv2.imread(list[i]))
             else:
-                list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
+                list = np.load('/data/cvg/maurice/unprocessed/val_snaps_paths.npy')
                 img = np.array(cv2.imread(list[i]))
 
             # predict y (since the model is trained on pictures in [-1,1]) and we always take the same crop
@@ -73,8 +73,8 @@ tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NA
 
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, input_size)
-val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, input_size)
+train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, input_size)
+val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size)
