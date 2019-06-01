@@ -20,6 +20,10 @@ import datetime
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
 test = np.array(cv2.imread(img_name))
 input_size = (64,64,3)
+te = resize_img(test, input_size[:-1])
+print(te.shape)
+"""
+input_size = (64,64,3)
 img = random_numpy_crop(test, input_size)
 y_true = np.expand_dims(img, axis=0)
 testmod = ConvAutoencoder(input_size)
@@ -27,7 +31,7 @@ testmod.load_encoder_weights('/home/maurice/Dokumente/encoder_logs/')
 pred = testmod.encoder.predict(y_true)
 print(pred.shape)
 
-"""
+
 size1 = np.array([488, 488,3])
 size2 = np.array([10,10,3])
 

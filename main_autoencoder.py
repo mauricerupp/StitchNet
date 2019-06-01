@@ -43,8 +43,9 @@ def image_predictor(epoch, logs):
                 list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
                 img = np.array(cv2.imread(list[i]))
 
-            # predict y (since the model is trained on pictures in [-1,1]) and we take a random crop
-            img = random_numpy_crop(img, input_size)
+            # predict y (since the model is trained on pictures in [-1,1]) and we always take the same crop
+            #img = random_numpy_crop(img, input_size)
+            img = resize_img(img, input_size[:-1])
             y_true = np.expand_dims(img, axis=0)
             y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
             equality = np.equal(y_pred, zero_center(y_true / 255.0))

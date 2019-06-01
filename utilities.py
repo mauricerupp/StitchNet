@@ -58,6 +58,25 @@ def scale_img(img, des_size):
     return cv2.resize(img, (new_size[1], new_size[0]))
 
 
+def resize_img(img, desired_size):
+    # scale the image until it covers the whole desired size
+    img = scale_img(img, desired_size)
+
+    (h, w) = img.shape[:2]
+    # cut the image so that the cut frame is centered
+    h_cut = h - desired_size[0]
+    space_h = int(h_cut / 2)
+    w_cut = w - desired_size[1]
+    space_w = int(w_cut / 2)
+
+    assert h_cut >= 0
+    assert w_cut >= 0
+
+    img = img[space_h:space_h+desired_size[0], space_w:space_w+desired_size[1]]
+
+    return img
+
+
 # ---- Layers ---- #
 def depth_to_space(input_layer, blocksize):
     """
