@@ -5,7 +5,7 @@ from __future__ import print_function
 import logging
 import tensorflow as tf
 from tensorflow.python.keras.layers import *
-from tensorflow.python.keras.models import *
+import random
 
 
 # ---- Functions ---- #
@@ -19,6 +19,22 @@ def zero_center(in_img):
 
 def revert_zero_center(in_img):
     return in_img / 2 + 0.5
+
+
+def random_numpy_crop(in_img, crop_size):
+    img_size = in_img.shape
+    assert img_size[0] >= crop_size[0]
+    assert img_size[1] >= crop_size[1]
+    assert img_size[2] == crop_size[2]
+    top_left_corner = [random.randint(0, int(img_size[0]-crop_size[0])),
+                       random.randint(0, int(img_size[1]-crop_size[1]))]
+
+    out = in_img[top_left_corner[0]:top_left_corner[0]+crop_size[0],
+           top_left_corner[1]:top_left_corner[1]+crop_size[1], :]
+    assert out.shape[0] == crop_size[0]
+    assert out.shape[1] == crop_size[1]
+    assert out.shape[2] == crop_size[2]
+    return out
 
 
 # ---- Layers ---- #

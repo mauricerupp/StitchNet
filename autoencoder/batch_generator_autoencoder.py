@@ -19,13 +19,6 @@ class MyGenerator(Sequence):
 
     def __getitem__(self, idx):
         batch = self.snaps[idx * self.batch_size:(idx + 1) * self.batch_size]
-        stack = tf.stack([random_crop(zero_center(np.array(cv2.imread(img))/255.0), self.img_size)
+        stack = np.stack([random_numpy_crop(zero_center(np.array(cv2.imread(img))/255.0), self.img_size)
                           for img in batch], axis=0)
-
-        # convert the stack to a numpy array in order to satisfy Keras
-        sess = tf.InteractiveSession()
-        with sess.as_default():
-            stack = stack.eval()
-        sess.close()
-
         return stack, stack

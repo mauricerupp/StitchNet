@@ -16,20 +16,27 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
+size1 = np.array([487, 487,3])
+size2 = np.array([10,10,3])
 
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
+test = np.array(cv2.imread(img_name))
+print(test.shape)
+print(random_numpy_crop(test, size1).shape)
+
+
 batchlist = []
 batchlist.append(img_name)
 batchlist.append(img_name)
 img_size = np.array([64,64,3])
-test2 = tf.image.random_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
-test3 = tf.image.random_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
+test2 = random_numpy_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
+test3 =random_numpy_crop(zero_center(np.array(cv2.imread(img_name))/255.0), img_size)
 print(type(test2))
 print(test2.shape)
-test = tf.stack([tf.image.random_crop(zero_center(np.array(cv2.imread(img))/255.0), img_size) for img in batchlist], axis=0)
-sess = tf.InteractiveSession()
-with sess.as_default():
-    test = test.eval()
+test = np.stack([random_numpy_crop(zero_center(np.array(cv2.imread(img))/255.0), img_size) for img in batchlist], axis=0)
+#sess = tf.InteractiveSession()
+#with sess.as_default():
+#    test = test.eval()
 print(type(test))
 print(test.shape)
 """
