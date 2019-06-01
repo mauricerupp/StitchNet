@@ -22,6 +22,7 @@ size2 = np.array([10,10,3])
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
 test = np.array(cv2.imread(img_name))
 print(test.shape)
+assert test.shape[2] == size1[2]
 print(random_numpy_crop(test, size1).shape)
 
 """

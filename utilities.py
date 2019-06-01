@@ -24,6 +24,8 @@ def revert_zero_center(in_img):
 
 def random_numpy_crop(in_img, crop_size):
     img_size = in_img.shape
+    print(img_size)
+    print(crop_size)
     assert img_size[2] == crop_size[2]
 
     # if the image is too small rescale it to atleast the crop_size
