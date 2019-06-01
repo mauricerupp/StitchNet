@@ -15,7 +15,10 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
+etst = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
+print(etst[0])
 
+"""
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
 batchlist = []
 batchlist.append(img_name)
@@ -27,8 +30,6 @@ print(test2.shape)
 print(test2.shape)
 test = tf.stack([tf.image.random_crop(zero_center(np.array(cv2.imread(img))/255.0), img_size) for img in batchlist], axis=0)
 print(test.shape)
-
-"""        
 y_pred1 = np.array([[[0, 255, 2],[33, 22, 11]], [[0, 0, 222],[1, 0, 2]]])
 print(y_pred1)
 print(y_pred1.shape)
