@@ -9,7 +9,7 @@ import tensorflow.keras.backend as K
 
 def create_model(input_size):
     # setup to encoding/decoding
-    inputs = Input(shape=input_size, name='encoder_input')
+    inputs = Input(shape=input_size)
 
     conv = Conv2D(64, 3, activation='relu', padding='same', name='encoder_conv1')(inputs)
     conv = Conv2D(128, 3, activation='relu', padding='same', name='encoder_conv2', strides=2)(conv)
@@ -34,4 +34,4 @@ def create_model(input_size):
 
 
 
-mod = create_model(input_size=(64,64,3))
+#mod = create_model(input_size=(64,64,3))
