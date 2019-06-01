@@ -14,7 +14,7 @@ class ConvAutoencoder(object):
         encoder_layers = encode(inputs)
         decoder_layers = decode(encoder_layers)
 
-        self.encoder = Model(inputs, encoder_layers, name='encoder')
+        #self.encoder = Model(inputs, encoder_layers, name='encoder')
 
         self.autoencoder = Model(inputs, decoder_layers, name='autoencoder')
         self.autoencoder.summary()
