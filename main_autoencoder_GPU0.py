@@ -22,7 +22,7 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + ""
+NAME = str(current_model.__name__) + "_run2"
 
 
 # ----- Callbacks / Helperfunctions ----- #
