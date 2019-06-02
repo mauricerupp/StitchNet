@@ -25,5 +25,8 @@ class ConvAutoencoder(object):
     def load_encoder_weights(self, path):
         self.encoder.load_weights(filepath=path)
 
+    def load_weights(self, path):
+        self.autoencoder.load_weights(filepath=path)
+
 
 #mod = ConvAutoencoder(input_size=(64,64,3))

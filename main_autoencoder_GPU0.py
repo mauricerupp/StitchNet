@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import cv2
 import tensorflow as tf
 
-#os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
+os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 
 # set the constants
 batchsize = 1800
@@ -78,6 +78,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, i
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size)
+model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
 checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/'.format(NAME)

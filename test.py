@@ -19,8 +19,9 @@ import datetime
 
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
 test = np.array(cv2.imread(img_name))
-input_size = (64,64,3)
-te = resize_img(test, input_size[:-1])
+print(test.shape)
+input_size = (641,641,3)
+te = random_numpy_crop(test, input_size)
 print(te.shape)
 """
 input_size = (64,64,3)

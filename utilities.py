@@ -27,9 +27,10 @@ def random_numpy_crop(in_img, crop_size):
     assert img_size[2] == crop_size[2]
 
     # if the image is too small rescale it to atleast the crop_size
-    if img_size[0] < crop_size[0] or img_size[1] < crop_size[1]:
+    if img_size[0] <= crop_size[0] or img_size[1] <= crop_size[1]:
         in_img = scale_img(in_img, crop_size)
         img_size = in_img.shape
+        print(img_size)
 
     top_left_corner = [random.randint(0, int(img_size[0]-crop_size[0])),
                        random.randint(0, int(img_size[1]-crop_size[1]))]
