@@ -13,8 +13,8 @@ class ConvAutoencoder(object):
         # setup to encoding/decoding
         inputs = Input(shape=input_size, name='encoder_input')
 
-        encoder_layers = encode(inputs, 3)
-        decoder_layers = decode(encoder_layers, 3)
+        encoder_layers = encode(inputs, 5)
+        decoder_layers = decode(encoder_layers, 5)
 
         self.encoder = Model(inputs, encoder_layers, name='encoder')
         self.decoder = Model()
