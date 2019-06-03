@@ -16,13 +16,13 @@ import tensorflow as tf
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # set the constants
-batchsize = 1500
+batchsize = 1400
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V2_run1"
+NAME = str(current_model.__name__) + "_V2_run2"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -69,7 +69,7 @@ def image_predictor(epoch, logs):
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 
 # create a TensorBoard
-tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
+tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME), histogram_freq=0)
 
 
 # ----- Batch-generator setup ----- #
@@ -78,6 +78,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, i
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size)
+model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V2_run1/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
 checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/'.format(NAME)
