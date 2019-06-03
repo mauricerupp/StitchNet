@@ -12,8 +12,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import tensorflow as tf
+from tensorflow.python.keras.backend import set_session
 
 os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
+config = tf.ConfigProto()
+config.gpu_options.per_process_gpu_memory_fraction = 0.9
+set_session(tf.Session(config=config))
 
 # set the constants
 batchsize = 1400
@@ -22,7 +26,7 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V2_run2"
+NAME = str(current_model.__name__) + "_V2_run3"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -78,7 +82,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, i
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size)
-model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V2_run1/weight_logs/')
+model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V2_run2/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
 checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/'.format(NAME)
@@ -90,6 +94,6 @@ enc_path = '/data/cvg/maurice/logs/{}/encoder_logs/'.format(NAME)
 enc_callback = EncoderCheckpoint(enc_path, model.encoder)
 
 # train the model
-model.autoencoder.fit_generator(train_data_generator,  epochs=2002,
+model.autoencoder.fit_generator(train_data_generator,  epochs=200,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict, enc_callback],
-                    validation_data=val_data_generator)
+                    validation_data=val_data_generator, max_queue_size=10, workers=1)
