@@ -2,9 +2,7 @@ import numpy as np
 import math
 from tensorflow.python.keras.utils import Sequence
 from utilities import *
-from tensorflow._api.v1.image import random_crop
 import cv2
-import tensorflow as tf
 
 
 class MyGenerator(Sequence):
