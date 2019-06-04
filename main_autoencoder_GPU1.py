@@ -20,7 +20,7 @@ config.gpu_options.per_process_gpu_memory_fraction = 0.9
 set_session(tf.Session(config=config))
 
 # set the constants
-batchsize = 1400
+batchsize = 1000
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
