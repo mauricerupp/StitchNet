@@ -20,13 +20,13 @@ config.gpu_options.per_process_gpu_memory_fraction = 0.9
 set_session(tf.Session(config=config))
 
 # set the constants
-batchsize = 1100
+batchsize = 1000
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V1_run6"
+NAME = str(current_model.__name__) + "_V1_run7"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -82,7 +82,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, i
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size)
-model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V1_run5/weight_logs/')
+model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V1_run6/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
 checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/'.format(NAME)
