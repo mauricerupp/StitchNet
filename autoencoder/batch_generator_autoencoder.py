@@ -21,4 +21,5 @@ class MyGenerator(Sequence):
         batch = self.snaps[idx * self.batch_size:(idx + 1) * self.batch_size]
         stack = np.stack([random_numpy_crop(zero_center(np.array(cv2.imread(img))/255.0), self.img_size)
                           for img in batch], axis=0)
+        batch = None
         return stack, stack
