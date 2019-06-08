@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-from stitch_encoder import *
+from stitch_decoder import *
 from utilities import *
 
 # packages
@@ -19,7 +19,7 @@ paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = StitchEncoder
+current_model = StitchDecoder
 
 # name the model
 NAME = str(current_model.__name__) + ""
@@ -89,10 +89,10 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = StitchEncoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V2_run7/encoder_logs/')
+model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V2_run7/encoder_logs/')
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=2002,
+model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 

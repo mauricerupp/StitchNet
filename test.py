@@ -16,7 +16,7 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
-
+"""
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
 test = np.array(cv2.imread(img_name))
 print(test.shape)
@@ -24,15 +24,31 @@ input_size = (641,641,3)
 te = random_numpy_crop(test, input_size)
 print(te.shape)
 """
+img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
+test = np.array(cv2.imread(img_name))
+test2 = np.array(cv2.imread(img_name))
+te = np.concatenate([test, test2], axis=2)
+size = te.shape
+
+
 input_size = (64,64,3)
 img = random_numpy_crop(test, input_size)
 y_true = np.expand_dims(img, axis=0)
+conc = np.concatenate([y_true, y_true], axis=3)
 testmod = ConvAutoencoder(input_size)
 testmod.load_encoder_weights('/home/maurice/Dokumente/encoder_logs/')
-pred = testmod.encoder.predict(y_true)
-print(pred.shape)
+index = 1
+in_conv_list = []
+input_size = (64, 64, 6)
+for i in range(0, 3, 3):
+    x = Lambda(lambda x: x[:, :, :, i:i + 3], name='img_{}'.format(str(index)))(conc)
+    in_conv_list.append(testmod.encoder.predict(x))
+    index += 1
+
+print(in_conv_list[0].shape)
 
 
+"""
 size1 = np.array([488, 488,3])
 size2 = np.array([10,10,3])
 

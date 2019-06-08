@@ -18,7 +18,9 @@ class ConvAutoencoder(object):
 
         self.encoder = Model(inputs, encoder_layers, name='encoder')
         self.autoencoder = Model(inputs=inputs, outputs=decoder_layers, name='autoencoder')
-        self.autoencoder.summary()
+        #self.autoencoder.summary()
+        self.encoder.trainable = False
+        self.autoencoder.trainable = False
         self.autoencoder.compile(optimizer='adam', loss='mean_absolute_error', metrics=['accuracy'])
 
     def load_encoder_weights(self, path):

@@ -157,6 +157,7 @@ def encode(input_tensor, kernel):
     a simple encoder which uses strided convolutions and an increasing amount of filters
     :param input_tensor:
     """
+
     conv = Conv2D(64, kernel, activation='relu', padding='same', name='encoder_conv1')(input_tensor)
     conv = Conv2D(128, kernel, activation='relu', padding='same', name='encoder_conv2', strides=2)(conv)
     conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv3', strides=2)(conv)
