@@ -40,7 +40,6 @@ class StitchDecoder(object):
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
         self.stitchdecoder.summary()
-        plot_model(self.stitchdecoder, to_file='stitch_decoder_v1.png')
         self.stitchdecoder.compile(optimizer='adam', loss=custom_loss, metrics=['accuracy'])
 
     def load_weights(self, path):
