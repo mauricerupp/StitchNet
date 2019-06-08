@@ -33,7 +33,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 20 == 0:  # print samples every 50 images
+    if epoch % 250 == 0:  # print samples every 50 images
         for i in range(1, 5):
             # load X
             if i % 2 == 0:
@@ -92,7 +92,7 @@ val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_v
 model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V2_run7/encoder_logs/')
 
 # train the model
-model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
+model.stitchdecoder.fit_generator(train_data_generator,  epochs=5002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 
