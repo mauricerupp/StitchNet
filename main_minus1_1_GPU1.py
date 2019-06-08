@@ -10,20 +10,20 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
+os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
 batchsize = 400
-paths_dir_train = '/data/cvg/maurice/processed/coco_small/train'
-paths_dir_val = '/data/cvg/maurice/processed/coco_small/val'
+paths_dir_train = '/data/cvg/maurice/processed/coco/train'
+paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "small_coco"
+NAME = str(current_model.__name__) + "whole_coco"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -38,16 +38,16 @@ def image_predictor(epoch, logs):
         for i in range(1, 5):
             # load X
             if i % 2 == 0:
-                x_pred = np.load('/data/cvg/maurice/processed/coco_small/train/snaps/snaps{}.npy'.format(i))
+                x_pred = np.load('/data/cvg/maurice/processed/coco/train/snaps/snaps{}.npy'.format(i))
             else:
-                x_pred = np.load('/data/cvg/maurice/processed/coco_small/val/snaps/snaps{}.npy'.format(i))
+                x_pred = np.load('/data/cvg/maurice/processed/coco/val/snaps/snaps{}.npy'.format(i))
             x_pred = np.expand_dims(x_pred, axis=0)
 
             # load Y
             if i % 2 == 0:
-                y_true = np.load('/data/cvg/maurice/processed/coco_small/train/targets/target{}.npy'.format(i))
+                y_true = np.load('/data/cvg/maurice/processed/coco/train/targets/target{}.npy'.format(i))
             else:
-                y_true = np.load('/data/cvg/maurice/processed/coco_small/val/targets/target{}.npy'.format(i))
+                y_true = np.load('/data/cvg/maurice/processed/coco/val/targets/target{}.npy'.format(i))
             covered_area = y_true[:, :, -3:]
             y_true = y_true[:, :, :-3]
             covered_target = y_true * covered_area
