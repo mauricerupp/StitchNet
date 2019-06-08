@@ -52,7 +52,7 @@ def image_predictor(epoch, logs):
             covered_target = y_true * covered_area
 
             # predict y (since the model is trained on pictures in [-1,1])
-            y_pred = model.predict(zero_center(x_pred/255.0))
+            y_pred = model.stitchdecoder.predict(zero_center(x_pred/255.0))
             equality = np.equal(y_pred, zero_center(y_true / 255.0))
             accuracy = np.mean(equality)
             y_pred = revert_zero_center(y_pred)*255
