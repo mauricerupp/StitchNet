@@ -14,7 +14,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 100
+batchsize = 150
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
@@ -34,7 +34,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 250 == 0:  # print samples every 50 images
+    if epoch % 20 == 0:  # print samples every 50 images
         for i in range(1, 5):
             # load X
             if i % 2 == 0:
