@@ -27,7 +27,7 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     inputs = Input(input_size)
 
     # extract features for every input image
-    conv1 = feature_extract(inputs, G0)
+    conv1 = feature_extract(inputs, G0, 5)
 
     global_conv1 = Conv2D(G0, kernel_size=3, activation='relu', padding='same', name='global_conv1')(conv1)
     global_conv2 = Conv2D(G0, kernel_size=3, activation='relu', padding='same', name='global_conv2')(global_conv1)

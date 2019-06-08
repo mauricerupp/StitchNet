@@ -164,7 +164,7 @@ def encode(input_tensor, kernel):
     return Conv2D(256, 3, activation='relu', padding='same', name='encoder_conv5', strides=2)(conv)
 
 
-def decode(input_tensor, kernel):
+def single_decode(input_tensor, kernel):
     """
     a decoder fitting for function encode
     :param input_tensor:
