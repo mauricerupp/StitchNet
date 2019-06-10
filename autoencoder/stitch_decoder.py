@@ -35,8 +35,8 @@ class StitchDecoder(object):
         conv = Conv2DTranspose(320, 3, activation='relu', padding='same', name='decoder_conv2', strides=2)(conv)
         conv = Conv2DTranspose(160, 3, activation='relu', padding='same', name='decoder_conv3', strides=2)(conv)
         conv = Conv2DTranspose(80, 3, activation='relu', padding='same', name='decoder_conv4', strides=2)(conv)
-        conv = Conv2DTranspose(40, 3, activation='tanh', padding='same', name='decoder_conv5', strides=2)(conv)
-        out = Conv2D(3, 3, activation='relu', padding='same', name='final_conv')(conv)
+        conv = Conv2DTranspose(40, 3, activation='relu', padding='same', name='decoder_conv5', strides=2)(conv)
+        out = Conv2D(3, 3, activation='tanh', padding='same', name='final_conv')(conv)
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
         self.stitchdecoder.summary()
