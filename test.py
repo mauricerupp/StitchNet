@@ -25,6 +25,7 @@ te = random_numpy_crop(test, input_size)
 print(te.shape)
 """
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
+print(img_name)
 test = np.array(cv2.imread(img_name))
 test2 = np.array(cv2.imread(img_name))
 te = np.concatenate([test, test2], axis=2)
