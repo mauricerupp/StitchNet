@@ -10,7 +10,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
+os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 tf.keras.backend.clear_session()
 
 # set the constants
