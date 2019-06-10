@@ -12,12 +12,12 @@ import numpy as np
 
 class StitchDecoder(object):
 
-    def __init__(self, input_size, encoder_weights_path):
+    def __init__(self, input_size, weights_path):
 
         encoder_inputs = Input(shape=input_size)
 
         autoenc = ConvAutoencoder([input_size[0], input_size[1], 3])
-        #autoenc.load_encoder_weights(encoder_weights_path)
+        autoenc.load_weights(weights_path)
         enc = autoenc.encoder
 
         # encode each image individually through the pre-trained encoder

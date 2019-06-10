@@ -23,7 +23,7 @@ x_0 = None
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v2_small_coco_NONLOADEDENCODERWEIGHTS"
+NAME = str(current_model.__name__) + "_v2_small_coco_LoadedAutoWeights"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -90,7 +90,7 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V2_run7/encoder_logs/')
+model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V2_run7/weight_logs/')
 
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=4002,
