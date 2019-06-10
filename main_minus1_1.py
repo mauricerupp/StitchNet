@@ -10,7 +10,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
+os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
@@ -23,7 +23,7 @@ x_0 = None
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v2_small_coco"
+NAME = str(current_model.__name__) + "_v2_small_coco_NONLOADEDENCODERWEIGHTS"
 
 
 # ----- Callbacks / Helperfunctions ----- #
