@@ -62,7 +62,7 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
             M[1, 2] += (nH / 2) - center[1]
             img_target = cv2.warpAffine(img_target, M, (h, w))
             (h, w) = img_target.shape[:2]
-            assert h >= w
+            assert h <= w
 
         # reshape the target to a size where we have enough space to move around if its to small
         # and keep the aspect ratio
