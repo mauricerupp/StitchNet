@@ -10,11 +10,11 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
+#os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 120
+batchsize = 350
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
@@ -37,10 +37,13 @@ def image_predictor(epoch, logs):
     if epoch % 20 == 0:  # print samples every 50 images
         for i in range(1, 5):
             # load X
+            set = ""
             if i % 2 == 0:
                 x_pred = np.load('/data/cvg/maurice/processed/coco/train/snaps/snaps{}.npy'.format(i))
+                set += "train-"
             else:
                 x_pred = np.load('/data/cvg/maurice/processed/coco/val/snaps/snaps{}.npy'.format(i))
+                set += "test-"
             x_pred = np.expand_dims(x_pred, axis=0)
 
             # load Y
@@ -61,7 +64,7 @@ def image_predictor(epoch, logs):
 
             # save the result
             fig = plt.figure()
-            fig.suptitle('Results of predicting Image {} on epoch {} \nwith an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
+            fig.suptitle('Results of predicting {}Image {} \non epoch {} \nwith an accuracy of {:.2%}'.format(set, i, epoch + 1, accuracy), fontsize=20)
             ax1 = fig.add_subplot(1, 3, 1)
             ax1.set_title('Y_True')
             plt.imshow(y_true[..., ::-1], interpolation='nearest') # conversion to RGB
@@ -93,7 +96,7 @@ val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_v
 model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V2_run7/encoder_logs/')
 
 # train the model
-model.stitchdecoder.fit_generator(train_data_generator,  epochs=5002,
+model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator)
 

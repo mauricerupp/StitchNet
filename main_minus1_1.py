@@ -23,7 +23,7 @@ x_0 = None
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v2_small_coco_NoWeightsLoaded"
+NAME = str(current_model.__name__) + "_v2_small_coco"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -64,7 +64,7 @@ def image_predictor(epoch, logs):
 
             # save the result
             fig = plt.figure()
-            fig.suptitle('Results of predicting {}Image {} on epoch {} \nwith an accuracy of {:.2%}'.format(set, i, epoch + 1, accuracy), fontsize=20)
+            fig.suptitle('Results of predicting {}Image {} \non epoch {} \nwith an accuracy of {:.2%}'.format(set, i, epoch + 1, accuracy), fontsize=20)
             ax1 = fig.add_subplot(1, 3, 1)
             ax1.set_title('Y_True')
             plt.imshow(y_true[..., ::-1], interpolation='nearest') # conversion to RGB

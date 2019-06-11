@@ -6,6 +6,7 @@ from autoencoder_v2 import *
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
+from tensorflow.python.keras.utils import multi_gpu_model
 import tensorflow.keras.backend as K
 import numpy as np
 
@@ -17,7 +18,7 @@ class StitchDecoder(object):
         encoder_inputs = Input(shape=input_size)
 
         autoenc = ConvAutoencoder([input_size[0], input_size[1], 3])
-        #autoenc.load_encoder_weights(weights_path)
+        autoenc.load_encoder_weights(weights_path)
         enc = autoenc.encoder
 
         # encode each image individually through the pre-trained encoder
@@ -40,6 +41,8 @@ class StitchDecoder(object):
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
         self.stitchdecoder.summary()
+        # enable multi-gpu-processing
+        self.stitchdecoder = multi_gpu_model(self.stitchdecoder)
         self.stitchdecoder.compile(optimizer='adam', loss=custom_loss, metrics=['accuracy'])
 
     def load_weights(self, path):
