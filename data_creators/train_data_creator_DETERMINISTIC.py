@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 # where we would output the sample images if needed:
 TRAINDIR = '/home/maurice/Dokumente/Try_Models/coco_try/test'
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
+#os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 
 # initialize the global variables
 sample_count = 0
@@ -296,15 +296,15 @@ create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
 
 
 """
-create_training_data('/data/cvg/maurice/unprocessed/coco_smalltrain',
-                     '/data/cvg/maurice/processed/coco_small/train/targets',
-                     '/data/cvg/maurice/processed/coco_small/train/snaps',
-                     '/data/cvg/maurice/processed/coco_small/train/',
+create_training_data('/data/cvg/maurice/unprocessed/coco_train',
+                     '/data/cvg/maurice/processed/coco/train/targets',
+                     '/data/cvg/maurice/processed/coco/train/snaps',
+                     '/data/cvg/maurice/processed/coco/train/',
                      (128, 128), (64, 64), 5, 16)
 
-create_training_data('/data/cvg/maurice/unprocessed/coco_smallval',
-                     '/data/cvg/maurice/processed/coco_small/val/targets',
-                     '/data/cvg/maurice/processed/coco_small/val/snaps',
-                     '/data/cvg/maurice/processed/coco_small/val/',
+create_training_data('/data/cvg/maurice/unprocessed/coco_val',
+                     '/data/cvg/maurice/processed/coco/val/targets',
+                     '/data/cvg/maurice/processed/coco/val/snaps',
+                     '/data/cvg/maurice/processed/coco/val/',
                      (128, 128), (64, 64), 5, 16)
 
