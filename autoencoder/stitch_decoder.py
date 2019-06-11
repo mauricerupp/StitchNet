@@ -42,7 +42,7 @@ class StitchDecoder(object):
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
         self.stitchdecoder.summary()
         # enable multi-gpu-processing
-        self.stitchdecoder = multi_gpu_model(self.stitchdecoder)
+        self.stitchdecoder = multi_gpu_model(self.stitchdecoder, gpus=2)
         self.stitchdecoder.compile(optimizer='adam', loss=custom_loss, metrics=['accuracy'])
 
     def load_weights(self, path):
