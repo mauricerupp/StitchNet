@@ -159,10 +159,15 @@ def encode(input_tensor, kernel):
     """
 
     conv = Conv2D(64, kernel, activation='relu', padding='same', name='encoder_conv1')(input_tensor)
-    conv = Conv2D(128, kernel, activation='relu', padding='same', name='encoder_conv2', strides=2)(conv)
-    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv3', strides=2)(conv)
-    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv4', strides=2)(conv)
-    return Conv2D(256, 3, activation='relu', padding='same', name='encoder_conv5', strides=2)(conv)
+    conv = Conv2D(64, kernel, activation='relu', padding='same', name='encoder_conv2')(conv)
+    conv = Conv2D(128, kernel, activation='relu', padding='same', name='encoder_conv3', strides=2)(conv)
+    conv = Conv2D(128, kernel, activation='relu', padding='same', name='encoder_conv4')(conv)
+    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv5', strides=2)(conv)
+    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv6')(conv)
+    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv7', strides=2)(conv)
+    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv8')(conv)
+    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv9', strides=2)(conv)
+    return Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv10')(conv)
 
 
 def single_decode(input_tensor, kernel):
@@ -170,11 +175,15 @@ def single_decode(input_tensor, kernel):
     a decoder fitting for function encode
     :param input_tensor:
     """
-    conv = Conv2DTranspose(128, 3, activation='relu', padding='same', name='decoder_conv1', strides=2)(input_tensor)
-    conv = Conv2DTranspose(64, kernel, activation='relu', padding='same', name='decoder_conv2', strides=2)(conv)
-    conv = Conv2DTranspose(32, kernel, activation='relu', padding='same', name='decoder_conv3', strides=2)(conv)
-    conv = Conv2DTranspose(16, kernel, activation='relu', padding='same', name='decoder_conv4', strides=2)(conv)
-    return Conv2DTranspose(3, kernel, activation='tanh', padding='same', name='decoder_conv5', strides=1)(conv)
+    conv = Conv2DTranspose(128, kernel, activation='relu', padding='same', name='decoder_conv1', strides=2)(input_tensor)
+    conv = Conv2D(128, kernel, activation='relu', padding='same', name='decoder_conv2')(conv)
+    conv = Conv2DTranspose(64, kernel, activation='relu', padding='same', name='decoder_conv3', strides=2)(conv)
+    conv = Conv2D(64, kernel, activation='relu', padding='same', name='decoder_conv4')(conv)
+    conv = Conv2DTranspose(32, kernel, activation='relu', padding='same', name='decoder_conv5', strides=2)(conv)
+    conv = Conv2D(32, kernel, activation='relu', padding='same', name='decoder_conv6')(conv)
+    conv = Conv2DTranspose(16, kernel, activation='relu', padding='same', name='decoder_conv7', strides=2)(conv)
+    conv = Conv2D(16, kernel, activation='relu', padding='same', name='decoder_conv8')(conv)
+    return Conv2DTranspose(3, kernel, activation='tanh', padding='same', name='decoder_conv9', strides=1)(conv)
 
 
 # ---- Normalization ---- #

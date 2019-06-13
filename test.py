@@ -16,6 +16,9 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
+
+
+
 """
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
 test = np.array(cv2.imread(img_name))
@@ -23,7 +26,7 @@ print(test.shape)
 input_size = (641,641,3)
 te = random_numpy_crop(test, input_size)
 print(te.shape)
-"""
+
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
 print(img_name)
 test = np.array(cv2.imread(img_name))
@@ -49,7 +52,7 @@ for i in range(0, 3, 3):
 print(in_conv_list[0].shape)
 
 
-"""
+
 size1 = np.array([488, 488,3])
 size2 = np.array([10,10,3])
 
