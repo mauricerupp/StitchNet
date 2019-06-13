@@ -1,6 +1,6 @@
 # own classes
 from batch_generator_autoencoder import *
-from autoencoder_v2 import *
+from autoencoder_v3 import *
 from utilities import *
 from encoder_callback import *
 
@@ -14,11 +14,11 @@ import cv2
 import tensorflow as tf
 from tensorflow.python.keras.backend import set_session
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
+#os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 2048
+batchsize = 4096
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
