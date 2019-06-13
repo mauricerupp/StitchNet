@@ -19,7 +19,7 @@ tf.keras.backend.clear_session()
 
 # set the constants
 batchsize = 2048
-paths_dir = '/data/cvg/maurice/unprocessed/'
+paths_dir = '/dev/smh/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
