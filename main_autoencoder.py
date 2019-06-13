@@ -18,7 +18,7 @@ from tensorflow.python.keras.backend import set_session
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 4096
+batchsize = 2048
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
@@ -35,7 +35,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 20 == 0:  # print samples every 50 images
+    if epoch % 30 == 0:  # print samples every 50 images
         for i in range(1, 5):
             # load the ground truth
             if i % 2 == 0:
