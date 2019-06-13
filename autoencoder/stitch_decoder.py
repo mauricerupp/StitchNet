@@ -1,14 +1,12 @@
 from utilities import *
 from l1_loss import custom_loss
-from autoencoder_v2 import *
+from autoencoder_v3 import *
 
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 from tensorflow.python.keras.utils import multi_gpu_model
-import tensorflow.keras.backend as K
-import numpy as np
 
 
 class StitchDecoder(object):
@@ -54,4 +52,4 @@ class StitchDecoder(object):
         self.stitchdecoder.load_weights(filepath=path)
 
 
-#mod = StitchDecoder(input_size=(64, 64, 15), encoder_weights_path='/home/maurice/Dokumente/encoder_logs/')
+#mod = StitchDecoder(input_size=(64, 64, 15), weights_path='/home/maurice/Dokumente/encoder_logs/')

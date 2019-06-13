@@ -15,15 +15,15 @@ tf.keras.backend.clear_session()
 
 # set the constants
 batchsize = 256
-paths_dir_train = '/data/cvg/maurice/processed/coco/train'
-paths_dir_val = '/data/cvg/maurice/processed/coco/val'
+paths_dir_train = '/dev/shm/coco/train'
+paths_dir_val = '/dev/shm/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v2_whole_coco"
+NAME = str(current_model.__name__) + "_v3_whole_coco"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -34,8 +34,8 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 10 == 0:  # print samples every 50 images
-        for i in range(1, 5):
+    if epoch % 20 == 0:  # print samples every 50 images
+        for i in range(6, 14):
             # load X
             set = ""
             if i % 2 == 0:
@@ -93,7 +93,7 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V2_run7/encoder_logs/')
+model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V3/encoder_logs/')
 
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
