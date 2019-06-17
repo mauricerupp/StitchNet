@@ -93,7 +93,7 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V3/encoder_logs/')
+model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V3_run4/encoder_logs/')
 
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
