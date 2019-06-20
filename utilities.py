@@ -155,6 +155,7 @@ def feature_extract(input_tensor, filter, kernel):
 def encode(input_tensor, kernel):
     """
     a simple encoder which uses strided convolutions and an increasing amount of filters
+    conv + norm (add trainable variables to graph colleciton) + activation
     :param input_tensor:
     """
 
@@ -184,12 +185,13 @@ def single_decode(input_tensor, kernel):
     conv = Conv2DTranspose(16, kernel, activation='relu', padding='same', name='decoder_conv7', strides=2)(conv)
     conv = Conv2D(16, kernel, activation='relu', padding='same', name='decoder_conv8')(conv)
     return Conv2DTranspose(3, kernel, activation='tanh', padding='same', name='decoder_conv9', strides=1)(conv)
+    #add another normal conv
 
 
 # ---- Normalization ---- #
-def normalize(input_layer, name, normalizer):
+def normalize(input_layer, name, normalizer, training_flag):
     if normalizer.lower() == 'batch':
-        return BatchNormalization(name=name, axis=3)(input_layer)
+        return BatchNormalization(name=name, axis=3, trainable=training_flag)(input_layer)
     elif normalizer.lower() == 'instance':
         return InstanceNormalization(axis=3)(input_layer)
     else:
