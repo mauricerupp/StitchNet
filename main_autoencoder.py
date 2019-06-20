@@ -24,7 +24,7 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V3_run4"
+NAME = str(current_model.__name__) + "_V3_run5"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -80,7 +80,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, i
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size)
-model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V3_run3/weight_logs/')
+model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V3_run4/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
 checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/'.format(NAME)
