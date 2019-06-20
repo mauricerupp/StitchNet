@@ -53,14 +53,14 @@ def image_predictor(epoch, logs):
             y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
             y_pred = revert_zero_center(y_pred)*255.0
             y_pred = np.array(np.rint(y_pred), dtype=int)
-
+            """
             # save the result
             img = tf.summary.image("Y_pred_{}".format(i), y_pred)
             writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
             sess = tf.InteractiveSession()
             with sess.as_default():
                 writer.add_summary(img.eval(session=sess))
-            """
+          
             fig = plt.figure()
             fig.suptitle('Results of predicting Image {} on epoch {} \nwith an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
             ax1 = fig.add_subplot(1, 2, 1)
