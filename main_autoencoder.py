@@ -38,12 +38,15 @@ def image_predictor(epoch, logs):
     if epoch % 10 == 0:  # print samples every 50 images
         for i in range(1, 5):
             # load the ground truth
+            set = ""
             if i % 2 == 0:
                 list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
                 img = np.array(cv2.imread(list[i]))
+                set += "train-"
             else:
                 list = np.load('/data/cvg/maurice/unprocessed/val_snaps_paths.npy')
                 img = np.array(cv2.imread(list[i]))
+                set += "test-"
 
             # predict y (since the model is trained on pictures in [-1,1]) and we always take the same crop
             #img = random_numpy_crop(img, input_size)
@@ -55,7 +58,7 @@ def image_predictor(epoch, logs):
 
             # save the result
             fig = plt.figure()
-            fig.suptitle('Results of predicting Image {} on epoch {} \nwith an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
+            fig.suptitle('Results of predicting {}Image {} on epoch {}'.format(set, i, epoch + 1), fontsize=20)
             ax1 = fig.add_subplot(1, 2, 1)
             ax1.set_title('Y_True')
             plt.imshow(img[..., ::-1], interpolation='nearest') # conversion to RGB
