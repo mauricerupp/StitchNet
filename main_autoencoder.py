@@ -36,7 +36,6 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch % 10 == 0:  # print samples every 50 images
-        file_writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/')
         for i in range(1, 5):
             # load the ground truth
             if i % 2 == 0:
@@ -55,15 +54,6 @@ def image_predictor(epoch, logs):
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
-            img = tf.summary.image("Y_pred_{}".format(i), y_pred)
-            with tf.Session() as sess:
-                # Run
-                summary = sess.run(img)
-                # Write summary
-                writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
-                writer.add_summary(summary)
-                writer.close()
-            """
             fig = plt.figure()
             fig.suptitle('Results of predicting Image {} on epoch {} \nwith an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
             ax1 = fig.add_subplot(1, 2, 1)
@@ -74,7 +64,16 @@ def image_predictor(epoch, logs):
             plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
             plt.close()
-            """
+
+            img = tf.summary.image("Y_pred_{}".format(i), y_pred, family=i)
+            with tf.Session() as sess:
+                # Run
+                summary = sess.run(img)
+                # Write summary
+                writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
+                writer.add_summary(summary)
+                writer.close()
+
 
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 
