@@ -57,7 +57,9 @@ def image_predictor(epoch, logs):
             # save the result
             img = tf.summary.image("Y_pred_{}".format(i), y_pred)
             writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
-            writer.add_summary(img.eval())
+            sess = tf.InteractiveSession()
+            with sess.as_default():
+                writer.add_summary(img.eval(session=sess))
             """
             fig = plt.figure()
             fig.suptitle('Results of predicting Image {} on epoch {} \nwith an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
