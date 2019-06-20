@@ -35,7 +35,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 10 == 0:  # print samples every 50 images
+    if epoch % 20 == 0:  # print samples every 50 images
         for i in range(1, 5):
             # load the ground truth
             set = ""
@@ -68,15 +68,6 @@ def image_predictor(epoch, logs):
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
             plt.close()
 
-            img = tf.summary.image("Y_pred_{}".format(i), y_pred)
-            with tf.Session() as sess:
-                # Run
-                summary = sess.run(img)
-                # Write summary
-                writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
-                writer.add_summary(summary)
-                writer.close()
-
 
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 
@@ -85,8 +76,8 @@ tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NA
 
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, input_size)
-val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, input_size)
+train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, input_size)
+val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size, norm='batch', training_flag=True)
