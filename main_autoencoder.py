@@ -56,7 +56,7 @@ def image_predictor(epoch, logs):
             # save the result
             file_writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/')
             with file_writer.as_default():
-                tf.summary.image("Y_pred", y_pred)
+                tf.summary.image("Y_pred_{}".format(i), y_pred)
             """
             fig = plt.figure()
             fig.suptitle('Results of predicting Image {} on epoch {} \nwith an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
