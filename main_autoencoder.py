@@ -36,6 +36,7 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch % 10 == 0:  # print samples every 50 images
+        file_writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/')
         for i in range(1, 5):
             # load the ground truth
             if i % 2 == 0:
@@ -54,9 +55,7 @@ def image_predictor(epoch, logs):
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
-            file_writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/')
-            with file_writer.as_default():
-                tf.summary.image("Y_pred_{}".format(i), y_pred)
+            file_writer.add_summary(tf.summary.image("Y_pred_{}".format(i), y_pred))
             """
             fig = plt.figure()
             fig.suptitle('Results of predicting Image {} on epoch {} \nwith an accuracy of {:.2%}'.format(i, epoch + 1, accuracy), fontsize=20)
@@ -69,7 +68,7 @@ def image_predictor(epoch, logs):
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
             plt.close()
             """
-
+        file_writer.close()
 
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 
