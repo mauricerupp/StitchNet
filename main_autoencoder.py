@@ -68,7 +68,7 @@ def image_predictor(epoch, logs):
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
             plt.close()
 
-            img = tf.summary.image("Y_pred_{}".format(i), y_pred[0])
+            img = tf.summary.image("Y_pred_{}".format(i), y_pred[0][..., ::-1])
             with tf.Session() as sess:
                 # Run
                 summary = sess.run(img)
