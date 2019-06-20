@@ -60,7 +60,7 @@ def image_predictor(epoch, logs):
                 # Run
                 summary = sess.run(img)
                 # Write summary
-                writer = tf.train.SummaryWriter('/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
+                writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
                 writer.add_summary(summary)
                 writer.close()
             """
