@@ -54,7 +54,7 @@ def image_predictor(epoch, logs):
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
-            file_writer = tf.summary.create_file_writer('/data/cvg/maurice/logs/{}/tb_logs/')
+            file_writer = tf.summary.FileWriter('/data/cvg/maurice/logs/{}/tb_logs/')
             with file_writer.as_default():
                 tf.summary.image("Y_pred", y_pred)
             """
