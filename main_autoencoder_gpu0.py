@@ -58,7 +58,7 @@ def image_predictor(epoch, logs):
 
             # save the result
             fig = plt.figure()
-            fig.suptitle('Results of predicting {}Image {} on epoch {}'.format(set, i, epoch + 1), fontsize=20)
+            fig.suptitle('Results of predicting {}Image {}\n on epoch {}'.format(set, i, epoch + 1), fontsize=20)
             ax1 = fig.add_subplot(1, 2, 1)
             ax1.set_title('Y_True')
             plt.imshow(img[..., ::-1], interpolation='nearest') # conversion to RGB
