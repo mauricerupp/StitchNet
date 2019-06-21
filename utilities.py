@@ -187,7 +187,40 @@ def single_decode(input_tensor, kernel):
     conv = Conv2DTranspose(16, kernel, activation='relu', padding='same', name='decoder_conv7', strides=2)(conv)
     conv = Conv2D(16, kernel, activation='relu', padding='same', name='decoder_conv8')(conv)
     return Conv2DTranspose(3, kernel, activation='tanh', padding='same', name='decoder_conv9', strides=1)(conv)
-    #add another normal conv
+
+
+def enc_block(input_layer, filters, index, normalizer, isTraining):
+    if filters > 256:
+        filters = 256
+    if index == 1:
+        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_1'.format(index))(input_layer)
+        x = Activation('relu')(x)
+    else:
+        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_1'.format(index))(input_layer)
+        x = normalize(x, 'encoder_norm{}_1'.format(index), normalizer, isTraining)
+        x = Activation('relu')(x)
+
+    x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_2'.format(index))(x)
+    x = normalize(x, 'encoder_norm{}_2'.format(index), normalizer, isTraining)
+    x = Activation('relu')(x)
+    if filters < 256:
+        x = Conv2D(filters*2, 3, activation=None, padding='same', strides=2, name='encoder_conv{}_3'.format(index))(x)
+    else:
+        x = Conv2D(filters, 3, activation=None, padding='same', strides=2, name='encoder_conv{}_3'.format(index))(x)
+    x = normalize(x, 'encoder_norm{}_3'.format(index), normalizer, isTraining)
+    return Activation('relu')(x)
+
+
+def dec_block(input_layer, filters, index, normalizer, isTraining, modelname):
+    x = Conv2DTranspose(filters, 3, activation=None, padding='same', name='{}_decoder_conv{}_1'.format(modelname, index), strides=2)(input_layer)
+    x = normalize(x, '{}_decoder_norm{}_1'.format(modelname, index), normalizer, isTraining)
+    x = Activation('relu')(x)
+    for i in range(2):
+        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='{}_decoder_conv{}_{}'.format(modelname, index, i +2))(x)
+        x = normalize(x, '{}_decoder_norm{}_{}'.format(modelname, index, i+2), normalizer, isTraining)
+        x = Activation('relu')(x)
+
+    return x
 
 
 # ---- Normalization ---- #

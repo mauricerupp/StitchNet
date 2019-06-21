@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-from stitch_decoder import *
+from stitch_decoder_v1 import *
 from utilities import *
 
 # packages

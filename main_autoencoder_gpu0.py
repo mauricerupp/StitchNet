@@ -80,7 +80,7 @@ train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsiz
 val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
-model = ConvAutoencoder(input_size, norm='instance', training_flag=True)
+model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
 #model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V3_run4/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
