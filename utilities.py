@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow.python.keras.layers import *
 import random
 import cv2
-import tensorflow.python.keras.backend as K
+import tensorflow.keras.backend as K
 from tensorflow.python.keras import initializers, regularizers, constraints
 
 
