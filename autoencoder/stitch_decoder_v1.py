@@ -30,21 +30,22 @@ class StitchDecoder(object):
         # concatenate the images and decode them to a final image
         x = Concatenate(axis=3, name='conc_img_features')(encoded_img_list)
 
-        for i in range(4):
+        for i in range(5):
             x = dec_block(x, int(512 / 2 ** i), i + 1, normalizer, isTraining, "D2")
         out = Conv2D(3, 3, activation='tanh', padding='same', name='final_conv')(x)
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
         self.stitchdecoder.summary()
         # enable multi-gpu-processing
-        self.stitchdecoder = multi_gpu_model(self.stitchdecoder, gpus=2)
+        #self.stitchdecoder = multi_gpu_model(self.stitchdecoder, gpus=2)
         self.stitchdecoder.compile(optimizer='adam', loss=custom_loss, metrics=['accuracy'])
 
     def load_weights(self, path):
         self.stitchdecoder.load_weights(filepath=path)
 
-
+"""
 mod = StitchDecoder(input_size=(64, 64, 15),
                     weights_path='/home/maurice/Dokumente/encoder_logs/',
                     normalizer='batch',
                     isTraining=True)
+"""
