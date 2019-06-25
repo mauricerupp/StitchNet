@@ -9,6 +9,7 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow.keras.backend as K
 import tensorflow as tf
 from tensorflow.python.keras.utils import multi_gpu_model
+import datetime
 
 
 class ConvAutoencoder(object):
@@ -48,6 +49,11 @@ class ConvAutoencoder(object):
             self.autoencoder.trainable = False
 
         self.autoencoder.compile(optimizer='adam', loss='mean_absolute_error', metrics=['accuracy', PSNR])
+
+        #with open('Autoenc_v4 ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
+        #    self.autoencoder.summary(print_fn=lambda x: fh.write(x + '\n'))
+
+        #plot_model(self.autoencoder, to_file='Autoencoder_v4')
 
     def load_encoder_weights(self, path):
         self.encoder.load_weights(filepath=path)

@@ -18,7 +18,9 @@ import tensorflow as tf
 import datetime
 
 
-
+directions = np.array([[0,0],[-1, 0], [-1, 1], [0, 1], [1,1], [1,0], [1, -1], [0, -1], [-1, -1]])
+print(directions.shape[0])
+print(random.randint(1, directions.shape[0]))
 """
 img_name = '/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg'
 test = np.array(cv2.imread(img_name))
