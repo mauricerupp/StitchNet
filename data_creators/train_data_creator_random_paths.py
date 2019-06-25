@@ -318,7 +318,7 @@ create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      (128, 128), (64, 64), 5, 16)
 
 
-
+"""
 create_training_data('/data/cvg/maurice/unprocessed/coco_train',
                      '/data/cvg/maurice/processed/coco/train/targets',
                      '/data/cvg/maurice/processed/coco/train/snaps',
@@ -330,4 +330,4 @@ create_training_data('/data/cvg/maurice/unprocessed/coco_val',
                      '/data/cvg/maurice/processed/coco/val/snaps',
                      '/data/cvg/maurice/processed/coco/val/',
                      (128, 128), (64, 64), 5, 16)
-
+"""
