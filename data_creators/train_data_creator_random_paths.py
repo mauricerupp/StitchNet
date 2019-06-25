@@ -68,7 +68,7 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         # reshape the target to a size where we have enough space to move around if its to small
         # and keep the aspect ratio
         # since h <= w, we can only adjust it with h
-        space = 2.2*((snaps_per_sample - 1)*step_size + snap_size[0])
+        space = int(2.2*((snaps_per_sample - 1)*step_size + snap_size[0]))
         if h <= space:
             img_target = cv2.resize(img_target, (int(w*(space/h)), space)) # (w, h) contrary to all
             h_target = img_target.shape[0]
