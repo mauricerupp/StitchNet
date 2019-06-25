@@ -10,7 +10,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
+#os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 tf.keras.backend.clear_session()
 
 # set the constants
@@ -23,7 +23,7 @@ x_0 = None
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v4_instance_run1"
+NAME = str(current_model.__name__) + "_randompaths_v4_instance_run1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -99,5 +99,5 @@ model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V4_ins
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
-                    validation_data=val_data_generator, max_queue_size=64, workers=16)
+                    validation_data=val_data_generator, max_queue_size=100, workers=16)
 
