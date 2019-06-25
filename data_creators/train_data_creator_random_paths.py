@@ -69,7 +69,7 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         # and keep the aspect ratio
         # since h <= w, we can only adjust it with h
         space = (snaps_per_sample - 1)*step_size + snap_size[0]
-        if h < 2*space:
+        if h <= 2*space:
             img_target = cv2.resize(img_target, (int(w*(space/h)), space)) # (w, h) contrary to all
 
         # create the stack of image snaps of the target image w/ shape (h, w, 3 * snaps_per_sample)
