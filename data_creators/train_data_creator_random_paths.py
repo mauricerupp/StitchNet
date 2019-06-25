@@ -80,13 +80,13 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         sample_count += 1
         middle_frame_center = middle_frame_top_left_corner + np.array(snap_size)/2
         # crop the target around the covered area
-        plt.imshow(img_overlapse)
-        plt.show()
+        #plt.imshow(img_overlapse)
+        #plt.show()
         img_target = crop(img_target, middle_frame_center, target_size)
         covered_pixels = crop(covered_pixels, middle_frame_center, target_size)
         img_overlapse = crop(img_overlapse, middle_frame_center, target_size)
-        plt.imshow(img_overlapse)
-        plt.show()
+        #plt.imshow(img_overlapse)
+        #plt.show()
 
         """
         # save the frame as an image (debugging)
@@ -114,6 +114,11 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
 
         # update the overall overlapse
         overlapse += (np.count_nonzero(img_overlapse !=1)-np.count_nonzero(img_overlapse == 0)) / np.count_nonzero(img_overlapse)
+        img_target = None
+        covered_pixels = None
+        img_snaps = None
+        img_overlapse = None
+
     # save the paths as numpy arrays
     np.save(paths_dir + "/targets_paths", targets_paths)
     np.save(paths_dir + "/snaps_paths", snaps_paths)
