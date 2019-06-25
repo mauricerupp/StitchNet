@@ -71,6 +71,9 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         space = (snaps_per_sample - 1)*step_size + snap_size[0]
         if h <= 2.5*space:
             img_target = cv2.resize(img_target, (int(w*(space/h)), space)) # (w, h) contrary to all
+            h_target = img_target.shape[0]
+            w_target = img_target.shape[1]
+            print("h: " + str(h_target) + ",w: " + str(w_target))
 
         # create the stack of image snaps of the target image w/ shape (h, w, 3 * snaps_per_sample)
         img_snaps, covered_pixels, img_overlapse, middle_frame_top_left_corner = create_rand_translation_path(img_target,
