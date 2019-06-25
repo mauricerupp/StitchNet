@@ -71,8 +71,6 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
         space = int(2.2*((snaps_per_sample - 1)*step_size + snap_size[0]))
         if h <= space:
             img_target = cv2.resize(img_target, (int(w*(space/h)), space)) # (w, h) contrary to all
-            h_target = img_target.shape[0]
-            w_target = img_target.shape[1]
 
         # create the stack of image snaps of the target image w/ shape (h, w, 3 * snaps_per_sample)
         img_snaps, covered_pixels, img_overlapse, middle_frame_top_left_corner = create_rand_translation_path(img_target,
@@ -320,13 +318,13 @@ create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      (128, 128), (64, 64), 5, 16)
 
 
-"""
+
 create_training_data('/data/cvg/maurice/unprocessed/coco_train',
                      '/data/cvg/maurice/processed/coco/train/targets',
                      '/data/cvg/maurice/processed/coco/train/snaps',
                      '/data/cvg/maurice/processed/coco/train/',
                      (128, 128), (64, 64), 5, 16)
-
+"""
 create_training_data('/data/cvg/maurice/unprocessed/coco_val',
                      '/data/cvg/maurice/processed/coco/val/targets',
                      '/data/cvg/maurice/processed/coco/val/snaps',
