@@ -14,7 +14,7 @@ import cv2
 import tensorflow as tf
 from tensorflow.python.keras.backend import set_session
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
+#os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 tf.keras.backend.clear_session()
 
 # set the constants
@@ -24,7 +24,7 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V4_instanceNEW_run1"
+NAME = str(current_model.__name__) + "_V4_instanceNEW_run2"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -81,7 +81,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, i
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
-#model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V3_run4/weight_logs/')
+model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V4_instanceNEW_run1/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
 checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/'.format(NAME)
@@ -95,4 +95,4 @@ enc_callback = EncoderCheckpoint(enc_path, model.encoder)
 # train the model
 model.autoencoder.fit_generator(train_data_generator,  epochs=3000,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict, enc_callback],
-                    validation_data=val_data_generator, workers=6)
+                    validation_data=val_data_generator, max_queue_size=64, workers=16)

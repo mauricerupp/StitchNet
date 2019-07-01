@@ -114,6 +114,19 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
 
         # update the overall overlapse
         overlapse += (np.count_nonzero(img_overlapse !=1)-np.count_nonzero(img_overlapse == 0)) / np.count_nonzero(img_overlapse)
+        temp = img_target[:, :, :-3]
+        fig5 = plt.imshow(temp[..., ::-1])
+        plt.savefig(
+            "/home/maurice/Dokumente/BA/Docu_random_samples/img{}-target-cropped.png".format(sample_count - 1))
+
+        temp = covered_pixels * temp
+        fig7 = plt.imshow(temp[..., ::-1])
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_random_samples/img{}-coveredtarget-cropped.png".format(
+            sample_count - 1))
+
+        fig8 = plt.imshow(img_overlapse)
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_random_samples/img{}-cropped.png".format(sample_count - 1))
+
         img_target = None
         covered_pixels = None
         img_snaps = None
@@ -309,13 +322,13 @@ def opp_dir(direction):
     else:
         return direction + 4
 
-"""
+
 create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/targets',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train/snaps',
                      '/home/maurice/Dokumente/Try_Models/coco_try/train',
                      (128, 128), (64, 64), 5, 16)
-
+"""
 create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      '/home/maurice/Dokumente/Try_Models/coco_try/val/targets',
                      '/home/maurice/Dokumente/Try_Models/coco_try/val/snaps',
@@ -323,13 +336,13 @@ create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
                      (128, 128), (64, 64), 5, 16)
 
 
-"""
+
 create_training_data('/data/cvg/maurice/unprocessed/coco_train',
                      '/data/cvg/maurice/processed/coco/train/targets',
                      '/data/cvg/maurice/processed/coco/train/snaps',
                      '/data/cvg/maurice/processed/coco/train/',
                      (128, 128), (64, 64), 5, 16)
-"""
+
 create_training_data('/data/cvg/maurice/unprocessed/coco_val',
                      '/data/cvg/maurice/processed/coco/val/targets',
                      '/data/cvg/maurice/processed/coco/val/snaps',
