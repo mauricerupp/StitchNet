@@ -9,9 +9,16 @@ import random
 import cv2
 import tensorflow.keras.backend as K
 from tensorflow.python.keras import initializers, regularizers, constraints
+import numpy as np
 
 
 # ---- Functions ---- #
+def log10(x):
+    numerator = tf.log(x)
+    denominator = tf.log(tf.constant(10, dtype=numerator.dtype))
+    return numerator / denominator
+
+
 def zero_center(in_img):
     """
     :param in_img: an image in the scale of [0,1]
@@ -32,7 +39,15 @@ def random_numpy_crop(in_img, crop_size):
     if img_size[0] <= crop_size[0] or img_size[1] <= crop_size[1]:
         in_img = scale_img(in_img, crop_size)
         img_size = in_img.shape
-        print(img_size)
+
+    # if the image is too big, we scale it down in order to have some detail in the image and not only blurry background
+    if img_size[0] > 5*crop_size[0] or img_size[1] > 5*crop_size[1]:
+        new_size = np.array(crop_size)
+
+        new_size[0] = 2*new_size[0]
+        new_size[1] = 2*new_size[1]
+        in_img = scale_img(in_img, new_size)
+        img_size = in_img.shape
 
     top_left_corner = [random.randint(0, int(img_size[0]-crop_size[0])),
                        random.randint(0, int(img_size[1]-crop_size[1]))]
@@ -77,6 +92,44 @@ def resize_img(img, desired_size):
 
     img = img[space_h:space_h+desired_size[0], space_w:space_w+desired_size[1]]
 
+    return img
+
+
+def crop(img, center, size):
+    """
+    crops an image around a given center to a given size
+    if the size around this center is not inside the image borders it shifts to the border
+    :param img: the img we want to crop
+    :param center: the new center
+    :param size: the new size
+    :return: a cropped image
+    """
+    assert center[0] >= 0
+    assert center[1] >= 0
+    (h, w) = img.shape[:2]
+    (up, under, left, right) = (int(center[0]-size[0] // 2), int(center[0] + size[0] - (size[0] // 2)),
+                                int(center[1] - size[1] // 2), int(center[1] + size[1] - (size[1] // 2)))
+    if up >= 0:
+        if under <= h:
+            pass
+        else:
+            under = h
+            up = under - size[0]
+    else:
+        up = 0
+        under = size[0]
+
+    if left >= 0:
+        if right <= w:
+            pass
+        else:
+            right = w
+            left = right - size[1]
+    else:
+        left = 0
+        right = size[1]
+    img = img[up:under, left:right]
+    assert img.shape[:2] == (size[0], size[1])
     return img
 
 

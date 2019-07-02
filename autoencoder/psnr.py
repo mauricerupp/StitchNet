@@ -7,4 +7,4 @@ def PSNR(y_true, y_pred):
     y_pred = revert_zero_center(y_pred)
     y_true = revert_zero_center(y_true)
     max_pixel = 1.0
-    return (10.0 * K.log((max_pixel ** 2) / (K.mean(K.square(y_pred - y_true), axis=-1)))) / 2.303
+    return 10.0 * log10((max_pixel ** 2) / (K.mean(K.square(y_pred - y_true), axis=-1)))

@@ -25,7 +25,8 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
     creates the training data and stores every sample as numpy array in target_dir and snap_dir
     targets consists of 6 channels:
     the first 3 are the color channels and the 2nd 3 are whether these pixels are covered or not
-    creates a random path, where the center of the frame is the middle snap
+    creates a random path, where the center of the frame is the middle snap, also the paths are more camera-like
+    so there are different probabilities for going in the same direction as before as for going back
     :param raw_dir:
     :param target_dir:
     :param snap_dir:
@@ -115,20 +116,19 @@ def create_training_data(raw_dir, target_dir, snap_dir, paths_dir, target_size, 
 
         # update the overall overlapse
         overlapse += (np.count_nonzero(img_overlapse !=1)-np.count_nonzero(img_overlapse == 0)) / np.count_nonzero(img_overlapse)
-        """
         temp = img_target[:, :, :-3]
         fig5 = plt.imshow(temp[..., ::-1])
         plt.savefig(
-            "/home/maurice/Dokumente/BA/Docu_random_samples/img{}-target-cropped.png".format(sample_count - 1))
+            "/home/maurice/Dokumente/BA/Docu_smooth_random_samples/img{}-target-cropped.png".format(sample_count - 1))
 
         temp = covered_pixels * temp
         fig7 = plt.imshow(temp[..., ::-1])
-        plt.savefig("/home/maurice/Dokumente/BA/Docu_random_samples/img{}-coveredtarget-cropped.png".format(
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_smooth_random_samples/img{}-coveredtarget-cropped.png".format(
             sample_count - 1))
 
         fig8 = plt.imshow(img_overlapse)
-        plt.savefig("/home/maurice/Dokumente/BA/Docu_random_samples/img{}-cropped.png".format(sample_count - 1))
-        """
+        plt.savefig("/home/maurice/Dokumente/BA/Docu_smooth_random_samples/img{}-cropped.png".format(sample_count - 1))
+
         img_target = None
         covered_pixels = None
         img_snaps = None
@@ -154,7 +154,7 @@ def create_rand_translation_path(img_target, snaps_per_sample, snap_size, step_s
     middle_frame_top_left_corner = []
 
     for iterationCount in range(snaps_per_sample):
-        last_direction = 0 #indicates that we initially don't have a direction
+        last_direction = np.random.randint(0, 8) #completely random direction to start with
         # update the position of the top left corner of our snap
         if iterationCount == 0: # start in the middle of the image in order to be able to move around
             top_left_corner = np.array([int(h_target/2 - h_snap/2), int(w_target/2 - w_snap)])
@@ -207,11 +207,10 @@ def update_frame_position(topleft_corner, step_size, h_snap, h_target, w_snap, w
     assert topleft_corner[1] >= 0
     assert step_size >= 0
     # have 8 different determined moving directions
-    directions = np.array([[0,0],[-1, 0], [-1, 1], [0, 1], [1,1], [1,0], [1, -1], [0, -1], [-1, -1]])
-    rand = random.randint(1, directions.shape[0]-1)
-    # avoid that the path get directly back to where it came from
-    while rand == opp_dir(last_direction):
-        rand = random.randint(1, directions.shape[0]-1)
+    directions = np.array([[0, -1], [1, -1], [1, 0], [1,1], [0,1], [-1, 1], [-1, 0], [-1, -1]])
+    weights = fill_probabilities(last_direction)
+
+    rand = np.random.choice(np.arange(0, 8), p=weights)
 
     # check if the new frame would be completely inside the picture
     if 0 < topleft_corner[0] + directions[rand][0]*step_size < h_target - h_snap \
@@ -243,10 +242,37 @@ def get_random_angle(h, w, point):
 
 
 def opp_dir(direction):
-    if direction > 4:
+    if direction >= 4:
         return direction - 4
     else:
         return direction + 4
+
+
+def fill_probabilities(previous_direction):
+    weights = np.zeros(8)
+    weights[previous_direction] = 0.33
+    # adust the weight left of the prev direction
+    if previous_direction > 0:
+        weights[previous_direction-1] = 0.23
+        weights[opp_dir(previous_direction-1)] = 0.02
+    else:
+        weights[7] = 0.23
+        weights[opp_dir(7)] = 0.02
+    # adjust the weight right of the prev direction
+    if previous_direction < 7:
+        weights[previous_direction+1] = 0.23
+        weights[opp_dir(previous_direction+1)] = 0.02
+    else:
+        weights[0] = 0.23
+        weights[opp_dir(0)] = 0.02
+    # adjust the weights at a right angle to the previous direction
+    if previous_direction < 6:
+        weights[previous_direction+2] = 0.085
+        weights[opp_dir(previous_direction+2)] = 0.085
+    else:
+        weights[previous_direction-2] = 0.085
+        weights[opp_dir(previous_direction - 2)] = 0.085
+    return weights
 
 
 create_training_data('/home/maurice/Dokumente/Try_Models/coco_try/TR',
