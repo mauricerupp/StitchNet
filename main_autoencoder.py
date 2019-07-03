@@ -1,6 +1,6 @@
 # own classes
 from batch_generator_autoencoder import *
-from autoencoder_v5 import *
+from autoencoder_v4 import *
 from utilities import *
 from encoder_callback import *
 
