@@ -39,10 +39,11 @@ class ConvAutoencoder(object):
         for i in range(4):
             x = dec_block(x, int(128 / 2**i), i + 1, norm, isTraining, "autoenc_v4")
         # final layer
-        out = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv')(x)
+        out1 = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv_2')(x)
+        out2 = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv_1')(x)
 
         self.encoder = Model(inputs, enc_out, name='encoder')
-        self.autoencoder = Model(inputs=inputs, outputs=[out, out],
+        self.autoencoder = Model(inputs=inputs, outputs=[out1, out2],
                                  name='autoencoder')
 
         #self.autoencoder.summary()
