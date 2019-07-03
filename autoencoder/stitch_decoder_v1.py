@@ -1,6 +1,7 @@
 from utilities import *
 from l1_loss import custom_loss
 from autoencoder_v4 import *
+from psnr_stitched import stitched_PSNR
 
 
 from tensorflow.python.keras.models import *
@@ -38,7 +39,7 @@ class StitchDecoder(object):
         self.stitchdecoder.summary()
         # enable multi-gpu-processing
         #self.stitchdecoder = multi_gpu_model(self.stitchdecoder, gpus=2)
-        self.stitchdecoder.compile(optimizer='adam', loss=custom_loss, metrics=['accuracy'])
+        self.stitchdecoder.compile(optimizer='adam', loss=custom_loss, metrics=['accuracy', stitched_PSNR])
 
     def load_weights(self, path):
         self.stitchdecoder.load_weights(filepath=path)

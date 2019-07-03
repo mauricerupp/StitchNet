@@ -1,6 +1,6 @@
 # own classes
 from batch_generator_autoencoder import *
-from autoencoder_v4 import *
+from autoencoder_v5 import *
 from utilities import *
 from encoder_callback import *
 
@@ -14,7 +14,7 @@ import cv2
 import tensorflow as tf
 from tensorflow.python.keras.backend import set_session
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
+#os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
@@ -24,7 +24,7 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V4_batch_run1"
+NAME = str(current_model.__name__) + "_V5_instance_run1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -36,7 +36,7 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch % 20 == 0:  # print samples every 50 images
-        for i in range(1, 5):
+        for i in range(1, 10):
             # load the ground truth
             set = ""
             if i % 2 == 0:
@@ -80,7 +80,7 @@ train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsiz
 val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
-model = ConvAutoencoder(input_size, norm='batch', isTraining=True)
+model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
 #model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V3_run4/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
@@ -95,4 +95,4 @@ enc_callback = EncoderCheckpoint(enc_path, model.encoder)
 # train the model
 model.autoencoder.fit_generator(train_data_generator,  epochs=3000,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict, enc_callback],
-                    validation_data=val_data_generator, workers=6)
+                    validation_data=val_data_generator, max_queue_size=128, workers=16)

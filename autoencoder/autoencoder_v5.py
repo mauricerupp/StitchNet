@@ -1,5 +1,6 @@
 from utilities import *
 from psnr import PSNR
+from perceptual_loss import *
 
 
 from tensorflow.python.keras.models import *
@@ -10,6 +11,8 @@ import tensorflow.keras.backend as K
 import tensorflow as tf
 from tensorflow.python.keras.utils import multi_gpu_model
 import datetime
+from tensorflow.python.keras.losses import *
+from tensorflow.python.keras.applications.vgg19 import VGG19
 
 
 class ConvAutoencoder(object):
@@ -39,7 +42,8 @@ class ConvAutoencoder(object):
         out = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv')(x)
 
         self.encoder = Model(inputs, enc_out, name='encoder')
-        self.autoencoder = Model(inputs=inputs, outputs=out, name='autoencoder')
+        self.autoencoder = Model(inputs=inputs, outputs=[out, out],
+                                 name='autoencoder')
 
         #self.autoencoder.summary()
         self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
@@ -47,9 +51,16 @@ class ConvAutoencoder(object):
 
         if not isTraining:
             self.encoder.trainable = False
+            for l in self.encoder.layers:
+                l.trainable = False
             self.autoencoder.trainable = False
+            for l in self.autoencoder.layers:
+                l.trainable = False
 
-        self.autoencoder.compile(optimizer='adam', loss='mean_absolute_error', metrics=['accuracy', PSNR])
+        self.autoencoder.compile(optimizer='adam',
+                                 loss=[vgg_loss, 'mean_absolute_error'],
+                                 loss_weights=[0.5, 0.5],
+                                 metrics=['accuracy', PSNR])
 
         #with open('Autoenc_v4 ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
         #    self.autoencoder.summary(print_fn=lambda x: fh.write(x + '\n'))
@@ -62,4 +73,5 @@ class ConvAutoencoder(object):
     def load_weights(self, path):
         self.autoencoder.load_weights(filepath=path)
 
-#mod = ConvAutoencoder(input_size=(64,64,3), norm='batch', isTraining=True)
+
+#mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)

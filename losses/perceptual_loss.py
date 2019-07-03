@@ -1,17 +1,15 @@
+from tensorflow.python.keras.applications.vgg19 import VGG19
 import tensorflow.keras.backend as K
-import tensorflow as tf
+from tensorflow.python.keras.models import Model
+from utilities import *
 
 
-def my_loss_l1(y_true, y_pred):
-    """
-    Idea from paper perceptual losses for real.time style transfer and super-resolution
-
-    :return: the loss of covered pixels
-    """
-    shape = y_pred.shape
-    mod_vgg16 = tf.keras.applications.vgg16.VGG16(include_top=False,
-                                                  input_shape=shape)
-    features = mod_vgg16.predict(y_pred)
-    covered_area = y_true[:, :, :, -3:]
-    y_true = y_true[:, :, :, :-3]
-    return K.sum(K.abs(y_true - y_pred) * covered_area)
+def vgg_loss(y_true, y_pred):
+    vgg19 = VGG19(include_top=False, weights='imagenet', input_shape=[64,64,3])
+    vgg19.trainable = False
+    for l in vgg19.layers:
+        l.trainable = False
+    model = Model(inputs=vgg19.input, outputs=vgg19.get_layer('block5_conv4').output)
+    model.trainable = False
+    # since vgg was trained with images in [0,1] we revert it here from [-1,1]
+    return K.mean(K.square(model(revert_zero_center(y_true)) - model(revert_zero_center(y_pred))))
