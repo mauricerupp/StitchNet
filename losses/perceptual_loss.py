@@ -12,6 +12,4 @@ def vgg_loss(y_true, y_pred):
     model = Model(inputs=vgg19.input, outputs=vgg19.get_layer('block5_conv4').output)
     model.trainable = False
     # since vgg was trained with images in [0,1] we revert it here from [-1,1]
-    print(y_true.shape)
-    print(y_pred.shape)
     return K.mean(K.square(model(revert_zero_center(y_true)) - model(revert_zero_center(y_pred))))

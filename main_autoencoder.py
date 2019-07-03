@@ -53,6 +53,9 @@ def image_predictor(epoch, logs):
             img = resize_img(img, input_size[:-1])
             y_true = np.expand_dims(img, axis=0)
             y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
+            print(y_pred.shape)
+            print(y_pred[0].shape)
+            print(y_pred[1].shape)
             y_pred = revert_zero_center(y_pred)*255.0
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
