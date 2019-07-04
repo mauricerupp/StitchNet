@@ -15,7 +15,7 @@ def vgg_loss(y_true, y_pred):
     percentage_MAE = 1
     percentage_perceptual = 1 - percentage_MAE
 
-    return percentage_MAE * mean_absolute_error(y_true, y_pred) + percentage_perceptual * perceptual_loss(y_true, y_pred)
+    return percentage_MAE * mean_absolute_error(y_true, y_pred) #+ percentage_perceptual * perceptual_loss(y_true, y_pred)
 
 
 def perceptual_loss(y_true, y_pred):
