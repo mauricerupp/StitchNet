@@ -4,6 +4,7 @@ from losses import l1_loss
 import matplotlib.pyplot as plt
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
+from tensorflow.python.keras.preprocessing import image
 import l1_loss
 import random
 from utilities import *
@@ -17,13 +18,19 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
+x = image.load_img('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000504554.jpg')
+print(x)
+x = np.array(x)
+print(x)
+
+"""
 directions = np.array([[0, 0], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]])
 weights = [0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5]
 print(np.zeros(9))
 chosen_dir = np.random.choice(np.arange(0, 9), p=weights)
 print(chosen_dir)
 
-"""
+
 directions = np.array([[0,0],[-1, 0], [-1, 1], [0, 1], [1,1], [1,0], [1, -1], [0, -1], [-1, -1]])
 print(directions.shape[0])
 print(random.randint(1, directions.shape[0]))

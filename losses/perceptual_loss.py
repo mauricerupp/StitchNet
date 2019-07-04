@@ -1,15 +1,32 @@
-from tensorflow.python.keras.applications.vgg19 import VGG19
+from tensorflow.python.keras.applications.vgg16 import *
 import tensorflow.keras.backend as K
 from tensorflow.python.keras.models import Model
 from utilities import *
+from tensorflow.python.keras.losses import *
 
 
 def vgg_loss(y_true, y_pred):
-    vgg19 = VGG19(include_top=False, weights='imagenet', input_shape=[64,64,3])
-    vgg19.trainable = False
-    for l in vgg19.layers:
+    """
+    does a weighted loss of perceptual loss and MAE
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
+    percentage_MAE = 1
+    percentage_perceptual = 1 - percentage_MAE
+
+    return percentage_MAE * mean_absolute_error(y_true, y_pred) + percentage_perceptual * perceptual_loss(y_true, y_pred)
+
+
+def perceptual_loss(y_true, y_pred):
+    vgg16 = VGG16(include_top=False, weights='imagenet', input_shape=[64, 64, 3])
+    vgg16.trainable = False
+    for l in vgg16.layers:
         l.trainable = False
-    model = Model(inputs=vgg19.input, outputs=vgg19.get_layer('block5_conv4').output)
+    model = Model(inputs=vgg16.input, outputs=vgg16.get_layer('block4_conv3').output)
     model.trainable = False
-    # since vgg was trained with images in [0,1] we revert it here from [-1,1]
-    return K.mean(K.square(model(revert_zero_center(y_true)) - model(revert_zero_center(y_pred))))
+    # preprocess input works with data in the range of [0,255], so the images have to be reverted
+    yt_new = preprocess_input(revert_zero_center(y_true)*255.0)
+    yp_new = preprocess_input(revert_zero_center(y_pred)*255.0)
+
+    return mean_squared_error(model(yt_new), model(yp_new))

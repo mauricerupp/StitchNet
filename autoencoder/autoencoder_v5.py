@@ -39,11 +39,10 @@ class ConvAutoencoder(object):
         for i in range(4):
             x = dec_block(x, int(128 / 2**i), i + 1, norm, isTraining, "autoenc_v4")
         # final layer
-        out1 = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv_2')(x)
-        out2 = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv_1')(x)
+        out = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv_2')(x)
 
         self.encoder = Model(inputs, enc_out, name='encoder')
-        self.autoencoder = Model(inputs=inputs, outputs=[out1, out2],
+        self.autoencoder = Model(inputs=inputs, outputs=out,
                                  name='autoencoder')
 
         #self.autoencoder.summary()
@@ -59,8 +58,7 @@ class ConvAutoencoder(object):
                 l.trainable = False
 
         self.autoencoder.compile(optimizer='adam',
-                                 loss=[vgg_loss, 'mean_absolute_error'],
-                                 loss_weights=[0.5, 0.5],
+                                 loss=vgg_loss,
                                  metrics=['accuracy', PSNR])
 
         #with open('Autoenc_v4 ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:

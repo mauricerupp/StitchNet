@@ -24,7 +24,7 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V5_instance_run1"
+NAME = str(current_model.__name__) + "_V5_instance_onlyMAE_run1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -49,7 +49,6 @@ def image_predictor(epoch, logs):
                 set += "test-"
 
             # predict y (since the model is trained on pictures in [-1,1]) and we always take the same crop
-            #img = random_numpy_crop(img, input_size)
             img = resize_img(img, input_size[:-1])
             y_true = np.expand_dims(img, axis=0)
             y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
