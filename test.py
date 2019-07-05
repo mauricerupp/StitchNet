@@ -17,13 +17,14 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
-
+print(1.66e-5 == 0.0000166)
+"""
 x = image.load_img('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000504554.jpg')
 print(x)
 x = np.array(x)
 print(x)
 
-"""
+
 directions = np.array([[0, 0], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]])
 weights = [0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5]
 print(np.zeros(9))

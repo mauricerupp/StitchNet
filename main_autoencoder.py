@@ -52,7 +52,7 @@ def image_predictor(epoch, logs):
             img = resize_img(img, input_size[:-1])
             y_true = np.expand_dims(img, axis=0)
             y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
-            y_pred = revert_zero_center(y_pred[0])*255.0
+            y_pred = revert_zero_center(y_pred)*255.0
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
@@ -63,7 +63,7 @@ def image_predictor(epoch, logs):
             plt.imshow(img[..., ::-1], interpolation='nearest') # conversion to RGB
             ax3 = fig.add_subplot(1, 2, 2)
             ax3.set_title('Prediction of model')
-            plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
+            plt.imshow(y_pred[..., ::-1], interpolation='nearest')
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
             plt.close()
 
