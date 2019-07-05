@@ -17,7 +17,7 @@ def vgg_loss(y_true, y_pred):
 
     # todo: MAE has shape of (64x64), Perceptual has shape of (8x8)
     print(K.mean(mean_absolute_error(y_true, y_pred)))
-    return percentage_MAE * mean_absolute_error(y_true, y_pred) + percentage_perceptual * perceptual_loss(y_true, y_pred)
+    return percentage_MAE * K.mean(mean_absolute_error(y_true, y_pred)) + percentage_perceptual * perceptual_loss(y_true, y_pred)
 
 
 def perceptual_loss(y_true, y_pred):
