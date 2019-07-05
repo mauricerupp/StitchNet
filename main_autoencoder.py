@@ -63,7 +63,7 @@ def image_predictor(epoch, logs):
             plt.imshow(img[..., ::-1], interpolation='nearest') # conversion to RGB
             ax3 = fig.add_subplot(1, 2, 2)
             ax3.set_title('Prediction of model')
-            plt.imshow(y_pred[..., ::-1], interpolation='nearest')
+            plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
             plt.close()
 
@@ -75,8 +75,8 @@ tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NA
 
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, input_size)
-val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
+train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, input_size)
+val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
