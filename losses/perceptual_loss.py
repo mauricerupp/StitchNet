@@ -12,9 +12,9 @@ def vgg_loss(y_true, y_pred):
     :param y_pred:
     :return:
     """
-    percentage_MAE = 0
+    percentage_MAE = 0.5
     percentage_perceptual = 1 - percentage_MAE
-    SCALE = 1.66e-5
+    SCALE = 1.68e-5
 
     # MAE has shape of (64x64), Perceptual has shape of (8x8), therefore we take the mean of those values and
     # add a scale factor, so they have the same general scale, so they can be weighted properly
