@@ -16,7 +16,8 @@ def vgg_loss(y_true, y_pred):
     percentage_perceptual = 1 - percentage_MAE
 
     # todo: MAE has shape of (64x64), Perceptual has shape of (8x8)
-    return percentage_perceptual * perceptual_loss(y_true, y_pred)
+    print(K.mean(mean_absolute_error(y_true, y_pred)))
+    return percentage_MAE * mean_absolute_error(y_true, y_pred) + percentage_perceptual * perceptual_loss(y_true, y_pred)
 
 
 def perceptual_loss(y_true, y_pred):
@@ -37,4 +38,4 @@ def perceptual_loss(y_true, y_pred):
     yp_new = preprocess_input(revert_zero_center(y_pred)*255.0)
     # since we here have 8x8=64 pixels, we have to scale the result
     print(K.mean(mean_squared_error(model(yt_new), model(yp_new))))
-    return mean_squared_error(model(yt_new), model(yp_new))
+    return K.mean(mean_squared_error(model(yt_new), model(yp_new)))
