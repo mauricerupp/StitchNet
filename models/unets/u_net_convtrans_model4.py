@@ -3,6 +3,8 @@ import l1_loss
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D, UpSampling2D
+from tensorflow.python.keras.utils import plot_model
+import datetime
 
 
 def create_model(pretrained_weights=None, input_size=None):
@@ -60,9 +62,16 @@ def create_model(pretrained_weights=None, input_size=None):
     out = Conv2D(3, 3, activation='relu', padding='same', kernel_initializer='he_normal', strides=1)(convtrans1)
     model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy'])
-    #model.summary()
+    model.summary()
+    """
+    plot_model(model, to_file='U-Net_ownImplementation')
 
+    with open('unet_' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
+       model.summary(print_fn=lambda x: fh.write(x + '\n'))
+    """
     if pretrained_weights:
         model.load_weights(pretrained_weights)
 
     return model
+
+#create_model(input_size=(64,64,15))
