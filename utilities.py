@@ -256,7 +256,7 @@ def enc_block(input_layer, filters, index, normalizer, isTraining):
     x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_2'.format(index))(x)
     x = normalize(x, 'encoder_norm{}_2'.format(index), normalizer, isTraining)
     x = Activation('relu')(x)
-    if filters < 512:
+    if filters < 256:
         x = Conv2D(filters*2, 3, activation=None, padding='same', strides=2, name='encoder_conv{}_3'.format(index))(x)
     else:
         x = Conv2D(filters, 3, activation=None, padding='same', strides=2, name='encoder_conv{}_3'.format(index))(x)
