@@ -30,14 +30,14 @@ def perceptual_loss(y_true, y_pred):
     :return:
     """
 
-    vgg16 = VGG16(include_top=False, weights='imagenet', input_shape=[64, 64, 3])
-    vgg16.trainable = False
-    for l in vgg16.layers:
+    my_vgg16 = VGG16(include_top=False, weights='imagenet', input_shape=[64, 64, 3])
+    my_vgg16.trainable = False
+    for l in my_vgg16.layers:
         l.trainable = False
-    model = Model(inputs=vgg16.input, outputs=vgg16.get_layer('block4_conv3').output)
+    model = Model(inputs=my_vgg16.input, outputs=my_vgg16.get_layer('block4_conv3').output)
     model.trainable = False
     # preprocess input works with data in the range of [0,255], so the images have to be reverted
-    y_true = tf.keras.applications.vgg16.preprocess_input(revert_zero_center(y_true)*255.0)
-    y_pred = tf.keras.applications.vgg16.preprocess_input(revert_zero_center(y_pred)*255.0)
+    yt_new = tf.keras.applications.vgg16.preprocess_input(revert_zero_center(y_true)*255.0)
+    yp_new = tf.keras.applications.vgg16.preprocess_input(revert_zero_center(y_pred)*255.0)
     # since we here have 8x8=64 pixels, we have to scale the result
-    return K.mean(mean_squared_error(model(y_true), model(y_pred)))
+    return K.mean(mean_squared_error(model(yt_new), model(yp_new)))
