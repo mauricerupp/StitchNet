@@ -1,6 +1,5 @@
 from tensorflow.python.keras.applications.vgg16 import VGG16
 import tensorflow.keras.backend as K
-from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import Model
 from utilities import *
 from tensorflow.python.keras.losses import *
@@ -38,7 +37,7 @@ def perceptual_loss(y_true, y_pred):
     model = Model(inputs=my_vgg16.input, outputs=my_vgg16.get_layer('block4_conv3').output)
     model.trainable = False
     # preprocess input works with data in the range of [0,255], so the images have to be reverted
-    yt_new = preprocess_input(revert_zero_center(y_true)*255.0)
-    yp_new = preprocess_input(revert_zero_center(y_pred)*255.0)
+    yt_new = preprocess_to_caffe(revert_zero_center(y_true)*255.0)
+    yp_new = preprocess_to_caffe(revert_zero_center(y_pred)*255.0)
     # since we here have 8x8=64 pixels, we have to scale the result
     return K.mean(mean_squared_error(model(yt_new), model(yp_new)))

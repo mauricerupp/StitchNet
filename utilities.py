@@ -13,6 +13,19 @@ import numpy as np
 
 
 # ---- Functions ---- #
+def preprocess_to_caffe(array):
+    # 'RGB'->'BGR'
+    array = array[..., ::-1]
+    mean = [103.939, 116.779, 123.68]
+    std = None
+
+    # Zero-center by mean pixel
+    array[..., 0] -= mean[0]
+    array[..., 1] -= mean[1]
+    array[..., 2] -= mean[2]
+    return array
+
+
 def log10(x):
     numerator = tf.log(x)
     denominator = tf.log(tf.constant(10, dtype=numerator.dtype))
