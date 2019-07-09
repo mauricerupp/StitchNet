@@ -40,4 +40,4 @@ def perceptual_loss(y_true, y_pred):
     yt_new = tf.keras.applications.vgg16.preprocess_input(revert_zero_center(y_true)*255.0)
     yp_new = tf.keras.applications.vgg16.preprocess_input(revert_zero_center(y_pred)*255.0)
     # since we here have 8x8=64 pixels, we have to scale the result
-    return K.mean(mean_squared_error(model(yt_new), model(yp_new)))
+    return K.mean(mean_squared_error(model.predict(yt_new), model.predict(yp_new)))
