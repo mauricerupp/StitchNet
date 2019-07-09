@@ -42,8 +42,7 @@ class ConvAutoencoder(object):
         out = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv')(x)
 
         self.encoder = Model(inputs, enc_out, name='encoder')
-        self.autoencoder = Model(inputs=inputs, outputs=out,
-                                 name='autoencoder')
+        self.autoencoder = Model(inputs=inputs, outputs=out, name='autoencoder')
 
         self.autoencoder.summary()
         self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
