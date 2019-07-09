@@ -28,6 +28,7 @@ def perceptual_loss(y_true, y_pred):
     :param y_pred:
     :return:
     """
+    tf.keras.backend.clear_session()
     vgg16 = VGG16(include_top=False, weights='imagenet', input_shape=[64, 64, 3])
     vgg16.trainable = False
     for l in vgg16.layers:
