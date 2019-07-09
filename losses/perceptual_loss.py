@@ -1,4 +1,4 @@
-from tensorflow.python.keras.applications.vgg16 import VGG16
+from tensorflow.python.keras.applications.vgg16 import *
 import tensorflow.keras.backend as K
 from tensorflow.python.keras.models import Model
 from utilities import *
