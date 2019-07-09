@@ -94,4 +94,4 @@ enc_callback = EncoderCheckpoint(enc_path, model.encoder)
 # train the model
 model.autoencoder.fit_generator(train_data_generator,  epochs=3000,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict, enc_callback],
-                    validation_data=val_data_generator, max_queue_size=64, workers=8)
+                    validation_data=val_data_generator, max_queue_size=170, workers=16)
