@@ -1,9 +1,14 @@
 from tensorflow.python.keras.applications.vgg16 import *
 import tensorflow.keras.backend as K
+import tensorflow.python.keras
 from tensorflow.python.keras.models import Model
 from utilities import *
 from tensorflow.python.keras.losses import *
-from tensorflow import Graph, Session
+
+backend=tensorflow.keras.backend
+layers = tensorflow.keras.layers
+models = tensorflow.keras.models
+utils = tensorflow.keras.utils
 
 
 def vgg_loss(y_true, y_pred):
@@ -19,9 +24,7 @@ def vgg_loss(y_true, y_pred):
 
     # MAE has shape of (64x64), Perceptual has shape of (8x8), therefore we take the mean of those values and
     # add a scale factor, so they have the same general scale, so they can be weighted properly
-    return percentage_MAE * K.mean(mean_absolute_error(y_true, y_pred)) + \
-           SCALE * percentage_perceptual * perceptual_loss(preprocess_input(revert_zero_center(y_true)*255.0),
-                                                           preprocess_input(revert_zero_center(y_pred)*255.0))
+    return percentage_MAE * K.mean(mean_absolute_error(y_true, y_pred)) + SCALE * percentage_perceptual * perceptual_loss(y_true, y_pred)
 
 
 def perceptual_loss(y_true, y_pred):
@@ -42,4 +45,4 @@ def perceptual_loss(y_true, y_pred):
     yt_new = preprocess_input(revert_zero_center(y_true)*255.0)
     yp_new = preprocess_input(revert_zero_center(y_pred)*255.0)
     # since we here have 8x8=64 pixels, we have to scale the result
-    return K.mean(mean_squared_error(model(y_true), model(y_pred)))
+    return K.mean(mean_squared_error(model(yt_new), model(yp_new)))
