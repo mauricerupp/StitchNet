@@ -32,7 +32,7 @@ def preprocess_to_caffe(x):
             x, K.cast(_IMAGENET_MEAN, K.dtype(x)),
             data_format='channels_last')
     else:
-        x = tf.math.add(x, _IMAGENET_MEAN)
+        x = K.bias_add(x, _IMAGENET_MEAN, 'channels_last')
     if std is not None:
         x /= std
     return x
