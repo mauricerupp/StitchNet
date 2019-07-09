@@ -73,4 +73,4 @@ class ConvAutoencoder(object):
         self.autoencoder.load_weights(filepath=path)
 
 
-#mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)
+mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)

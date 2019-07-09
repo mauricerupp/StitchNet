@@ -18,13 +18,13 @@ from tensorflow.python.keras.backend import set_session
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 128
+batchsize = 64
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V5_instance_30_70_run1"
+NAME = str(current_model.__name__) + "_V5_instanceBIGGER_30_70_run1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -94,4 +94,4 @@ enc_callback = EncoderCheckpoint(enc_path, model.encoder)
 # train the model
 model.autoencoder.fit_generator(train_data_generator,  epochs=3000,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict, enc_callback],
-                    validation_data=val_data_generator, max_queue_size=170, workers=16)
+                    validation_data=val_data_generator, max_queue_size=64, workers=8)

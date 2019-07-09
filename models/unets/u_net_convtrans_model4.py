@@ -61,6 +61,17 @@ def create_model(pretrained_weights=None, input_size=None):
     model = Model(inputs=inputs, outputs=out)
     model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy'])
 
+
+    model.summary()
+    """
+    plot_model(model, to_file='U-Net_ownImplementation')
+
+    with open('unet_' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
+       model.summary(print_fn=lambda x: fh.write(x + '\n'))
+    """
+    if pretrained_weights:
+        model.load_weights(pretrained_weights)
+
     return model
 
 #create_model(input_size=(64,64,15))
