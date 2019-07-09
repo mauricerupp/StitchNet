@@ -12,7 +12,7 @@ def vgg_loss(y_true, y_pred):
     :param y_pred:
     :return:
     """
-    percentage_MAE = 0.3
+    percentage_MAE = 0.2
     percentage_perceptual = 1 - percentage_MAE
     SCALE = 1.68e-5
 
