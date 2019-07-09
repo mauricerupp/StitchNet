@@ -1,14 +1,9 @@
-from tensorflow.python.keras.applications.vgg16 import *
+from tensorflow.python.keras.applications.vgg16 import VGG16
 import tensorflow.keras.backend as K
-import tensorflow.python.keras
+from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import Model
 from utilities import *
 from tensorflow.python.keras.losses import *
-
-backend=tensorflow.keras.backend
-layers = tensorflow.keras.layers
-models = tensorflow.keras.models
-utils = tensorflow.keras.utils
 
 
 def vgg_loss(y_true, y_pred):
@@ -24,7 +19,8 @@ def vgg_loss(y_true, y_pred):
 
     # MAE has shape of (64x64), Perceptual has shape of (8x8), therefore we take the mean of those values and
     # add a scale factor, so they have the same general scale, so they can be weighted properly
-    return percentage_MAE * K.mean(mean_absolute_error(y_true, y_pred)) + SCALE * percentage_perceptual * perceptual_loss(y_true, y_pred)
+    return percentage_MAE * K.mean(mean_absolute_error(y_true, y_pred)) + \
+           SCALE * percentage_perceptual * perceptual_loss(y_true, y_pred)
 
 
 def perceptual_loss(y_true, y_pred):
