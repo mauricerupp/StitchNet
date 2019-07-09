@@ -11,19 +11,31 @@ import tensorflow.keras.backend as K
 from tensorflow.python.keras import initializers, regularizers, constraints
 import numpy as np
 
+_IMAGENET_MEAN = None
+
 
 # ---- Functions ---- #
-def preprocess_to_caffe(array):
+def preprocess_to_caffe(x):
+    global _IMAGENET_MEAN
+
     # 'RGB'->'BGR'
-    array = array[..., ::-1]
+    x = x[..., ::-1]
     mean = [103.939, 116.779, 123.68]
     std = None
 
+    if _IMAGENET_MEAN is None:
+        _IMAGENET_MEAN = K.constant(-np.array(mean))
+
     # Zero-center by mean pixel
-    array[..., 0] -= mean[0]
-    array[..., 1] -= mean[1]
-    array[..., 2] -= mean[2]
-    return array
+    if K.dtype(x) != K.dtype(_IMAGENET_MEAN):
+        x = K.bias_add(
+            x, K.cast(_IMAGENET_MEAN, K.dtype(x)),
+            data_format='channels_last')
+    else:
+        x = K.bias_add(x, _IMAGENET_MEAN, 'channels_last')
+    if std is not None:
+        x /= std
+    return x
 
 
 def log10(x):
