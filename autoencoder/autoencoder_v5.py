@@ -27,17 +27,17 @@ class ConvAutoencoder(object):
             x = enc_block(x, int(64 * 2**i), i + 1, norm, isTraining)
 
         # bottom of the net (like U-Net):
-        x = Conv2D(256, 3, activation=None, padding='same', strides=1, name='encoder_conv5_1')(x)
+        x = Conv2D(512, 3, activation=None, padding='same', strides=1, name='encoder_conv5_1')(x)
         x = normalize(x, 'encoder_norm5_1', norm, isTraining)
         x = Activation('relu')(x)
-        x = Conv2D(256, 3, activation=None, padding='same', strides=1, name='encoder_conv5_2')(x)
+        x = Conv2D(512, 3, activation=None, padding='same', strides=1, name='encoder_conv5_2')(x)
         x = normalize(x, 'encoder_norm5_2', norm, isTraining)
         enc_out = Activation('relu')(x)
 
         # decoder
         x = enc_out
         for i in range(4):
-            x = dec_block(x, int(128 / 2**i), i + 1, norm, isTraining, "autoenc_v4")
+            x = dec_block(x, int(256 / 2**i), i + 1, norm, isTraining, "autoenc_v4")
         # final layer
         out = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv')(x)
 
@@ -72,4 +72,4 @@ class ConvAutoencoder(object):
         self.autoencoder.load_weights(filepath=path)
 
 
-mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)
+#mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)
