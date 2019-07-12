@@ -1,6 +1,6 @@
 from utilities import *
 from l1_loss import custom_loss
-from autoencoder_v4 import *
+from autoencoder_v5 import *
 from psnr_stitched import stitched_PSNR
 
 
@@ -32,7 +32,7 @@ class StitchDecoder(object):
         x = Concatenate(axis=3, name='conc_img_features')(encoded_img_list)
 
         for i in range(5):
-            x = dec_block(x, int(512 / 2 ** i), i + 1, normalizer, isTraining, "D2")
+            x = dec_block(x, int(1048 / 2 ** i), i + 1, normalizer, isTraining, "D2")
         out = Conv2D(3, 3, activation='tanh', padding='same', name='final_conv')(x)
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
