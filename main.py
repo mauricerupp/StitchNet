@@ -14,7 +14,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 128
+batchsize = 64
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
@@ -98,5 +98,5 @@ model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V5fixe
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
-                    validation_data=val_data_generator, max_queue_size=64, workers=16)
+                    validation_data=val_data_generator, max_queue_size=128, workers=8)
 
