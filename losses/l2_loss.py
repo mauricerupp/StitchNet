@@ -1,4 +1,5 @@
 import tensorflow.keras.backend as K
+import tensorflow as tf
 
 
 def my_loss_l2(y_true, y_pred):
@@ -10,4 +11,7 @@ def my_loss_l2(y_true, y_pred):
     """
     covered_area = y_true[:, :, :, -3:]
     y_true = y_true[:, :, :, :-3]
-    return K.sum(K.square(y_true - y_pred) * covered_area) / 2
+    l2 = K.sum(K.pow(y_true - y_pred, 2) * covered_area)
+    nonzero = K.cast(tf.math.count_nonzero(covered_area, keepdims=False), 'float32')
+
+    return l2/nonzero

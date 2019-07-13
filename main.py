@@ -23,7 +23,7 @@ x_0 = None
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v4_batch_run1"
+NAME = str(current_model.__name__) + "_v5_instance_run1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -93,7 +93,7 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V4_batch_run1/encoder_logs/', normalizer='batch', isTraining=True)
+model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run2/encoder_logs/', normalizer='instance', isTraining=True)
 
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
