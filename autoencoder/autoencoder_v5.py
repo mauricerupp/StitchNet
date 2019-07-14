@@ -53,6 +53,7 @@ class ConvAutoencoder(object):
                 l.trainable = False
 
         #self.autoencoder.summary()
+        #self.encoder.summary()
         self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
         self.encoder = multi_gpu_model(self.autoencoder, gpus=2)
 
