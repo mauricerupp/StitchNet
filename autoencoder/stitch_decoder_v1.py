@@ -19,7 +19,7 @@ class StitchDecoder(object):
         autoenc = ConvAutoencoder([input_size[0], input_size[1], 3], norm=normalizer, isTraining=False)
         autoenc.load_encoder_weights(weights_path)
         enc = autoenc.encoder
-        enc.summary()
+        autoenc.autoencoder.summary()
 
         # encode each image individually through the pre-trained encoder
         encoded_img_list = []
