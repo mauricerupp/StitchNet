@@ -12,7 +12,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import tensorflow as tf
-from tensorflow.python.keras.backend import set_session
 
 #os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
