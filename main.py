@@ -20,6 +20,7 @@ paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
+print(input_size)
 current_model = StitchDecoder
 
 # name the model
