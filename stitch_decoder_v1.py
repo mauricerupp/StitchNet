@@ -6,18 +6,19 @@ from psnr_stitched import stitched_PSNR
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
+import tensorflow as tf
 from tensorflow.python.keras.utils import plot_model
 from tensorflow.python.keras.utils import multi_gpu_model
 
-
+print(tf.keras.__version__)
 class StitchDecoder(object):
 
-    def __init__(self, input_size, weights_path, normalizer, isTraining):
+    def __init__(self, input_size, encoderweights_path, normalizer, isTraining):
 
         encoder_inputs = Input(shape=input_size)
 
         autoenc = ConvAutoencoder([input_size[0], input_size[1], 3], norm=normalizer, isTraining=False)
-        autoenc.load_encoder_weights(weights_path)
+        autoenc.load_encoder_weights(encoderweights_path)
         enc = autoenc.encoder
 
         # encode each image individually through the pre-trained encoder
@@ -46,7 +47,7 @@ class StitchDecoder(object):
 
 
 mod = StitchDecoder(input_size=(64, 64, 15),
-                    weights_path='/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/encoder_logs/',
+                    encoderweights_path='/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/encoder_logs/',
                     normalizer='instance',
                     isTraining=True)
 
