@@ -23,7 +23,7 @@ x_0 = None
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v5_instance_run1"
+NAME = str(current_model.__name__) + "_v5_S2_instance_run1"
 
 
 # ----- Callbacks / Helperfunctions ----- #
