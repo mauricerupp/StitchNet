@@ -44,12 +44,12 @@ class StitchDecoder(object):
     def load_weights(self, path):
         self.stitchdecoder.load_weights(filepath=path)
 
-
+"""
 mod = StitchDecoder(input_size=(64, 64, 15),
                     encoderweights_path='/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/encoder_logs/',
                     normalizer='instance',
                     isTraining=True)
-"""
+
 mod = StitchDecoder(input_size=(64, 64, 15),
                     encoderweights_path='/home/maurice/Dokumente/encoder_logs/',
                     normalizer='instance',
