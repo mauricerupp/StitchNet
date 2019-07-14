@@ -19,7 +19,6 @@ class StitchDecoder(object):
         autoenc = ConvAutoencoder([input_size[0], input_size[1], 3], norm=normalizer, isTraining=False)
         autoenc.load_encoder_weights(weights_path)
         enc = autoenc.encoder
-        autoenc.summary()
 
         # encode each image individually through the pre-trained encoder
         encoded_img_list = []
@@ -37,7 +36,7 @@ class StitchDecoder(object):
         out = Conv2D(3, 3, activation='tanh', padding='same', name='final_conv')(x)
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
-        #self.stitchdecoder.summary()
+        self.stitchdecoder.summary()
         # enable multi-gpu-processing
         self.stitchdecoder = multi_gpu_model(self.stitchdecoder, gpus=2)
         self.stitchdecoder.compile(optimizer='adam', loss=custom_loss, metrics=['accuracy', stitched_PSNR])
@@ -45,9 +44,9 @@ class StitchDecoder(object):
     def load_weights(self, path):
         self.stitchdecoder.load_weights(filepath=path)
 
-"""
+
 mod = StitchDecoder(input_size=(64, 64, 15),
-                    weights_path='/home/maurice/Dokumente/encoder_logs/',
-                    normalizer='batch',
+                    weights_path='/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/encoder_logs/',
+                    normalizer='instance',
                     isTraining=True)
-"""
+
