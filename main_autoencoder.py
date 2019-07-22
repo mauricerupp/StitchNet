@@ -49,9 +49,9 @@ def image_predictor(epoch, logs):
                 set += "test-"
 
             # predict y (since the model is trained on pictures in [-1,1]) and we always take the same crop
-            img = random_numpy_crop(zero_center(img/255.0), input_size)
+            img = random_numpy_crop(img, input_size)
             y_true = np.expand_dims(img, axis=0)
-            y_pred = model.autoencoder.predict(y_true)
+            y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
             y_pred = revert_zero_center(y_pred)*255.0
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
