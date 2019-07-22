@@ -18,26 +18,32 @@ from tensorflow.python.keras.applications.vgg19 import VGG19
 class ConvAutoencoder(object):
 
     def __init__(self, input_size, norm='batch', isTraining=None):
-
+        """
+        Same as V5, but lower lr and leaky_relu instead of relu
+        Also random crops, without downsampling big images
+        :param input_size:
+        :param norm:
+        :param isTraining:
+        """
         inputs = Input(shape=input_size, name='encoder_input')
         x = inputs
 
         # encoder (add blocks until 4x4x256):
         for i in range(4):
-            x = enc_block(x, int(64 * 2**i), i + 1, norm, isTraining)
+            x = enc_block_leaky(x, int(64 * 2**i), i + 1, norm, isTraining)
 
         # bottom of the net (like U-Net):
         x = Conv2D(512, 3, activation=None, padding='same', strides=1, name='encoder_conv5_1')(x)
         x = normalize(x, 'encoder_norm5_1', norm, isTraining)
-        x = Activation('relu')(x)
+        x = LeakyReLU()(x)
         x = Conv2D(512, 3, activation=None, padding='same', strides=1, name='encoder_conv5_2')(x)
         x = normalize(x, 'encoder_norm5_2', norm, isTraining)
-        enc_out = Activation('relu')(x)
+        enc_out = LeakyReLU()(x)
 
         # decoder
         x = enc_out
         for i in range(4):
-            x = dec_block(x, int(256 / 2**i), i + 1, norm, isTraining, "autoenc_v5")
+            x = dec_block_leaky(x, int(256 / 2**i), i + 1, norm, isTraining, "autoenc_v6")
         # final layer
         out = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv')(x)
 
@@ -52,12 +58,12 @@ class ConvAutoencoder(object):
             for l in self.autoencoder.layers:
                 l.trainable = False
 
-        #self.autoencoder.summary()
+        self.autoencoder.summary()
         #self.encoder.summary()
-        #self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
-        #self.encoder = multi_gpu_model(self.encoder, gpus=2)
+        self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
+        self.encoder = multi_gpu_model(self.encoder, gpus=2)
 
-        self.autoencoder.compile(optimizer='adam',
+        self.autoencoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),
                                  loss=vgg_loss,
                                  metrics=['accuracy', PSNR])
 

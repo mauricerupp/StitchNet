@@ -1,6 +1,6 @@
 # own classes
 from batch_generator_autoencoder import *
-from autoencoder_v5 import *
+from autoencoder_v6 import *
 from utilities import *
 from encoder_callback import *
 
@@ -24,7 +24,7 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V5fixed_instanceBIGGER_20_80_run3"
+NAME = str(current_model.__name__) + "_V6_instance_20_80"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -49,9 +49,9 @@ def image_predictor(epoch, logs):
                 set += "test-"
 
             # predict y (since the model is trained on pictures in [-1,1]) and we always take the same crop
-            img = resize_img(img, input_size[:-1])
+            img = random_numpy_crop(zero_center(np.array(cv2.imread(img), dtype='float32')/255.0), input_size)
             y_true = np.expand_dims(img, axis=0)
-            y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
+            y_pred = model.autoencoder.predict(img)
             y_pred = revert_zero_center(y_pred)*255.0
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
@@ -80,7 +80,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, i
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
-model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run2/weight_logs/')
+#model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run2/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
 checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/'.format(NAME)

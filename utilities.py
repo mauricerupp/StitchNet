@@ -60,7 +60,8 @@ def random_numpy_crop(in_img, crop_size):
     if img_size[0] <= crop_size[0] or img_size[1] <= crop_size[1]:
         in_img = scale_img(in_img, crop_size)
         img_size = in_img.shape
-
+    """
+    Avoid this part for experimental reasons for autoenc_v6, v5 was trained with this line
     # if the image is too big, we scale it down in order to have some detail in the image and not only blurry background
     if img_size[0] > 5*crop_size[0] or img_size[1] > 5*crop_size[1]:
         new_size = np.array(crop_size)
@@ -69,6 +70,7 @@ def random_numpy_crop(in_img, crop_size):
         new_size[1] = 2*new_size[1]
         in_img = scale_img(in_img, new_size)
         img_size = in_img.shape
+    """
 
     top_left_corner = [random.randint(0, int(img_size[0]-crop_size[0])),
                        random.randint(0, int(img_size[1]-crop_size[1]))]
@@ -285,6 +287,28 @@ def enc_block(input_layer, filters, index, normalizer, isTraining):
     return Activation('relu')(x)
 
 
+def enc_block_leaky(input_layer, filters, index, normalizer, isTraining):
+    if filters > 256:
+        filters = 256
+    if index == 1:
+        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_1'.format(index))(input_layer)
+        x = LeakyReLU()(x)
+    else:
+        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_1'.format(index))(input_layer)
+        x = normalize(x, 'encoder_norm{}_1'.format(index), normalizer, isTraining)
+        x = LeakyReLU()(x)
+
+    x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_2'.format(index))(x)
+    x = normalize(x, 'encoder_norm{}_2'.format(index), normalizer, isTraining)
+    x = LeakyReLU()(x)
+    if filters < 512:
+        x = Conv2D(filters*2, 3, activation=None, padding='same', strides=2, name='encoder_conv{}_3'.format(index))(x)
+    else:
+        x = Conv2D(filters, 3, activation=None, padding='same', strides=2, name='encoder_conv{}_3'.format(index))(x)
+    x = normalize(x, 'encoder_norm{}_3'.format(index), normalizer, isTraining)
+    return LeakyReLU()(x)
+
+
 def dec_block(input_layer, filters, index, normalizer, isTraining, modelname):
     x = Conv2DTranspose(filters, 3, activation=None, padding='same', name='{}_decoder_conv{}_1'.format(modelname, index), strides=2)(input_layer)
     x = normalize(x, '{}_decoder_norm{}_1'.format(modelname, index), normalizer, isTraining)
@@ -293,6 +317,18 @@ def dec_block(input_layer, filters, index, normalizer, isTraining, modelname):
         x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='{}_decoder_conv{}_{}'.format(modelname, index, i +2))(x)
         x = normalize(x, '{}_decoder_norm{}_{}'.format(modelname, index, i+2), normalizer, isTraining)
         x = Activation('relu')(x)
+
+    return x
+
+
+def dec_block_leaky(input_layer, filters, index, normalizer, isTraining, modelname):
+    x = Conv2DTranspose(filters, 3, activation=None, padding='same', name='{}_decoder_conv{}_1'.format(modelname, index), strides=2)(input_layer)
+    x = normalize(x, '{}_decoder_norm{}_1'.format(modelname, index), normalizer, isTraining)
+    x = LeakyReLU()(x)
+    for i in range(2):
+        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='{}_decoder_conv{}_{}'.format(modelname, index, i +2))(x)
+        x = normalize(x, '{}_decoder_norm{}_{}'.format(modelname, index, i+2), normalizer, isTraining)
+        x = LeakyReLU()(x)
 
     return x
 
