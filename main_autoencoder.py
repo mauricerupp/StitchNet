@@ -41,15 +41,15 @@ def image_predictor(epoch, logs):
             set = ""
             if i % 2 == 0:
                 list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
-                img = np.array(cv2.imread(list[i]))
+                img = np.array(cv2.imread(list[i]), dtype='float32')
                 set += "train-"
             else:
                 list = np.load('/data/cvg/maurice/unprocessed/val_snaps_paths.npy')
-                img = np.array(cv2.imread(list[i]))
+                img = np.array(cv2.imread(list[i]), dtype='float32')
                 set += "test-"
 
             # predict y (since the model is trained on pictures in [-1,1]) and we always take the same crop
-            img = random_numpy_crop(zero_center(np.array(cv2.imread(img), dtype='float32')/255.0), input_size)
+            img = random_numpy_crop(zero_center(img/255.0), input_size)
             y_true = np.expand_dims(img, axis=0)
             y_pred = model.autoencoder.predict(img)
             y_pred = revert_zero_center(y_pred)*255.0
@@ -75,8 +75,8 @@ tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NA
 
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, input_size)
-val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
+train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, input_size)
+val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
