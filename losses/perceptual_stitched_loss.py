@@ -17,6 +17,7 @@ def vgg_loss(y_true, y_pred):
     percentage_MAE = 0
     percentage_perceptual = 1 - percentage_MAE
     SCALE = 1.68e-5
+    SCALE = 1
     covered_area = y_true[:, :, :, -3:]
 
     # MAE has shape of (64x64), Perceptual has shape of (8x8), therefore we take the mean of those values and
