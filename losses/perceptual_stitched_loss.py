@@ -14,7 +14,7 @@ def vgg_loss(y_true, y_pred):
     :param y_pred:
     :return:
     """
-    percentage_MAE = 0.2
+    percentage_MAE = 0
     percentage_perceptual = 1 - percentage_MAE
     SCALE = 1.68e-5
     covered_area = y_true[:, :, :, -3:]
@@ -41,6 +41,7 @@ def perceptual_loss(y_true, y_pred, covered_area):
     model.trainable = False
     # preprocess input works with data in the range of [0,255], so the images have to be reverted
     # also the images are multiplied with the coverage-matrix in order to have all the non-covered pixels black
+    #TODO: multiply it with the covered area before or after the prediction?
     yt_new = preprocess_to_caffe(revert_zero_center(y_true*covered_area)*255.0)
     yp_new = preprocess_to_caffe(revert_zero_center(y_pred*covered_area)*255.0)
     # since we here have 8x8=64 pixels, we have to scale the result

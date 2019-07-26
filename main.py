@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-from stitch_decoder_v1 import *
+from stitch_decoder_v2 import *
 from utilities import *
 
 # packages
@@ -23,7 +23,7 @@ x_0 = None
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v5_S2_instance_run1"
+NAME = str(current_model.__name__) + "_v6_S2_instance_run1_percONLY"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -93,10 +93,11 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/encoder_logs/', normalizer='instance', isTraining=True)
+model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80/encoder_logs/',
+                      normalizer='instance', isTraining=True)
 
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
-                    validation_data=val_data_generator, max_queue_size=128, workers=8)
+                    validation_data=val_data_generator, max_queue_size=64, workers=8)
 
