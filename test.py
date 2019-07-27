@@ -18,7 +18,7 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
-print(1.66e-5 == 0.0000166)
+print(5.57779E-05 == 0.0000557779)
 """
 x = image.load_img('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000504554.jpg')
 print(x)
