@@ -18,7 +18,9 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
-print(5.57779E-05 == 0.0000557779)
+
+matrix = np.random.choice(a=[0, 1], size=(10, 5), p=[1, 0])
+print(matrix)
 """
 x = image.load_img('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000504554.jpg')
 print(x)
@@ -141,7 +143,7 @@ print(y_true.shape)
 y_true = np.concatenate([y_true[:,:,:-3], y_true[:,:,-3:]], axis=2)
 print(y_true.shape)
 
-"""
+
 y_true1 = np.array([[[0, 0.2, 0.1, 1,1,1],[0.4, 0.2, 0.1,0,0,0]], [[0.3, 0.0, 0.5,1,1,1],[0.4, 0.4, 0.1,0,0,0]]])
 y_true2 = np.array([[[0.11, 0.22, 0.33, 0,0,0],[0.33, 0.22, 0.11,0,0,0]], [[0.7, 0.70, 0.0,0,0,0],[0.1, 0.0, 0.2,1,1,1]]])
 y_true = np.array((y_true1, y_true2))
@@ -158,7 +160,7 @@ accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
 
 print(sess.run(loss))
 sess.close()
-"""
+
 equality = np.equal(y_pred1, y_pred2 / 255.0)
 accuracy = np.mean(equality)
 
