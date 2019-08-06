@@ -6,6 +6,7 @@ from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D, UpSampling2D
 from tensorflow.python.keras.utils import plot_model
+from tensorflow.python.keras.utils import multi_gpu_model
 import datetime
 
 
@@ -61,6 +62,7 @@ def create_model(pretrained_weights=None, input_size=None):
     conv10 = Conv2D(32, 3, activation='relu', padding='same')(up10)
     out = Conv2D(3, 3, activation='tanh', padding='same', strides=1)(conv10)
     model = Model(inputs=inputs, outputs=out)
+    model = multi_gpu_model(model, gpus=2)
     model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy', stitched_PSNR, stitched_ssim])
 
 
