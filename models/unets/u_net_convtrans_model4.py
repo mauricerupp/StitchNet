@@ -1,4 +1,6 @@
 import l1_loss
+from psnr_stitched import stitched_PSNR
+from ssim_stitched import stitched_ssim
 
 from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
@@ -59,7 +61,7 @@ def create_model(pretrained_weights=None, input_size=None):
     conv10 = Conv2D(32, 3, activation='relu', padding='same')(up10)
     out = Conv2D(3, 3, activation='tanh', padding='same', strides=1)(conv10)
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy'])
+    model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy', stitched_PSNR, stitched_ssim])
 
 
     model.summary()

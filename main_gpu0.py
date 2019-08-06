@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-from stitch_decoder_v1 import *
+from u_net_convtrans_model4 import *
 from utilities import *
 
 # packages
@@ -14,16 +14,15 @@ import matplotlib.pyplot as plt
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 128
+batchsize = 64
 paths_dir_train = '/data/cvg/maurice/processed/coco/train'
 paths_dir_val = '/data/cvg/maurice/processed/coco/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
-current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_randompaths_v4_instance_run1"
+NAME = "unet4_metric_run"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -35,7 +34,7 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch % 20 == 0:  # print samples every 50 images
-        for i in range(6, 19):
+        for i in range(6, 25):
             # load X
             set = ""
             if i % 2 == 0:
@@ -93,11 +92,10 @@ train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_d
 val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
-model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V4_instanceNEW_run1/encoder_logs/',
-                      normalizer='instance', isTraining=True)
+model = create_model(input_size=input_size)
 
 # train the model
-model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
+model.stitchdecoder.fit_generator(train_data_generator,  epochs=202,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
-                    validation_data=val_data_generator, max_queue_size=128, workers=16)
+                    validation_data=val_data_generator, max_queue_size=64, workers=8)
 
