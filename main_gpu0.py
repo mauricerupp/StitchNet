@@ -15,8 +15,8 @@ tf.keras.backend.clear_session()
 
 # set the constants
 batchsize = 64
-paths_dir_train = '/data/cvg/maurice/processed/coco/train'
-paths_dir_val = '/data/cvg/maurice/processed/coco/val'
+paths_dir_train = '/data/cvg/maurice/coco_small/train'
+paths_dir_val = '/data/cvg/maurice/coco_small/val'
 x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
 input_size = x_0.shape
 x_0 = None
@@ -88,8 +88,8 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only=True, verbose=1)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir_train + "/smallsnaps_paths.npy", paths_dir_train + "/targets_paths.npy", batchsize, '-1,1')
-val_data_generator = MyGenerator(paths_dir_val + "/smallsnaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
+train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_dir_train + "/targets_paths.npy", batchsize, '-1,1')
+val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
 model = create_model(input_size=input_size)
