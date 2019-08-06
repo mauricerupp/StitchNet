@@ -22,7 +22,7 @@ input_size = x_0.shape
 x_0 = None
 
 # name the model
-NAME = "unet4_metric_run"
+NAME = "unet4_Dataset2_metric_run"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -34,7 +34,7 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch % 20 == 0:  # print samples every 50 images
-        for i in range(6, 25):
+        for i in range(6, 30):
             # load X
             set = ""
             if i % 2 == 0:
