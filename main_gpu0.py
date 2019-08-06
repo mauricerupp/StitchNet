@@ -55,7 +55,7 @@ def image_predictor(epoch, logs):
             covered_target = y_true * covered_area
 
             # predict y (since the model is trained on pictures in [-1,1])
-            y_pred = model.stitchdecoder.predict(zero_center(x_pred/255.0))
+            y_pred = model.predict(zero_center(x_pred/255.0))
             equality = np.equal(y_pred, zero_center(y_true / 255.0))
             accuracy = np.mean(equality)
             y_pred = revert_zero_center(y_pred)*255
@@ -88,8 +88,8 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only=True, verbose=1)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_dir_train + "/targets_paths.npy", batchsize, '-1,1')
-val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
+train_data_generator = MyGenerator(paths_dir_train + "/smallsnaps_paths.npy", paths_dir_train + "/targets_paths.npy", batchsize, '-1,1')
+val_data_generator = MyGenerator(paths_dir_val + "/smallsnaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
 
 # ----- Model setup ----- #
 model = create_model(input_size=input_size)
