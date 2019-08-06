@@ -95,7 +95,7 @@ val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_v
 model = create_model(input_size=input_size)
 
 # train the model
-model.stitchdecoder.fit_generator(train_data_generator,  epochs=202,
+model.fit_generator(train_data_generator,  epochs=202,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator, max_queue_size=64, workers=8)
 
