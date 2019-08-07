@@ -74,8 +74,8 @@ def create_smooth_rand_path(img_path):
     img_target = zero_center(img_target/255.0)
     #concatenate target with covered pixels
     img_target = np.concatenate((img_target, covered_pixels), axis=2)
-    #revert the snaps to [-1,1]
-    return zero_center(img_snaps/255.0), img_target
+    #revert the snaps to [-1,1] and make a list of length 2
+    return [zero_center(img_snaps/255.0), img_target]
 
 
 def create_rand_translation_path(img_target, snaps_per_sample, snap_size, step_size):

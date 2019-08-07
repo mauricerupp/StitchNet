@@ -16,8 +16,14 @@ class MyGenerator(Sequence):
 
     def __getitem__(self, idx):
         batch = self.snaps[idx * self.batch_size:(idx + 1) * self.batch_size]
-
+        inputs = []
+        targets = []
+        for img_path in batch:
+            output = create_smooth_rand_path(img_path)
+            inputs.copy(output[0])
+            targets.copy(output[1])
+        """
         inputs, targets = np.stack(
             [create_smooth_rand_path(img_path) for img_path in batch], axis=0)
-
-        return inputs, targets
+        """
+        return np.stack(inputs, axis=0), np.stack(targets, axis=0)
