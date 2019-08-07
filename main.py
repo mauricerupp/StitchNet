@@ -85,8 +85,8 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only=True, verbose=1)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize)
-val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize)
+train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize)
+val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize)
 
 # ----- Model setup ----- #
 model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80/encoder_logs/',
