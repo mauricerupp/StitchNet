@@ -33,7 +33,7 @@ class StitchDecoder(object):
         x = Concatenate(axis=3, name='conc_img_features')(encoded_img_list)
 
         for i in range(5):
-            x = dec_block_leaky(x, int(1024 / 2 ** i), i + 1, normalizer, isTraining, "D2")
+            x = dec_block_leaky(x, int(2048 / 2 ** i), i + 1, normalizer, isTraining, "D2")
         out = Conv2D(3, 3, activation='tanh', padding='same', name='final_conv')(x)
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
@@ -50,7 +50,7 @@ mod = StitchDecoder(input_size=(64, 64, 15),
                     encoderweights_path='/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/encoder_logs/',
                     normalizer='instance',
                     isTraining=True)
-                    
+  
 mod = StitchDecoder(input_size=(64, 64, 15),
                     encoderweights_path='/home/maurice/Dokumente/encoder_logs/',
                     normalizer='instance',

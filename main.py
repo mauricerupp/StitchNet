@@ -15,15 +15,12 @@ tf.keras.backend.clear_session()
 
 # set the constants
 batchsize = 64
-paths_dir_train = '/data/cvg/maurice/processed/coco/train'
-paths_dir_val = '/data/cvg/maurice/processed/coco/val'
-x_0 = np.load(paths_dir_train + "/snaps/snaps1.npy")
-input_size = x_0.shape
-x_0 = None
+paths_dir = '/data/cvg/maurice/unprocessed/'
+input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v6_S2_instance_run1_5_95"
+NAME = str(current_model.__name__) + "_v6_S2new_instance_run1_5_95"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -89,8 +86,8 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only=True, verbose=1)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir_train + "/snaps_paths.npy", paths_dir_train + "/targets_paths.npy", batchsize, '-1,1')
-val_data_generator = MyGenerator(paths_dir_val + "/snaps_paths.npy", paths_dir_val + "/targets_paths.npy", batchsize, '-1,1')
+train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize)
+val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize)
 
 # ----- Model setup ----- #
 model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80/encoder_logs/',
@@ -99,5 +96,5 @@ model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_ins
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
-                    validation_data=val_data_generator, max_queue_size=64, workers=8)
+                    validation_data=val_data_generator, max_queue_size=64, workers=12)
 
