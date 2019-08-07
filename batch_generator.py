@@ -20,8 +20,8 @@ class MyGenerator(Sequence):
         targets = []
         for img_path in batch:
             output = create_smooth_rand_path(img_path)
-            inputs.copy(output[0])
-            targets.copy(output[1])
+            inputs.append(output[0])
+            targets.append(output[1])
         """
         inputs, targets = np.stack(
             [create_smooth_rand_path(img_path) for img_path in batch], axis=0)
