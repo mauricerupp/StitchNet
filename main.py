@@ -36,32 +36,26 @@ def image_predictor(epoch, logs):
             # load X
             set = ""
             if i % 2 == 0:
-                x_pred = np.load('/data/cvg/maurice/processed/coco/train/snaps/snaps{}.npy'.format(i))
+                list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
                 set += "train-"
             else:
-                x_pred = np.load('/data/cvg/maurice/processed/coco/val/snaps/snaps{}.npy'.format(i))
+                list = np.load('/data/cvg/maurice/unprocessed/val_snaps_paths.npy')
                 set += "test-"
-            x_pred = np.expand_dims(x_pred, axis=0)
 
             # load Y
-            if i % 2 == 0:
-                y_true = np.load('/data/cvg/maurice/processed/coco/train/targets/target{}.npy'.format(i))
-            else:
-                y_true = np.load('/data/cvg/maurice/processed/coco/val/targets/target{}.npy'.format(i))
+            x, y_true = create_smooth_rand_path(list[i])
             covered_area = y_true[:, :, -3:]
             y_true = y_true[:, :, :-3]
             covered_target = y_true * covered_area
 
             # predict y (since the model is trained on pictures in [-1,1])
-            y_pred = model.stitchdecoder.predict(zero_center(x_pred/255.0))
-            equality = np.equal(y_pred, zero_center(y_true / 255.0))
-            accuracy = np.mean(equality)
+            y_pred = model.stitchdecoder.predict(x)
             y_pred = revert_zero_center(y_pred)*255
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
             fig = plt.figure()
-            fig.suptitle('Results of predicting {}Image {} \non epoch {} \nwith an accuracy of {:.2%}'.format(set, i, epoch + 1, accuracy), fontsize=20)
+            fig.suptitle('Results of predicting {}Image {} \non epoch {}'.format(set, i, epoch + 1), fontsize=20)
             ax1 = fig.add_subplot(1, 3, 1)
             ax1.set_title('Y_True')
             plt.imshow(y_true[..., ::-1], interpolation='nearest') # conversion to RGB
