@@ -210,4 +210,4 @@ def fill_probabilities(previous_direction):
     return weights
 
 
-create_smooth_rand_path('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg')
+#create_smooth_rand_path('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg')
