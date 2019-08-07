@@ -42,13 +42,19 @@ def image_predictor(epoch, logs):
                 list = np.load('/data/cvg/maurice/unprocessed/val_snaps_paths.npy')
                 set += "test-"
 
-            # load Y
-            x, y_true = create_smooth_rand_path(list[i])
+            # create a random path
+            loaded_data = create_smooth_rand_path(list[i])
+            # preprocess x
+            x = loaded_data[0]
+            x = np.expand_dims(x, axis=0)
+            # preprocess y
+            y_true = loaded_data[1]
             covered_area = y_true[:, :, -3:]
             y_true = y_true[:, :, :-3]
             covered_target = y_true * covered_area
 
             # predict y (since the model is trained on pictures in [-1,1])
+
             y_pred = model.stitchdecoder.predict(x)
             y_pred = revert_zero_center(y_pred)*255
             y_pred = np.array(np.rint(y_pred), dtype=int)
