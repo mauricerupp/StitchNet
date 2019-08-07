@@ -19,6 +19,10 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
+data = np.array('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000504554.jpg',
+                )
+train_data_generator = MyGenerator(np.arra[data, 1)
+
 matrix = np.random.choice(a=[0, 1], size=(10, 5), p=[1, 0])
 print(matrix)
 """
