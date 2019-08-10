@@ -20,7 +20,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v6_S2new_instance_run1_5_95"
+NAME = str(current_model.__name__) + "_v6_S2new_instance_run1_25_75"
 
 
 # ----- Callbacks / Helperfunctions ----- #
