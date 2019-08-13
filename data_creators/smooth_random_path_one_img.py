@@ -13,7 +13,7 @@ def create_smooth_rand_path(img_path):
     snaps_per_sample = 5
     snap_size = (64, 64)
     target_size = (128, 128)
-    step_size = 16
+    max_step_size = 20
 
     # read the image
     img_target = cv2.imread(img_path)
@@ -37,7 +37,7 @@ def create_smooth_rand_path(img_path):
     # reshape the target to a size where we have enough space to move around if its to small
     # and keep the aspect ratio
     # since h <= w, we can only adjust it with h
-    space = int(2.2*((snaps_per_sample - 1)*step_size + snap_size[0]))
+    space = int(2.1*((snaps_per_sample - 1)*max_step_size + snap_size[0]))
     if h <= space:
         img_target = cv2.resize(img_target, (int(w*(space/h)), space)) # (w, h) contrary to all
 
@@ -45,7 +45,7 @@ def create_smooth_rand_path(img_path):
     img_snaps, covered_pixels, img_overlapse, middle_frame_top_left_corner = create_rand_translation_path(img_target,
                                                                                                  snaps_per_sample,
                                                                                                  snap_size,
-                                                                                                 step_size)
+                                                                                                 max_step_size)
     sample_count += 1
     middle_frame_center = middle_frame_top_left_corner + np.array(snap_size)/2
     # crop the target around the covered area
@@ -78,7 +78,7 @@ def create_smooth_rand_path(img_path):
     return [zero_center(img_snaps/255.0), img_target]
 
 
-def create_rand_translation_path(img_target, snaps_per_sample, snap_size, step_size):
+def create_rand_translation_path(img_target, snaps_per_sample, snap_size, max_step_size):
 
     # initialization of local variables
     h_target = img_target.shape[0]
@@ -90,6 +90,7 @@ def create_rand_translation_path(img_target, snaps_per_sample, snap_size, step_s
 
     for iterationCount in range(snaps_per_sample):
         last_direction = np.random.randint(0, 8) #completely random direction to start with
+        step_size = random.randint(4, max_step_size) # have a random stepsize for every snapshot
         # update the position of the top left corner of our snap
         if iterationCount == 0: # start in the middle of the image in order to be able to move around
             top_left_corner = np.array([int(h_target/2 - h_snap/2), int(w_target/2 - w_snap)])
