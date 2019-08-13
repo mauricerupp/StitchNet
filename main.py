@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-from stitch_decoder_v2 import *
+from stitch_decoder_v3 import *
 from utilities import *
 
 # packages
@@ -20,7 +20,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_v6_S2new_instance_run1_25_75"
+NAME = str(current_model.__name__) + "_AEv6_D2v3_S2_lowLR_instance_run1_25_75"
 
 
 # ----- Callbacks / Helperfunctions ----- #
