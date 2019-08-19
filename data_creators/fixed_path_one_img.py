@@ -8,12 +8,12 @@ import random
 from utilities import *
 
 
-def create_smooth_rand_path(img_path):
+def create_fixed_path(img_path):
     sample_count = 0
     snaps_per_sample = 5
     snap_size = (64, 64)
     target_size = (128, 128)
-    max_step_size = 20
+    step_size = 20
 
     # read the image
     img_target = cv2.imread(img_path)
@@ -37,15 +37,15 @@ def create_smooth_rand_path(img_path):
     # reshape the target to a size where we have enough space to move around if its to small
     # and keep the aspect ratio
     # since h <= w, we can only adjust it with h
-    space = int(2.1*((snaps_per_sample - 1)*max_step_size + snap_size[0]))
+    space = int(2.1*((snaps_per_sample - 1)*step_size + snap_size[0]))
     if h <= space:
         img_target = cv2.resize(img_target, (int(w*(space/h)), space)) # (w, h) contrary to all
 
     # create the stack of image snaps of the target image w/ shape (h, w, 3 * snaps_per_sample)
-    img_snaps, covered_pixels, img_overlapse, middle_frame_top_left_corner = create_rand_translation_path(img_target,
-                                                                                                 snaps_per_sample,
-                                                                                                 snap_size,
-                                                                                                 max_step_size)
+    img_snaps, covered_pixels, img_overlapse, middle_frame_top_left_corner = create_fixed_translation_path(img_target,
+                                                                                                           snaps_per_sample,
+                                                                                                           snap_size,
+                                                                                                           step_size)
     sample_count += 1
     middle_frame_center = middle_frame_top_left_corner + np.array(snap_size)/2
     # crop the target around the covered area
@@ -78,7 +78,7 @@ def create_smooth_rand_path(img_path):
     return [zero_center(img_snaps/255.0), img_target]
 
 
-def create_rand_translation_path(img_target, snaps_per_sample, snap_size, max_step_size):
+def create_fixed_translation_path(img_target, snaps_per_sample, snap_size, step_size):
 
     # initialization of local variables
     h_target = img_target.shape[0]
@@ -87,18 +87,16 @@ def create_rand_translation_path(img_target, snaps_per_sample, snap_size, max_st
     img_overlapse = np.zeros([h_target, w_target], dtype=int)
     (h_snap, w_snap) = (snap_size[0], snap_size[1])
     middle_frame_top_left_corner = []
-    last_direction = np.random.randint(0, 8)  # completely random direction to start with
 
     for iterationCount in range(snaps_per_sample):
-        step_size = random.randint(4, max_step_size) # have a random stepsize for every snapshot
         # update the position of the top left corner of our snap
         if iterationCount == 0: # start in the middle of the image in order to be able to move around
             top_left_corner = np.array([int(h_target/2 - h_snap/2), int(w_target/2 - w_snap)])
 
         else:
-            top_left_corner, last_direction = update_frame_position(top_left_corner, step_size,
+            top_left_corner = update_frame_position(top_left_corner, step_size,
                                                                     h_snap, h_target,
-                                                                    w_snap, w_target, last_direction)
+                                                                    w_snap, w_target)
 
 
         # update and save the snap
@@ -137,20 +135,16 @@ def create_rand_translation_path(img_target, snaps_per_sample, snap_size, max_st
     return img_snaps, covered_area, img_overlapse, middle_frame_top_left_corner
 
 
-def update_frame_position(topleft_corner, step_size, h_snap, h_target, w_snap, w_target, last_direction):
+def update_frame_position(topleft_corner, step_size, h_snap, h_target, w_snap, w_target):
 
     assert topleft_corner[0] >= 0 # since there should be no negative index numbers
     assert topleft_corner[1] >= 0
     assert step_size >= 0
     # have 8 different determined moving directions
-    directions = np.array([[0, -1], [1, -1], [1, 0], [1,1], [0,1], [-1, 1], [-1, 0], [-1, -1]])
-    weights = fill_probabilities(last_direction)
-
-    rand = np.random.choice(np.arange(0, 8), p=weights)
 
     # check if the new frame would be completely inside the picture
-    if 0 < topleft_corner[0] + directions[rand][0]*step_size < h_target - h_snap \
-            and 0 < topleft_corner[1] + directions[rand][1]*step_size < w_target - w_snap:
+    if 0 < topleft_corner[0] + step_size < h_target - h_snap \
+            and 0 < topleft_corner[1] + step_size < w_target - w_snap:
         pass
 
     # since this case should never occur
@@ -158,57 +152,10 @@ def update_frame_position(topleft_corner, step_size, h_snap, h_target, w_snap, w
         print("out of borders")
         exit()
 
-    topleft_corner[0] = topleft_corner[0] + directions[rand][0]*step_size
-    topleft_corner[1] = topleft_corner[1] + directions[rand][1]*step_size
+    topleft_corner[0] = topleft_corner[0] + step_size
+    topleft_corner[1] = topleft_corner[1] + step_size
 
-    return topleft_corner, rand
-
-
-def get_random_angle(h, w, point):
-    if point[0] <= h/2:
-        if point[1] <= w/2:
-            return ran.uniform(0 + 0.2, math.pi/2 - 0.2)
-        else:
-            return ran.uniform(math.pi/2 + 0.2, math.pi - 0.2)
-    else:
-        if point[1] <= w / 2:
-            return ran.uniform(1.5*math.pi + 0.2, 2*math.pi - 0.2)
-        else:
-            return ran.uniform(math.pi + 0.2, 1.5*math.pi - 0.2)
+    return topleft_corner
 
 
-def opp_dir(direction):
-    if direction >= 4:
-        return direction - 4
-    else:
-        return direction + 4
-
-
-def fill_probabilities(previous_direction):
-    weights = np.zeros(8)
-    weights[previous_direction] = 0.33
-    # adust the weight left of the prev direction
-    if previous_direction > 0:
-        weights[previous_direction-1] = 0.23
-        weights[opp_dir(previous_direction-1)] = 0.02
-    else:
-        weights[7] = 0.23
-        weights[opp_dir(7)] = 0.02
-    # adjust the weight right of the prev direction
-    if previous_direction < 7:
-        weights[previous_direction+1] = 0.23
-        weights[opp_dir(previous_direction+1)] = 0.02
-    else:
-        weights[0] = 0.23
-        weights[opp_dir(0)] = 0.02
-    # adjust the weights at a right angle to the previous direction
-    if previous_direction < 6:
-        weights[previous_direction+2] = 0.085
-        weights[opp_dir(previous_direction+2)] = 0.085
-    else:
-        weights[previous_direction-2] = 0.085
-        weights[opp_dir(previous_direction - 2)] = 0.085
-    return weights
-
-
-#create_fixed_path('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg')
+create_fixed_path('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg')

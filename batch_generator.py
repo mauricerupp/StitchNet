@@ -24,6 +24,6 @@ class MyGenerator(Sequence):
             targets.append(output[1])
         """
         inputs, targets = np.stack(
-            [create_smooth_rand_path(img_path) for img_path in batch], axis=0)
+            [create_fixed_path(img_path) for img_path in batch], axis=0)
         """
         return np.stack(inputs, axis=0), np.stack(targets, axis=0)
