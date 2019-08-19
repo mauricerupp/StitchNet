@@ -14,7 +14,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 64
+batchsize = 48
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 current_model = StitchDecoder
