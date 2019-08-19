@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-from u_net_convtrans_model4 import *
+from stitch_decoder_v4_gpu1 import *
 from utilities import *
 
 # packages
@@ -10,16 +10,17 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-#os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
+os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
 batchsize = 64
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
+current_model = StitchDecoder
 
 # name the model
-NAME = "unet4_Dataset2_metric_run"
+NAME = str(current_model.__name__) + "_AEv6_D2v4_PERC"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -30,7 +31,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 20 == 0:  # print samples every 50 images
+    if epoch % 10 == 0:  # print samples every 50 images
         for i in range(6, 30):
             # load X
             set = ""
@@ -54,7 +55,7 @@ def image_predictor(epoch, logs):
 
             # predict y (since the model is trained on pictures in [-1,1])
             y_pred = model.stitchdecoder.predict(x)
-            y_pred = revert_zero_center(y_pred) * 255
+            y_pred = revert_zero_center(y_pred)*255
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
@@ -62,7 +63,7 @@ def image_predictor(epoch, logs):
             fig.suptitle('Results of predicting {}Image {} \non epoch {}'.format(set, i, epoch + 1), fontsize=20)
             ax1 = fig.add_subplot(1, 3, 1)
             ax1.set_title('Y_True')
-            plt.imshow(y_true[..., ::-1], interpolation='nearest')  # conversion to RGB
+            plt.imshow(y_true[..., ::-1], interpolation='nearest') # conversion to RGB
             ax2 = fig.add_subplot(1, 3, 2)
             ax2.set_title('Y_True covered')
             plt.imshow(covered_target[..., ::-1], interpolation='nearest')
@@ -88,10 +89,11 @@ train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsiz
 val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize)
 
 # ----- Model setup ----- #
-model = create_model(input_size=input_size)
+model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80/encoder_logs/',
+                      normalizer='instance', isTraining=True)
 
 # train the model
-model.fit_generator(train_data_generator,  epochs=202,
+model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
-                    validation_data=val_data_generator, max_queue_size=64, workers=12)
+                    validation_data=val_data_generator, max_queue_size=64, workers=16)
 

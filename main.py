@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-from stitch_decoder_v3 import *
+from stitch_decoder_v4 import *
 from utilities import *
 
 # packages
@@ -10,7 +10,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-#os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
+os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
 tf.keras.backend.clear_session()
 
 # set the constants
@@ -20,7 +20,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_AEv6_D2v3_S2_lowLR_instance_run1_25_75"
+NAME = str(current_model.__name__) + "_AEv6_D2v4_MAE"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -31,7 +31,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 20 == 0:  # print samples every 50 images
+    if epoch % 10 == 0:  # print samples every 50 images
         for i in range(6, 30):
             # load X
             set = ""

@@ -333,6 +333,18 @@ def dec_block_leaky(input_layer, filters, index, normalizer, isTraining, modelna
     return x
 
 
+def big_dec_block_leaky(input_layer, filters, index, normalizer, isTraining, modelname):
+    x = Conv2DTranspose(filters, 3, activation=None, padding='same', name='{}_decoder_conv{}_1'.format(modelname, index), strides=2)(input_layer)
+    x = normalize(x, '{}_decoder_norm{}_1'.format(modelname, index), normalizer, isTraining)
+    x = LeakyReLU()(x)
+    for i in range(3):
+        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='{}_decoder_conv{}_{}'.format(modelname, index, i +2))(x)
+        x = normalize(x, '{}_decoder_norm{}_{}'.format(modelname, index, i+2), normalizer, isTraining)
+        x = LeakyReLU()(x)
+
+    return x
+
+
 # ---- Normalization ---- #
 def normalize(input_layer, name, normalizer, training_flag):
     if normalizer.lower() == 'batch':
