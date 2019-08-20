@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 32
+batchsize = 64
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 current_model = StitchDecoder
@@ -193,5 +193,5 @@ model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_ins
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
-                    validation_data=val_data_generator, max_queue_size=64, workers=8)
+                    validation_data=val_data_generator, max_queue_size=64, workers=12)
 
