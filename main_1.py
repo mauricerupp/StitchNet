@@ -9,8 +9,7 @@ from tensorflow.python.keras.callbacks import TensorBoard
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
+
 tf.keras.backend.clear_session()
 
 # set the constants
@@ -20,7 +19,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_AEv6_D2v4_PERC"
+NAME = str(current_model.__name__) + "_AEv6_D2v4_PERC_REVERSE"
 
 
 # ----- Callbacks / Helperfunctions ----- #

@@ -6,7 +6,7 @@ from tensorflow.python.keras.losses import *
 from l2_loss import my_loss_l2
 from l1_loss import custom_loss
 
-percentage_MAE = 0.25
+percentage_MAE = 0.8
 percentage_perceptual = 1 - percentage_MAE
 SCALE = 5.57779e-05
 
@@ -52,5 +52,5 @@ def perceptual_stitched_loss(y_true, y_pred):
     #TODO: multiply it with the covered area before or after the prediction? --> Then maybe change SCALE
     yt_new = preprocess_to_caffe(revert_zero_center(y_true*covered_area)*255.0)
     yp_new = preprocess_to_caffe(revert_zero_center(y_pred*covered_area)*255.0)
-    # since we here have 8x8=64 pixels, we have to scale the result
+    # since we here have 8x8 =64 pixels, we have to scale the result
     return SCALE * percentage_perceptual * K.mean(mean_squared_error(model(yt_new), model(yp_new)))
