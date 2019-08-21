@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 16
+batchsize = 64
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 current_model = StitchDecoder
