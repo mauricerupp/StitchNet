@@ -13,13 +13,13 @@ import matplotlib.pyplot as plt
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 64
+batchsize = 32
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_AEv6_D2v4_MAE"
+NAME = str(current_model.__name__) + "_AEv6_D2v4_MAE_NOWEIGHTS"
 
 
 # ----- Callbacks / Helperfunctions ----- #
