@@ -10,7 +10,7 @@ import l2_loss
 import random
 from utilities import *
 import cv2
-from autoencoder_v5 import *
+from autoencoder_v6 import *
 
 from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import *
@@ -21,7 +21,17 @@ import datetime
 input_size=[64,64,3]
 img = np.array(cv2.imread('/home/maurice/Dokumente/000000000030.jpg'))
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
-autoenc.load_weights('/home/maurice/Dokumente/BA/Autoencoder/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/weight_logs/')
+weights = autoenc.encoder.get_layer(name='encoder_conv1_1').get_weights()
+weights = np.array(weights)
+print(weights.shape)
+print(weights)
+print("________________________________________________________________________")
+#autoenc.load_weights('/home/maurice/Dokumente/BA/Autoencoder/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/weight_logs/')
+autoenc.load_weights('/home/maurice/Dokumente/encoder_logs/')
+weights = autoenc.encoder.get_layer(name='encoder_conv1_1').get_weights()
+weights = np.array(weights)
+print(weights)
+
 img = random_numpy_crop(img, input_size)
 y_true = np.expand_dims(img, axis=0)
 y_pred = autoenc.autoencoder.predict(zero_center(y_true/255.0))
