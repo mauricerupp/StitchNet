@@ -29,7 +29,7 @@ autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
 
 weights = autoenc.encoder.get_layer(index=2).get_weights()
 weights = np.array(weights)
-print(weights)
+print(weights.shape)
 
 autoenc.encoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/encoder_logs/encepoch0.h5')
 
