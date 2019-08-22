@@ -22,11 +22,13 @@ import datetime
 input_size=[64,64,3]
 img = np.array(cv2.imread('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/000000000030.jpg'))
 img = random_numpy_crop(img, input_size)
-autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
-autoenc.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-20.h5')
 y_true = np.expand_dims(img, axis=0)
 y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
-y_pred = autoenc.autoencoder.evaluate(y_true)
+
+autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
+autoenc.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-20.h5')
+y_pred = autoenc.autoencoder.predict(y_true)
+
 y_pred = revert_zero_center(y_pred)*255.0
 y_pred = np.array(np.rint(y_pred), dtype=int)
 
