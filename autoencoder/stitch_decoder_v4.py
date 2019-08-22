@@ -21,6 +21,7 @@ class StitchDecoder(object):
         autoenc = ConvAutoencoder([input_size[0], input_size[1], 3], norm=normalizer, isTraining=False)
         autoenc.load_weights(weights_path)
 
+        # create the encoder
         encoder_model = Model(inputs=autoenc.autoencoder.input, outputs=autoenc.autoencoder.get_layer().output)
 
 
