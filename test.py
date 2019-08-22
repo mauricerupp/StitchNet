@@ -18,7 +18,7 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
-
+"""
 input_size=[64,64,3]
 img = np.array(cv2.imread('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/000000000030.jpg'))
 img = random_numpy_crop(img, input_size)
@@ -30,7 +30,6 @@ autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
 weights = autoenc.encoder.get_layer(index=3).get_weights()
 weights = np.array(weights)
 print(weights[0][0])
-print("________________________________________")
 
 autoenc.encoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/encoder_logs/encepoch0.h5')
 
@@ -42,7 +41,7 @@ y_pred = autoenc.encoder.predict(y_true)
 y_pred = np.array(y_pred)
 print(y_pred.shape)
 
-"""
+
 y_pred = revert_zero_center(y_pred)*255.0
 y_pred = np.array(np.rint(y_pred), dtype=int)
 
@@ -56,7 +55,7 @@ ax3.set_title('Prediction of model')
 plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
 plt.savefig("/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/predicts.png")
 plt.close()
-
+"""
 
 
 
@@ -67,8 +66,18 @@ y_true = np.expand_dims(img, axis=0)
 y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
 
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
+weights = autoenc.autoencoder.get_layer(index=3).get_weights()
+weights = np.array(weights)
+print(weights[0][0][0])
+print("_______________________")
+
+
 autoenc.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-02.h5')
 y_pred = autoenc.autoencoder.predict(y_true)
+
+weights = autoenc.autoencoder.get_layer(index=3).get_weights()
+weights = np.array(weights)
+print(weights[0][0][0])
 
 y_pred = revert_zero_center(y_pred)*255.0
 y_pred = np.array(np.rint(y_pred), dtype=int)
@@ -86,7 +95,7 @@ plt.close()
 
 
 
-
+"""
 input_size=[64,64,3]
 img = np.array(cv2.imread('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/000000000030.jpg'))
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)

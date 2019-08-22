@@ -14,26 +14,22 @@ from tensorflow.python.keras.utils import multi_gpu_model
 
 class StitchDecoder(object):
 
-    def __init__(self, input_size, encoderweights_path, normalizer, isTraining):
+    def __init__(self, input_size, weights_path, normalizer, isTraining):
 
         encoder_inputs = Input(shape=input_size)
 
         autoenc = ConvAutoencoder([input_size[0], input_size[1], 3], norm=normalizer, isTraining=False)
-        autoenc.load_encoder_weights(encoderweights_path)
+        autoenc.load_weights(weights_path)
 
-        """
-        encoder_model = Model(inputs=autoenc.autoencoder.input,
-                                 outputs=autoenc.autoencoder.get_layer().output)
-        encoder_output = intermediate_layer_model.predict(data)
-        """
-        enc = autoenc.encoder
+        encoder_model = Model(inputs=autoenc.autoencoder.input, outputs=autoenc.autoencoder.get_layer().output)
+
 
         # encode each image individually through the pre-trained encoder
         encoded_img_list = []
         index = 1
         for i in range(0, input_size[2], 3):
             x = Lambda(lambda x: x[:, :, :, i:i + 3], name='img_{}'.format(str(index)))(encoder_inputs)
-            encoded_img_list.append(enc(x))
+            encoded_img_list.append(encoder_model.predict(x))
             index += 1
 
         # concatenate the images and decode them to a final image
