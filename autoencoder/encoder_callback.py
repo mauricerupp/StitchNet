@@ -15,4 +15,4 @@ class EncoderCheckpoint(Callback):
         if self.monitor_op(current, self.best):
             self.best = current
         if epoch % 20 == 0:
-                self.encoder.save_weights(self.filepath + 'epoch{}.h5'.format(epoch), overwrite=True)
+                self.encoder.save_weights(self.filepath + '-epoch{}.h5'.format(epoch), overwrite=True)
