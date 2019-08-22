@@ -68,18 +68,11 @@ y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
 print([layer.name for layer in autoenc.autoencoder.layers])
 
-weights = autoenc.autoencoder.get_layer('autoencoder').get_layer(name='bottleneck_relu_layer').get_weights()
-weights = np.array(weights)
-print(weights[0][0][0])
-print("_______________________")
+print(autoenc.autoencoder.get_layer('autoencoder').get_layer(name='bottleneck_relu_layer').output_shape)
 
 
 autoenc.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-01.h5')
 y_pred = autoenc.autoencoder.predict(y_true)
-
-weights = autoenc.autoencoder.get_layer('autoencoder').get_layer(name='bottleneck_relu_layer').get_weights()
-weights = np.array(weights)
-print(weights[0][0][0])
 
 y_pred = revert_zero_center(y_pred)*255.0
 y_pred = np.array(np.rint(y_pred), dtype=int)
