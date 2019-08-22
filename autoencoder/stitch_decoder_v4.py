@@ -30,7 +30,7 @@ class StitchDecoder(object):
         index = 1
         for i in range(0, input_size[2], 3):
             x = Lambda(lambda x: x[:, :, :, i:i + 3], name='img_{}'.format(str(index)))(encoder_inputs)
-            encoded_img_list.append(encoder_model.predict(x, steps=1))
+            encoded_img_list.append(encoder_model(x))
             index += 1
 
         # concatenate the images and decode them to a final image
