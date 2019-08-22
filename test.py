@@ -29,13 +29,13 @@ autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
 
 weights = autoenc.encoder.get_layer(index=3).get_weights()
 weights = np.array(weights)
-print(weights.shape)
+print(weights[0])
 
 autoenc.encoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/encoder_logs/encepoch0.h5')
 
 weights = autoenc.encoder.get_layer(index=3).get_weights()
 weights = np.array(weights)
-print(weights)
+print(weights[0])
 
 y_pred = autoenc.encoder.predict(y_true)
 y_pred = np.array(y_pred)
