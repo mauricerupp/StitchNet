@@ -47,13 +47,13 @@ class ConvAutoencoder(object):
         # final layer
         out = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv')(x)
 
-        self.encoder = Model(inputs, enc_out, name='encoder')
+        #self.encoder = Model(inputs, enc_out, name='encoder')
         self.autoencoder = Model(inputs=inputs, outputs=out, name='autoencoder')
 
         if not isTraining:
-            self.encoder.trainable = False
-            for l in self.encoder.layers:
-                l.trainable = False
+            #self.encoder.trainable = False
+            #for l in self.encoder.layers:
+            #    l.trainable = False
             self.autoencoder.trainable = False
             for l in self.autoencoder.layers:
                 l.trainable = False
@@ -61,7 +61,7 @@ class ConvAutoencoder(object):
         self.autoencoder.summary()
         #self.encoder.summary()
         self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
-        self.encoder = multi_gpu_model(self.encoder, gpus=2)
+        #self.encoder = multi_gpu_model(self.encoder, gpus=2)
 
         self.autoencoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),
                                  loss=vgg_loss,
@@ -72,8 +72,8 @@ class ConvAutoencoder(object):
 
         #plot_model(self.autoencoder, to_file='Autoencoder_v4')
 
-    def load_encoder_weights(self, path):
-        self.encoder.load_weights(filepath=path)
+    #def load_encoder_weights(self, path):
+     #   self.encoder.load_weights(filepath=path)
 
     def load_weights(self, path):
         self.autoencoder.load_weights(filepath=path)
