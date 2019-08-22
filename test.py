@@ -66,6 +66,8 @@ y_true = np.expand_dims(img, axis=0)
 y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
 
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
+print([layer.name for layer in autoenc.autoencoder.layers])
+
 weights = autoenc.autoencoder.get_layer(name='bottleneck_relu_layer').get_weights()
 weights = np.array(weights)
 print(weights[0][0][0])
