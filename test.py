@@ -32,7 +32,7 @@ y_pred = revert_zero_center(y_pred)*255.0
 
 with tf.Session() as sess:
     #latest = tf.train.latest_checkpoint('/home/maurice/Dokumente/BA/Autoencoder/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/weight_logs/')
-    autoenc.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-03.hdf5')
+    autoenc.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-20.ckpt')
     y_pred_np = sess.run(y_pred)
     y_pred_np = np.array(np.rint(y_pred_np), dtype=int)
 
