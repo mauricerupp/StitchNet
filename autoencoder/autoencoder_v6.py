@@ -56,22 +56,9 @@ class ConvAutoencoder(object):
 
         #self.autoencoder.summary()
         self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
-        #self.encoder = multi_gpu_model(self.encoder, gpus=2)
 
         self.autoencoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),
                                  loss=vgg_loss,
                                  metrics=['accuracy', PSNR, mae_loss, perceptual_loss])
-
-        #with open('Autoenc_v4 ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
-        #    self.autoencoder.summary(print_fn=lambda x: fh.write(x + '\n'))
-
-        #plot_model(self.autoencoder, to_file='Autoencoder_v4')
-
-    #def load_encoder_weights(self, path):
-     #   self.encoder.load_weights(filepath=path)
-
-    def load_weights(self, path):
-        self.autoencoder.load_weights(filepath=path)
-
 
 #mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)

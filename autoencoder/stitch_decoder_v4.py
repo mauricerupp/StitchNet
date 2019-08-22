@@ -19,12 +19,11 @@ class StitchDecoder(object):
         encoder_inputs = Input(shape=input_size)
 
         autoenc = ConvAutoencoder([input_size[0], input_size[1], 3], norm=normalizer, isTraining=False)
-        autoenc.load_weights(weights_path)
+        autoenc.autoencoder.load_weights(weights_path)
 
         # create the encoder
         encoder_model = Model(inputs=autoenc.autoencoder.input, outputs=autoenc.autoencoder.get_layer('autoencoder').
                               get_layer(name='bottleneck_relu_layer').output)
-
 
         # encode each image individually through the pre-trained encoder
         encoded_img_list = []
@@ -57,12 +56,12 @@ class StitchDecoder(object):
     def load_weights(self, path):
         self.stitchdecoder.load_weights(filepath=path)
 
-"""
+
 mod = StitchDecoder(input_size=(64, 64, 15),
-                    encoderweights_path='/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/encoder_logs/',
+                    weights_path='/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-01.h5',
                     normalizer='instance',
                     isTraining=True)
-  
+"""
 mod = StitchDecoder(input_size=(64, 64, 15),
                     encoderweights_path='/home/maurice/Dokumente/encoder_logs/',
                     normalizer='instance',
