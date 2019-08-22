@@ -40,7 +40,7 @@ plt.imshow(img[..., ::-1], interpolation='nearest')  # conversion to RGB
 ax3 = fig.add_subplot(1, 2, 2)
 ax3.set_title('Prediction of model')
 plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
-plt.savefig("/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/")
+plt.savefig("/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/predicts.png")
 plt.close()
 
 
