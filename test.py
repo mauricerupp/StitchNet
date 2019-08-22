@@ -27,13 +27,13 @@ y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
 
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
 
-weights = autoenc.encoder.get_layer(name='encoder_conv1_1').get_weights()
+weights = autoenc.encoder.get_layer(1).get_weights()
 weights = np.array(weights)
 print(weights)
 
 autoenc.encoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/encoder_logs/encepoch0.h5')
 
-weights = autoenc.encoder.get_layer(name='encoder_conv1_1').get_weights()
+weights = autoenc.encoder.get_layer(1).get_weights()
 weights = np.array(weights)
 print(weights)
 
