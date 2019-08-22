@@ -22,7 +22,8 @@ class StitchDecoder(object):
         autoenc.load_weights(weights_path)
 
         # create the encoder
-        encoder_model = Model(inputs=autoenc.autoencoder.input, outputs=autoenc.autoencoder.get_layer().output)
+        encoder_model = Model(inputs=autoenc.autoencoder.input, outputs=autoenc.autoencoder.get_layer('autoencoder').
+                              get_layer(name='bottleneck_relu_layer').output)
 
 
         # encode each image individually through the pre-trained encoder

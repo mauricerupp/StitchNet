@@ -88,11 +88,7 @@ filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.h5'
 cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=1)
 
 
-# create the callback for the encoder weights
-enc_path = '/data/cvg/maurice/logs/{}/encoder_logs/enc'.format(NAME)
-enc_callback = EncoderCheckpoint(enc_path, model.encoder)
-
 # train the model
 model.autoencoder.fit_generator(train_data_generator,  epochs=800,
-                    callbacks=[cp_callback, tensorboard, cb_imagepredict, enc_callback],
+                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator, max_queue_size=64, workers=12)

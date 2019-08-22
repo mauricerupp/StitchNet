@@ -47,19 +47,14 @@ class ConvAutoencoder(object):
         # final layer
         out = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv')(x)
 
-        #self.encoder = Model(inputs, enc_out, name='encoder')
         self.autoencoder = Model(inputs=inputs, outputs=out, name='autoencoder')
 
         if not isTraining:
-            #self.encoder.trainable = False
-            #for l in self.encoder.layers:
-            #    l.trainable = False
             self.autoencoder.trainable = False
             for l in self.autoencoder.layers:
                 l.trainable = False
 
-        self.autoencoder.summary()
-        #self.encoder.summary()
+        #self.autoencoder.summary()
         self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
         #self.encoder = multi_gpu_model(self.encoder, gpus=2)
 
