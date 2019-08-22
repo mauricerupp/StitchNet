@@ -21,6 +21,7 @@ import datetime
 
 input_size=[64,64,3]
 img = np.array(cv2.imread('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/000000000030.jpg'))
+img = random_numpy_crop(img, input_size)
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
 autoenc.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-20.h5')
 y_true = np.expand_dims(img, axis=0)
