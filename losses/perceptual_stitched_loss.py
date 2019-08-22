@@ -6,7 +6,7 @@ from tensorflow.python.keras.losses import *
 from l2_loss import my_loss_l2
 from l1_loss import custom_loss
 
-percentage_MAE = 1
+percentage_MAE = 0.2
 percentage_perceptual = 1 - percentage_MAE
 SCALE = 5.57779e-05
 
