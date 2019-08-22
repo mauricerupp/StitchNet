@@ -84,7 +84,7 @@ model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
 
 # create checkpoint callbacks to store the training weights
 SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/auto'.format(NAME)
-filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.ckpt'
+filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
 cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=1)
 
 
