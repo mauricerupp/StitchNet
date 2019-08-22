@@ -79,7 +79,7 @@ cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
 
 # create checkpoint callbacks to store the training weights
-checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/{epoch:02d}.hdf5'.format(NAME)
+checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/weights.best.hdf5'.format(NAME)
 checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, verbose=1, save_best_only=True, monitor='val_acc')
 
