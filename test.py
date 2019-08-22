@@ -10,7 +10,7 @@ import l2_loss
 import random
 from utilities import *
 import cv2
-from autoencoder_v5 import *
+from autoencoder_v6 import *
 
 from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import *
@@ -18,13 +18,10 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
-epoch = 2
-print('hello ' + '{epoch}')
 
 
-"""
 input_size=[64,64,3]
-img = np.array(cv2.imread('/home/maurice/Dokumente/000000000030.jpg'))
+img = np.array(cv2.imread('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/000000000030.jpg'))
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
 
 img = random_numpy_crop(img, input_size)
@@ -35,7 +32,7 @@ y_pred = revert_zero_center(y_pred)*255.0
 
 with tf.Session() as sess:
     #latest = tf.train.latest_checkpoint('/home/maurice/Dokumente/BA/Autoencoder/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/weight_logs/')
-    autoenc.load_weights('/home/maurice/Dokumente/BA/Autoencoder/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/weight_logs/hahhser.hdf5')
+    autoenc.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-03.hdf5')
     y_pred_np = sess.run(y_pred)
     y_pred_np = np.array(np.rint(y_pred_np), dtype=int)
 
@@ -48,10 +45,10 @@ with tf.Session() as sess:
     ax3 = fig.add_subplot(1, 2, 2)
     ax3.set_title('Prediction of model')
     plt.imshow(y_pred_np[0][..., ::-1], interpolation='nearest')
-    plt.savefig("/home/maurice/Dokumente/imgpred.png")
+    plt.savefig("/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/")
     plt.close()
 
-
+"""
 x = image.load_img('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000504554.jpg')
 print(x)
 x = np.array(x)

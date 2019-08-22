@@ -14,4 +14,6 @@ class EncoderCheckpoint(Callback):
         current = logs.get(self.monitor)
         if self.monitor_op(current, self.best):
             self.best = current
-            self.encoder.save_weights(self.filepath + '{}.hdf5'.format(epoch), overwrite=True)
+        if epoch % 20 == 0:
+                self.encoder.save_weights(self.filepath + 'epoch{}.hdf5'.format(epoch), overwrite=True)
+                self.encoder.save_weights(self.filepath + 'epoch{}.ckpt'.format(epoch), overwrite=True)
