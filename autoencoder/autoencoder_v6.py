@@ -38,7 +38,7 @@ class ConvAutoencoder(object):
         x = LeakyReLU()(x)
         x = Conv2D(512, 3, activation=None, padding='same', strides=1, name='encoder_conv5_2')(x)
         x = normalize(x, 'encoder_norm5_2', norm, isTraining)
-        enc_out = LeakyReLU()(x)
+        enc_out = LeakyReLU(name='bottleneck_relu_layer')(x)
 
         # decoder
         x = enc_out

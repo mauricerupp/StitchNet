@@ -66,7 +66,7 @@ y_true = np.expand_dims(img, axis=0)
 y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
 
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
-weights = autoenc.autoencoder.get_layer(name='leaky_re_lu_13').get_weights()
+weights = autoenc.autoencoder.get_layer(name='bottleneck_relu_layer').get_weights()
 weights = np.array(weights)
 print(weights[0][0][0])
 print("_______________________")
@@ -75,7 +75,7 @@ print("_______________________")
 autoenc.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-01.h5')
 y_pred = autoenc.autoencoder.predict(y_true)
 
-weights = autoenc.autoencoder.get_layer(name='leaky_re_lu_13').get_weights()
+weights = autoenc.autoencoder.get_layer(name='bottleneck_relu_layer').get_weights()
 weights = np.array(weights)
 print(weights[0][0][0])
 
