@@ -164,12 +164,12 @@ def depth_to_space(input_layer, blocksize):
     return Lambda(lambda x: tf.depth_to_space(x, block_size=blocksize, data_format='NHWC'), name='Depth_to_Space',)(input_layer)
 
 
-def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dilation, normalizer):
+def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dilation, normalizer, isTraining):
     x = Conv2D(filters=n_filters, kernel_size=kernel_size,
                strides=stride, dilation_rate=dilation,
                name=block_name + "_conv1",
                padding='same')(prior_layer)
-    x = normalize(x, name=block_name + "_norm1", normalizer=normalizer)
+    x = normalize(x, name=block_name + "_norm1", normalizer=normalizer, training_flag=isTraining)
     x = Activation('relu')(x)
 
     x = Conv2D(filters=n_filters, kernel_size=kernel_size,
@@ -177,7 +177,7 @@ def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dil
                name=block_name + "_conv2",
                padding='same')(x)
 
-    x = normalize(x, name=block_name + "_norm2", normalizer=normalizer)
+    x = normalize(x, name=block_name + "_norm2", normalizer=normalizer, training_flag=isTraining)
 
     return Add()([prior_layer, x])
 

@@ -24,7 +24,7 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V6_instance_20_80"
+NAME = str(current_model.__name__) + "_V6_instance_20_80_newcallback"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -36,7 +36,7 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch % 20 == 0:  # print samples every 50 images
-        for i in range(1, 10):
+        for i in range(1, 15):
             # load the ground truth
             set = ""
             if i % 2 == 0:
@@ -83,15 +83,16 @@ model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
 #model.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run2/weight_logs/')
 
 # create checkpoint callbacks to store the training weights
-checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/'.format(NAME)
-checkpoint_dir = os.path.dirname(checkpoint_path)
-cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, save_weights_only=True, verbose=1)
+SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/auto'.format(NAME)
+filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
+cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=1)
+
 
 # create the callback for the encoder weights
-enc_path = '/data/cvg/maurice/logs/{}/encoder_logs/'.format(NAME)
+enc_path = '/data/cvg/maurice/logs/{}/encoder_logs/enc'.format(NAME)
 enc_callback = EncoderCheckpoint(enc_path, model.encoder)
 
 # train the model
-model.autoencoder.fit_generator(train_data_generator,  epochs=3000,
+model.autoencoder.fit_generator(train_data_generator,  epochs=800,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict, enc_callback],
-                    validation_data=val_data_generator, max_queue_size=64, workers=8)
+                    validation_data=val_data_generator, max_queue_size=64, workers=12)

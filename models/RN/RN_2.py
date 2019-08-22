@@ -10,7 +10,7 @@ import tensorflow as tf
 import datetime
 
 
-def create_model(pretrained_weights=None, input_size=None, filter_size=128, block_amount = 12, normalizer=None):
+def create_model(pretrained_weights=None, input_size=None, filter_size=128, block_amount = 12, normalizer=None, isTraining=True):
     """
     A simple residual network with ResBlocks from Givi and added the feature extraction layer of RDNs in the beginning
     :param G0: filtersize for the last convolutional layer
@@ -24,22 +24,22 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     inputs = Input(input_size)
 
     # feature extractor of RDNs
-    conv1 = feature_extract(inputs, 64)
+    conv1 = feature_extract(inputs, 64, 3)
     # first global conv has no normalization
     global_conv1 = Conv2D(filter_size*2, kernel_size=7, activation='relu', padding='same', name='global_conv1')(conv1)
 
     global_conv2 = Conv2D(filter_size, kernel_size=7, padding='same', name='global_conv2')(global_conv1)
-    global_conv2 = normalize(name="globalconv2_norm1", input_layer=global_conv2, normalizer=normalizer)
+    global_conv2 = normalize(name="globalconv2_norm1", input_layer=global_conv2, normalizer=normalizer, training_flag=isTraining)
     global_conv2 = Activation('relu')(global_conv2)
 
     # first RB
     RB = create_resblock(prior_layer=global_conv2, block_name='RB1',
-                         n_filters=filter_size, kernel_size=3, stride=1, dilation=1, normalizer=normalizer)
+                         n_filters=filter_size, kernel_size=3, stride=1, dilation=1, normalizer=normalizer, isTraining=isTraining)
 
     # add the remaining RDB
     for i in range(2, block_amount + 1):
         RB = create_resblock(prior_layer=RB, block_name='RB' + str(i),
-                             n_filters=filter_size, kernel_size=3, stride=1, dilation=1, normalizer=normalizer)
+                             n_filters=filter_size, kernel_size=3, stride=1, dilation=1, normalizer=normalizer, isTraining=isTraining)
 
     # depth to space
     out = depth_to_space(RB, 2)
@@ -67,4 +67,4 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     return model
 
 
-mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=10, normalizer='batch')
+mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=20, normalizer='instance')

@@ -79,9 +79,9 @@ cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
 
 # create checkpoint callbacks to store the training weights
-checkpoint_path = '/data/cvg/maurice/logs/{}/weight_logs/weights.best.hdf5'.format(NAME)
-checkpoint_dir = os.path.dirname(checkpoint_path)
-cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path, verbose=1, save_best_only=True, monitor='val_acc')
+SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/d2'.format(NAME)
+filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
+cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='train_acc', verbose=1, save_best_only=False, mode='max', period=1)
 
 # ----- Batch-generator setup ----- #
 train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize)
@@ -96,3 +96,5 @@ model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_lo
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator, max_queue_size=64, workers=12)
+
+model.stitchdecoder.save(SAVE_PATH)

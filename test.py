@@ -10,7 +10,7 @@ import l2_loss
 import random
 from utilities import *
 import cv2
-from autoencoder_v6 import *
+from autoencoder_v5 import *
 
 from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import *
@@ -18,39 +18,40 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
+epoch = 2
+print('hello ' + '{epoch}')
+
+
+"""
 input_size=[64,64,3]
 img = np.array(cv2.imread('/home/maurice/Dokumente/000000000030.jpg'))
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
-weights = autoenc.encoder.get_layer(name='encoder_conv1_1').get_weights()
-weights = np.array(weights)
-print(weights.shape)
-print(weights)
-print("________________________________________________________________________")
-#autoenc.load_weights('/home/maurice/Dokumente/BA/Autoencoder/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/weight_logs/')
-autoenc.load_weights('/home/maurice/Dokumente/encoder_logs/')
-weights = autoenc.encoder.get_layer(name='encoder_conv1_1').get_weights()
-weights = np.array(weights)
-print(weights)
 
 img = random_numpy_crop(img, input_size)
 y_true = np.expand_dims(img, axis=0)
-y_pred = autoenc.autoencoder.predict(zero_center(y_true/255.0))
+y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
+y_pred = autoenc.autoencoder(y_true)
 y_pred = revert_zero_center(y_pred)*255.0
-y_pred = np.array(np.rint(y_pred), dtype=int)
 
-# save the result
-fig = plt.figure()
-fig.suptitle('Results of predicting', fontsize=20)
-ax1 = fig.add_subplot(1, 2, 1)
-ax1.set_title('Y_True')
-plt.imshow(img[..., ::-1], interpolation='nearest') # conversion to RGB
-ax3 = fig.add_subplot(1, 2, 2)
-ax3.set_title('Prediction of model')
-plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
-plt.savefig("/home/maurice/Dokumente/imgpred.png")
-plt.close()
+with tf.Session() as sess:
+    #latest = tf.train.latest_checkpoint('/home/maurice/Dokumente/BA/Autoencoder/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/weight_logs/')
+    autoenc.load_weights('/home/maurice/Dokumente/BA/Autoencoder/ConvAutoencoder_V5fixed_instanceBIGGER_20_80_run3/weight_logs/hahhser.hdf5')
+    y_pred_np = sess.run(y_pred)
+    y_pred_np = np.array(np.rint(y_pred_np), dtype=int)
 
-"""
+    # save the result
+    fig = plt.figure()
+    fig.suptitle('Results of predicting', fontsize=20)
+    ax1 = fig.add_subplot(1, 2, 1)
+    ax1.set_title('Y_True')
+    plt.imshow(img[..., ::-1], interpolation='nearest') # conversion to RGB
+    ax3 = fig.add_subplot(1, 2, 2)
+    ax3.set_title('Prediction of model')
+    plt.imshow(y_pred_np[0][..., ::-1], interpolation='nearest')
+    plt.savefig("/home/maurice/Dokumente/imgpred.png")
+    plt.close()
+
+
 x = image.load_img('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000504554.jpg')
 print(x)
 x = np.array(x)

@@ -65,7 +65,7 @@ class ConvAutoencoder(object):
 
         self.autoencoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),
                                  loss=vgg_loss,
-                                 metrics=['accuracy', PSNR])
+                                 metrics=['accuracy', PSNR, mae_loss, perceptual_loss])
 
         #with open('Autoenc_v4 ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
         #    self.autoencoder.summary(print_fn=lambda x: fh.write(x + '\n'))
@@ -79,4 +79,4 @@ class ConvAutoencoder(object):
         self.autoencoder.load_weights(filepath=path)
 
 
-mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)
+#mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)

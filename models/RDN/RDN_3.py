@@ -28,7 +28,7 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     inputs = Input(input_size)
 
     # extract features for every input image
-    conv1 = feature_extract(inputs, 64)
+    conv1 = feature_extract(inputs, 64, 3)
 
 
     # first RDB
@@ -76,4 +76,4 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
 
     return model
 
-#mod = create_model(input_size=(64,64,15), D=4, C=6, G0=320)
+mod = create_model(input_size=(64,64,15), D=10, C=6, G0=320)
