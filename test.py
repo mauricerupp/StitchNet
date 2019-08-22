@@ -72,7 +72,7 @@ print(weights[0][0][0])
 print("_______________________")
 
 
-autoenc.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-02.h5')
+autoenc.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-01.h5')
 y_pred = autoenc.autoencoder.predict(y_true)
 
 weights = autoenc.autoencoder.get_layer(index=3).get_weights()
