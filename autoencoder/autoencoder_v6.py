@@ -49,16 +49,19 @@ class ConvAutoencoder(object):
 
         self.autoencoder = Model(inputs=inputs, outputs=out, name='autoencoder')
 
-        if not isTraining:
-            self.autoencoder.trainable = False
-            for l in self.autoencoder.layers:
-                l.trainable = False
-
         #self.autoencoder.summary()
         self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
 
         self.autoencoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),
                                  loss=vgg_loss,
                                  metrics=['accuracy', PSNR, mae_loss, perceptual_loss])
+
+    def isNotTraining(self):
+        self.autoencoder.trainable = False
+        for l in self.autoencoder.layers:
+            l.trainable = False
+        for l in self.autoencoder.get_layer('autoencoder').layers:
+            l.trainalbe = False
+
 
 #mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)

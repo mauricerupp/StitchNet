@@ -18,6 +18,10 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
+input_size=[64,64,3]
+autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
+print([layer.name for layer in autoenc.autoencoder.layers])
+
 """
 input_size=[64,64,3]
 img = np.array(cv2.imread('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/000000000030.jpg'))

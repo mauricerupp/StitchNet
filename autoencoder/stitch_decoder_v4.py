@@ -20,10 +20,13 @@ class StitchDecoder(object):
 
         autoenc = ConvAutoencoder([input_size[0], input_size[1], 3], norm=normalizer, isTraining=False)
         autoenc.autoencoder.load_weights(weights_path)
+        # freeze the weights
+        autoenc.isNotTraining()
 
         # create the encoder
         encoder_model = Model(inputs=autoenc.autoencoder.input, outputs=autoenc.autoencoder.get_layer('autoencoder').
                               get_layer(name='bottleneck_relu_layer').output)
+        encoder_model.trainable = False
 
         # encode each image individually through the pre-trained encoder
         encoded_img_list = []
