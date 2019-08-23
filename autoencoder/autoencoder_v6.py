@@ -50,7 +50,7 @@ class ConvAutoencoder(object):
         self.autoencoder = Model(inputs=inputs, outputs=out, name='autoencoder')
 
         #self.autoencoder.summary()
-        #self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
+        self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
 
         self.autoencoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),
                                  loss=vgg_loss,
