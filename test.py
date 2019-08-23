@@ -20,7 +20,7 @@ import tensorflow as tf
 import datetime
 input_size=[64,64,3]
 autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
-print([layer.name for layer in autoenc.autoencoder.layers])
+print([layer.name for layer in autoenc.layers])
 
 """
 input_size=[64,64,3]
