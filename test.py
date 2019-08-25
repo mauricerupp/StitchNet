@@ -18,9 +18,6 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
-input_size=[64,64,3]
-autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
-print([layer.name for layer in autoenc.layers])
 
 """
 input_size=[64,64,3]
