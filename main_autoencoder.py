@@ -24,7 +24,7 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V6_instance_20_80_newcallback_run2"
+NAME = str(current_model.__name__) + "_V6_instance_20_80_newcallback_run3"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -80,12 +80,12 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, i
 
 # ----- Model setup ----- #
 model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
-model.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-80.h5')
+model.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run2/weight_logs/auto_weights-improvement-20.h5')
 
 # create checkpoint callbacks to store the training weights
 SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/auto'.format(NAME)
 filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.h5'
-cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=20)
+cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=1)
 
 
 # train the model
