@@ -61,7 +61,7 @@ plt.close()
 
 
 input_size=[64,64,3]
-img = np.array(cv2.imread('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/000000000030.jpg'))
+img = np.array(cv2.imread('/data/cvg/maurice/000000000030.jpg'))
 img = random_numpy_crop(img, input_size)
 y_true = np.expand_dims(img, axis=0)
 y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
@@ -82,7 +82,7 @@ plt.imshow(img[..., ::-1], interpolation='nearest')  # conversion to RGB
 ax3 = fig.add_subplot(1, 2, 2)
 ax3.set_title('Prediction of model')
 plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
-plt.savefig("/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/predicts.png")
+plt.savefig("/data/cvg/maurice/predicts.png")
 plt.close()
 
 
