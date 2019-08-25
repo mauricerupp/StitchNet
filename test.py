@@ -67,7 +67,7 @@ y_true = np.expand_dims(img, axis=0)
 y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
 
 #autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
-autoenc = load_model('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run3/weight_logs/auto_weights-improvement-01.hdf5')
+autoenc = load_model('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/auto_weights-improvement-01.h5')
 #autoenc.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run3/weight_logs/auto_weights-improvement-01.hdf5')
 y_pred = autoenc.autoencoder.predict(y_true)
 
