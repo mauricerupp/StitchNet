@@ -20,32 +20,8 @@ import tensorflow as tf
 import datetime
 
 
-def shuffle_snaps(snaps_array):
-    size = snaps_array.shape[2]
-    size = int(size / 3)
-    perm = np.random.permutation(size)
-    perm *= 3
-    print(perm)
-    shuffled_array = np.zeros(snaps_array.shape)
-    for i in range(perm.shape[0]):
-        shuffled_array[i*3] = snaps_array[perm[i]]
-        shuffled_array[i*3+1] = snaps_array[perm[i]+1]
-        shuffled_array[i*3+2] = snaps_array[perm[i]+2]
-
-    return shuffled_array
-
-
-array = np.zeros([64,64,15])
-
-for i in range(array.shape[2]):
-    array[:][:][i]=i
-
-
-array = shuffle_snaps(array)
-for i in range(15):
-    print(array[:][:][i])
-
-
+te = np.load('/home/maurice/Dokumente/smalltrain_snaps_paths.npy')
+print(te.shape)
 
 """
 
