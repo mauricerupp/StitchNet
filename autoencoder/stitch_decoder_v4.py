@@ -41,9 +41,11 @@ class StitchDecoder(object):
             debug_img_list.append(autoenc.autoencoder(x))
 
             index += 1
-
+        print(debug_img_list)
+        exit()
         tf.summary.image('autoenc', tf.concat(debug_img_list, axis=0))
         tf.summary.merge_all()
+
         # concatenate the images and decode them to a final image
         x = Concatenate(axis=3, name='conc_img_features')(encoded_img_list)
 
