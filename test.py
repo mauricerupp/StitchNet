@@ -47,8 +47,8 @@ for i in range(15):
 
 
 
-
 """
+
 input_size=[64,64,3]
 img = np.array(cv2.imread('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/000000000030.jpg'))
 img = random_numpy_crop(img, input_size)

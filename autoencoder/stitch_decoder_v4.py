@@ -10,6 +10,8 @@ from tensorflow.python.keras.models import *
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 from tensorflow.python.keras.utils import multi_gpu_model
+import matplotlib.pyplot as plt
+import time
 
 
 class StitchDecoder(object):
@@ -30,10 +32,25 @@ class StitchDecoder(object):
 
         # encode each image individually through the pre-trained encoder
         encoded_img_list = []
+        debug_img_list = []
         index = 1
         for i in range(0, input_size[2], 3):
             x = Lambda(lambda x: x[:, :, :, i:i + 3], name='img_{}'.format(str(index)))(encoder_inputs)
             encoded_img_list.append(encoder_model(x))
+
+            debug = revert_zero_center(autoenc.autoencoder(x)) * 255
+            y_pred = np.array(np.rint(debug), dtype=int)
+            fig = plt.figure()
+            fig.suptitle('Results of predicting {}Image {}\n on epoch {}'.format(set, i, epoch + 1), fontsize=20)
+            ax1 = fig.add_subplot(1, 2, 1)
+            ax1.set_title('Y_True') # conversion to RGB
+            ax3 = fig.add_subplot(1, 2, 2)
+            ax3.set_title('Prediction of model')
+            plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
+            plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-{}.png".format(debug, i, time.time()))
+            plt.close()
+
+
             index += 1
 
         # concatenate the images and decode them to a final image
