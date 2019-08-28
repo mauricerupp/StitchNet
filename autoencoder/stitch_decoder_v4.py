@@ -42,8 +42,9 @@ class StitchDecoder(object):
             debug_img_list.append(autoenc.autoencoder(x))
 
             index += 1
-        NAME= 'StitchDecoder_S2_20_80_fixedcallback_DEBUG/tb_logs'
-        logdir = "/data/cvg/maurice/logs/{}/tb_logs/".format(NAME) + datetime.time.strftime("%Y%m%d-%H%M%S")
+
+        NAME = 'StitchDecoder_S2_20_80_fixedcallback_DEBUG/tb_logs'
+        logdir = "/data/cvg/maurice/logs/{}/tb_logs/".format(NAME) + datetime.datetime.now().("%Y%m%d-%H%M%S")
         # Creates a file writer for the log directory.
         file_writer = tf.summary.FileWriter(logdir)
 
