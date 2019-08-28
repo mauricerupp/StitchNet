@@ -40,8 +40,10 @@ class StitchDecoder(object):
 
             debug = revert_zero_center(autoenc.autoencoder(x)) * 255
             sess = tf.Session()
-            with sess.as_default():
-                debug = debug.eval()
+            sinogram = tf.image.encode_jpeg(debug, quality=100)
+            writer = tf.write_file("/data/cvg/maurice/logs/{}/Prediction-img{}-{}.jpeg".format(debug, i, time.time()), sinogram)
+            sess.run(writer)
+            """
             y_pred = np.array(np.rint(debug), dtype=int)
             fig = plt.figure()
             fig.suptitle('Results of predicting {}Image {}\n on epoch {}'.format(set, i, epoch + 1), fontsize=20)
@@ -52,7 +54,7 @@ class StitchDecoder(object):
             plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
             plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-{}.png".format(debug, i, time.time()))
             plt.close()
-
+            """
 
             index += 1
 
