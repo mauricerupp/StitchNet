@@ -40,7 +40,7 @@ class StitchDecoder(object):
 
             debug = revert_zero_center(autoenc.autoencoder(x)) * 255
             sess = tf.Session()
-            sinogram = tf.cast(debug, tf.uint8)
+            sinogram = tf.cast(debug[0], tf.uint8)
             sinogram = tf.image.encode_jpeg(sinogram, quality=100)
             writer = tf.write_file("/data/cvg/maurice/logs/{}/Prediction-img{}-{}.jpeg".format(debug, i, time.time()), sinogram)
             sess.run(writer)
