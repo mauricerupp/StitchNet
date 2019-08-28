@@ -44,7 +44,7 @@ class StitchDecoder(object):
             index += 1
 
         NAME = 'StitchDecoder_S2_20_80_fixedcallback_DEBUG/tb_logs'
-        logdir = "/data/cvg/maurice/logs/{}/tb_logs/".format(NAME) + datetime.datetime.now().("%Y%m%d-%H%M%S")
+        logdir = "/data/cvg/maurice/logs/{}/tb_logs/".format(NAME) + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         # Creates a file writer for the log directory.
         file_writer = tf.summary.FileWriter(logdir)
 
