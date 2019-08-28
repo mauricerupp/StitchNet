@@ -92,15 +92,6 @@ model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_ins
                       normalizer='instance', isTraining=True)
 #model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
 
-
-list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
-loaded_data = create_smooth_rand_path(list[1])
-# preprocess x
-x = loaded_data[0]
-x = np.expand_dims(x, axis=0)
-model.debugger(x)
-
-
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],

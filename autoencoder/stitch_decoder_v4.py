@@ -37,21 +37,7 @@ class StitchDecoder(object):
         for i in range(0, input_size[2], 3):
             x = Lambda(lambda x: x[:, :, :, i:i + 3], name='img_{}'.format(str(index)))(encoder_inputs)
             encoded_img_list.append(encoder_model(x))
-
-
-            """
-            y_pred = np.array(np.rint(debug), dtype=int)
-            fig = plt.figure()
-            fig.suptitle('Results of predicting {}Image {}\n on epoch {}'.format(set, i, epoch + 1), fontsize=20)
-            ax1 = fig.add_subplot(1, 2, 1)
-            ax1.set_title('Y_True') # conversion to RGB
-            ax3 = fig.add_subplot(1, 2, 2)
-            ax3.set_title('Prediction of model')
-            plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
-            plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-{}.png".format(debug, i, time.time()))
-            plt.close()
-            """
-
+            tf.summary.image('autoenc-img{}-{}.jpeg'.format(i, time.time()), autoenc.autoencoder(x))
             index += 1
 
         # concatenate the images and decode them to a final image
@@ -81,17 +67,6 @@ class StitchDecoder(object):
 
     def load_weights(self, path):
         self.stitchdecoder.load_weights(filepath=path)
-
-    def debugger(self, tensor):
-        for i in range(0, 15, 3):
-            x = tensor[:, :, :, i:i + 3]
-            debug = revert_zero_center(self.autoenc.autoencoder(x)) * 255
-            sess = tf.Session()
-            autoenc_img = tf.cast(debug[0], tf.uint8)
-            autoenc_img = tf.image.encode_jpeg(autoenc_img, quality=100)
-            writer = tf.write_file("/data/cvg/maurice/logs/{}/Prediction-img{}-{}.jpeg".format(debug, i, time.time()),
-                                   autoenc_img)
-            sess.run(writer)
 
 """
 mod = StitchDecoder(input_size=(64, 64, 15),
