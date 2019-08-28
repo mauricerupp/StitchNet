@@ -19,7 +19,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_S2_20_80_fixedcallback_DEBUG_small"
+NAME = str(current_model.__name__) + "_S2_20_80_140samples"
 
 
 # ----- Callbacks / Helperfunctions ----- #
