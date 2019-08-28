@@ -39,6 +39,7 @@ class StitchDecoder(object):
             encoded_img_list.append(encoder_model(x))
 
             debug = revert_zero_center(autoenc.autoencoder(x)) * 255
+            debug = debug.eval()
             y_pred = np.array(np.rint(debug), dtype=int)
             fig = plt.figure()
             fig.suptitle('Results of predicting {}Image {}\n on epoch {}'.format(set, i, epoch + 1), fontsize=20)
