@@ -31,14 +31,14 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch % 50 == 0:  # print samples every 50 images
-        for i in range(6, 30):
+        for i in range(6, 20):
             # load X
             set = ""
             if i % 2 == 0:
-                list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
+                list = np.load('/data/cvg/maurice/unprocessed/smalltrain_snaps_paths.npy')
                 set += "train-"
             else:
-                list = np.load('/data/cvg/maurice/unprocessed/val_snaps_paths.npy')
+                list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
                 set += "test-"
 
             # create a random path
