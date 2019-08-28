@@ -38,11 +38,11 @@ class StitchDecoder(object):
             x = Lambda(lambda x: x[:, :, :, i:i + 3], name='img_{}'.format(str(index)))(encoder_inputs)
             encoded_img_list.append(encoder_model(x))
 
-            #tf.summary.image('autoenc', autoenc.autoencoder(x))
+            tf.summary.image('autoenc', autoenc.autoencoder(x))
+            print(autoenc.autoencoder(x))
+            exit()
 
             index += 1
-        print(encoded_img_list[0])
-        exit()
         # concatenate the images and decode them to a final image
         x = Concatenate(axis=3, name='conc_img_features')(encoded_img_list)
 
