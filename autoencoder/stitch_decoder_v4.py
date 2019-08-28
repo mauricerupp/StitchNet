@@ -42,7 +42,7 @@ class StitchDecoder(object):
             debug_img_list.append(autoenc.autoencoder(x))
 
             index += 1
-
+        """
         NAME = 'StitchDecoder_S2_20_80_fixedcallback_DEBUG'
         logdir = "/data/cvg/maurice/logs/{}/tb_logs/".format(NAME) + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         # Creates a file writer for the log directory.
@@ -52,7 +52,7 @@ class StitchDecoder(object):
         with file_writer.as_default():
             tf.summary.image("Training data", tf.concat(debug_img_list, axis=0), step=0)
 
-
+        """
         # concatenate the images and decode them to a final image
         x = Concatenate(axis=3, name='conc_img_features')(encoded_img_list)
 

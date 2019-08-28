@@ -19,7 +19,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_S2_20_80_DEBUG"
+NAME = str(current_model.__name__) + "_S2_20_80_DEBUG_140samples"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -30,7 +30,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 50 == 0:  # print samples every 50 images
+    if epoch % 200 == 0:  # print samples every 50 images
         for i in range(6, 20):
             # load X
             set = ""
@@ -81,7 +81,7 @@ tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NA
 # create checkpoint callbacks to store the training weights
 SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/d2'.format(NAME)
 filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
-cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=50, save_weights_only=True)
+cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=200, save_weights_only=True)
 
 # ----- Batch-generator setup ----- #
 train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize)
@@ -93,7 +93,7 @@ model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_ins
 #model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
 
 # train the model
-model.stitchdecoder.fit_generator(train_data_generator,  epochs=2002,
+model.stitchdecoder.fit_generator(train_data_generator,  epochs=4502,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator, max_queue_size=64, workers=12)
 
