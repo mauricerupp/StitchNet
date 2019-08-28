@@ -42,6 +42,7 @@ class StitchDecoder(object):
 
             index += 1
         print(encoded_img_list[0])
+        exit()
         # concatenate the images and decode them to a final image
         x = Concatenate(axis=3, name='conc_img_features')(encoded_img_list)
 
