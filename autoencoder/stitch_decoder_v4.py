@@ -38,14 +38,8 @@ class StitchDecoder(object):
             x = Lambda(lambda x: x[:, :, :, i:i + 3], name='img_{}'.format(str(index)))(encoder_inputs)
             encoded_img_list.append(encoder_model(x))
 
+
             """
-            debug = revert_zero_center(autoenc.autoencoder(x)) * 255
-            sess = tf.Session()
-            autoenc_img = tf.cast(debug[0], tf.uint8)
-            autoenc_img = tf.image.encode_jpeg(autoenc_img, quality=100)
-            writer = tf.write_file("/data/cvg/maurice/logs/{}/Prediction-img{}-{}.jpeg".format(debug, i, time.time()), autoenc_img)
-            sess.run(writer)
-           
             y_pred = np.array(np.rint(debug), dtype=int)
             fig = plt.figure()
             fig.suptitle('Results of predicting {}Image {}\n on epoch {}'.format(set, i, epoch + 1), fontsize=20)
@@ -87,6 +81,17 @@ class StitchDecoder(object):
 
     def load_weights(self, path):
         self.stitchdecoder.load_weights(filepath=path)
+
+    def debugger(self, tensor):
+        for i in range(0, 15, 3):
+            x = tensor[:, :, :, i:i + 3]
+            debug = revert_zero_center(self.autoenc.autoencoder(x)) * 255
+            sess = tf.Session()
+            autoenc_img = tf.cast(debug[0], tf.uint8)
+            autoenc_img = tf.image.encode_jpeg(autoenc_img, quality=100)
+            writer = tf.write_file("/data/cvg/maurice/logs/{}/Prediction-img{}-{}.jpeg".format(debug, i, time.time()),
+                                   autoenc_img)
+            sess.run(writer)
 
 """
 mod = StitchDecoder(input_size=(64, 64, 15),
