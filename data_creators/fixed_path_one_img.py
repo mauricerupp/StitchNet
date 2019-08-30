@@ -111,8 +111,8 @@ def create_fixed_translation_path(img_target, snaps_per_sample, snap_size, step_
         img_overlapse[top_left_corner[0]: top_left_corner[0] + h_snap,
                      top_left_corner[1]: top_left_corner[1] + w_snap] += 1
 
-        plt.imshow(img_overlapse)
-        plt.show()
+        #plt.imshow(img_overlapse)
+        #plt.show()
 
         assert new_snap.shape == (snap_size[0], snap_size[1], 3)
 

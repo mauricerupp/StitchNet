@@ -9,6 +9,7 @@ for img in os.listdir(dir):
 
 np.save(storage_dir + "train_snaps_paths.npy", snaps_paths)
 
+print(len(snaps_paths))
 
 dir = '/data/cvg/maurice/unprocessed/coco_val/'
 snaps_paths = []
@@ -18,3 +19,4 @@ for img in os.listdir(dir):
 
 np.save(storage_dir + "val_snaps_paths.npy", snaps_paths)
 
+print(len(snaps_paths))
