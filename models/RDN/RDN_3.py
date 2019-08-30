@@ -64,11 +64,11 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy'])
 
     model.summary()
-
+    """
     # Save the configurations as txt-file
     with open('RDN ' + str(datetime.datetime.now()) + ' config.txt', 'w') as fh:
         model.summary(print_fn=lambda x: fh.write(x + '\n'))
-
+    """
     #plot_model(model, to_file='RDN_3_D{}C{}.png'.format(D, C))
 
     if pretrained_weights:
@@ -76,4 +76,4 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
 
     return model
 
-mod = create_model(input_size=(64,64,15), D=10, C=6, G0=320)
+#mod = create_model(input_size=(64,64,15), D=10, C=6, G0=320, G=64)

@@ -67,4 +67,4 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     return model
 
 
-mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=20, normalizer='instance')
+#mod = create_model(input_size=(64,64,15), filter_size=128, block_amount=20, normalizer='instance')

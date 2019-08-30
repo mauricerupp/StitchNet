@@ -1,7 +1,10 @@
 # own classes
 from batch_generator import *
-from stitch_decoder_v4 import *
+from u_net_convtrans_model4 import *
 from utilities import *
+from fixed_path_one_img import *
+from smooth_random_path_one_img import *
+from very_random_path_one_img import *
 
 # packages
 from tensorflow import keras
@@ -16,10 +19,10 @@ tf.keras.backend.clear_session()
 batchsize = 64
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
-current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_S2_100_0_DEBUG_10samples"
+DATASET = "S1"
+NAME = "unet_" + DATASET
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -30,19 +33,25 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 250 == 0:  # print samples every 50 images
-        for i in range(0,9):
+    if epoch % 10 == 0:  # print samples every 50 images
+        for i in range(0,25):
             # load X
             set = ""
             if i % 2 == 0:
-                list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
+                list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
                 set += "train-"
             else:
-                list = np.load('/data/cvg/maurice/unprocessed/smallval_snaps_paths.npy')
+                list = np.load('/data/cvg/maurice/unprocessed/val_snaps_paths.npy')
                 set += "test-"
 
             # create a random path
-            loaded_data = create_smooth_rand_path(list[i])
+            if DATASET == "S1":
+                loaded_data = create_fixed_path(list[i])
+            elif DATASET == "S2":
+                loaded_data = create_smooth_rand_path(list[i])
+            else:
+                loaded_data = create_very_rand_path(list[i])
+
             # preprocess x
             x = loaded_data[0]
             x = np.expand_dims(x, axis=0)
@@ -79,22 +88,20 @@ cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
 
 # create checkpoint callbacks to store the training weights
-SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/d2'.format(NAME)
+SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/unet'.format(NAME)
 filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
-cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=400, save_weights_only=True)
+cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=10, save_weights_only=True)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize)
-val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize)
+train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, DATASET)
+val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
 
 # ----- Model setup ----- #
-model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run4/weight_logs/auto_weights-improvement-133.hdf5',
-                      normalizer='instance', isTraining=True)
+model = create_model(input_size=input_size)
 #model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
 
 # train the model
-model.stitchdecoder.fit_generator(train_data_generator,  epochs=5502,
+model.fit_generator(train_data_generator,  epochs=702,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator, max_queue_size=64, workers=12)
 
-model.stitchdecoder.save(SAVE_PATH)
