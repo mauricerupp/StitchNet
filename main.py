@@ -19,7 +19,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_S2_100_0_DEBUG_10samples"
+NAME = str(current_model.__name__) + "_S2_100_0_DEBUG_10samples_BATCH"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -89,7 +89,7 @@ val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsi
 
 # ----- Model setup ----- #
 model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run4/weight_logs/auto_weights-improvement-133.hdf5',
-                      normalizer='instance', isTraining=True)
+                      normalizer='batch', isTraining=True)
 #model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
 
 # train the model
