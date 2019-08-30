@@ -154,4 +154,4 @@ def update_frame_position(topleft_corner, step_size, h_snap, h_target, w_snap, w
     return topleft_corner
 
 
-create_fixed_path('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg')
+#create_fixed_path('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000039914.jpg')

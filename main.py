@@ -84,8 +84,8 @@ filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
 cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=400, save_weights_only=True)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, "S2")
-val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, "S2")
+train_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize)
+val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize)
 
 # ----- Model setup ----- #
 model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run4/weight_logs/auto_weights-improvement-133.hdf5',
