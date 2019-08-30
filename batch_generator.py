@@ -9,10 +9,9 @@ from very_random_path_one_img import create_very_rand_path
 
 class MyGenerator(Sequence):
 
-    def __init__(self, raw_paths, batch_size, dataset="S2"):
+    def __init__(self, raw_paths, batch_size):
         self.snaps = np.load(raw_paths)
         self.batch_size = batch_size
-        self.dataset = dataset
 
     def __len__(self):
         return math.ceil(len(self.snaps) / float(self.batch_size))
@@ -22,12 +21,7 @@ class MyGenerator(Sequence):
         inputs = []
         targets = []
         for img_path in batch:
-            if self.dataset == "S1":
-                output = create_fixed_path(img_path)
-            elif self.dataset == "S2":
-                output = create_smooth_rand_path(img_path)
-            else:
-                output = create_very_rand_path(img_path)
+            output = create_smooth_rand_path(img_path)
 
             inputs.append(output[0])
             targets.append(output[1])
