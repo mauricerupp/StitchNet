@@ -1,5 +1,7 @@
 import l1_loss
 from utilities import *
+from psnr_stitched import stitched_PSNR
+from ssim_stitched import stitched_ssim
 
 
 from tensorflow.python.keras.models import *
@@ -47,7 +49,7 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     out = Conv2D(3, kernel_size=5, padding='same', activation='tanh')(out)
 
     model = Model(inputs=inputs, outputs=out)
-    model.compile(optimizer=tf.keras.optimizers.Adam(), loss=l1_loss.custom_loss, metrics=['accuracy'])
+    model.compile(optimizer=tf.keras.optimizers.Adam(), loss=l1_loss.custom_loss, metrics=['accuracy', stitched_PSNR, stitched_ssim])
     model.summary()
 
     # Save the configurations as txt-file

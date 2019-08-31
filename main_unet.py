@@ -21,7 +21,7 @@ paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 
 # name the model
-DATASET = "S1"
+DATASET = "S2"
 NAME = "unet_" + DATASET
 
 
