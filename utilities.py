@@ -52,6 +52,43 @@ def revert_zero_center(in_img):
     return in_img / 2 + 0.5
 
 
+def random_numpy_crop_BIG(in_img, crop_size):
+    img_size = in_img.shape
+    assert img_size[2] == crop_size[2]
+
+    # if the image is too small rescale it to atleast the crop_size
+    if img_size[0] <= crop_size[0] or img_size[1] <= crop_size[1]:
+        in_img = scale_img(in_img, crop_size)
+        img_size = in_img.shape
+    """
+    Avoid this part for experimental reasons for autoenc_v6, v5 was trained with this line
+    # if the image is too big, we scale it down in order to have some detail in the image and not only blurry background
+    if img_size[0] > 5*crop_size[0] or img_size[1] > 5*crop_size[1]:
+        new_size = np.array(crop_size)
+
+        new_size[0] = 2*new_size[0]
+        new_size[1] = 2*new_size[1]
+        in_img = scale_img(in_img, new_size)
+        img_size = in_img.shape
+    """
+
+    top_left_corner = [random.randint(0, int(img_size[0]-crop_size[0])),
+                       random.randint(0, int(img_size[1]-crop_size[1]))]
+
+    out = in_img[top_left_corner[0]:top_left_corner[0]+crop_size[0],
+           top_left_corner[1]:top_left_corner[1]+crop_size[1], :]
+
+    # flip the image from right to left w/ 50% chance
+    flipit = random.choice([True, False])
+    if flipit:
+        out = np.fliplr(out)
+
+    assert out.shape[0] == crop_size[0]
+    assert out.shape[1] == crop_size[1]
+    assert out.shape[2] == crop_size[2]
+    return out
+
+
 def random_numpy_crop(in_img, crop_size):
     img_size = in_img.shape
     assert img_size[2] == crop_size[2]
