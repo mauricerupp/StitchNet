@@ -72,6 +72,7 @@ class StitchDecoder(object):
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
         self.stitchdecoder.summary()
+        plot_model(self.stitchdecoder, to_file='decoder.png')
 
         # enable multi-gpu-processing
         self.stitchdecoder = multi_gpu_model(self.stitchdecoder, gpus=2)
