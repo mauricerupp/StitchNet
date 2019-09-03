@@ -60,8 +60,8 @@ class ConvAutoencoderBIG(object):
         self.autoencoder.trainable = False
         for l1 in self.autoencoder.layers:
             l1.trainable = False
-            for l2 in l1.layers:
-                l2.trainable = False
+        for l in self.autoencoder.get_layer('autoencoderBIG').layers:
+            l.trainable = False
 
 
 #mod = ConvAutoencoderBIG(input_size=(128,128,3), norm='instance', isTraining=True)
