@@ -70,7 +70,7 @@ class StitchDecoder(object):
             print(layers.name)
 
         for i in range(37):
-            x = autoenc_big.autoencoder.get_layer(index=i+42)(x)
+            x = autoenc_big.autoencoder.get_layer('autoencoderBIG').get_layer(index=i+42)(x)
 
         out = x
 
