@@ -63,11 +63,11 @@ class StitchDecoder(object):
 
         # get rid of the samples axis
         x = Lambda(lambda x: tf.keras.backend.squeeze(x, axis=1))(x)
-
+        """
         # pass this through the decoder part of the big Autoencoder
         for i in range(37):
             x = autoenc_big.autoencoder.get_layer('autoencoderBIG').get_layer(index=i+42)(x)
-
+        """
         out = x
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
