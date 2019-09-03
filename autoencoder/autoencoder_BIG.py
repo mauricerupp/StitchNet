@@ -15,7 +15,7 @@ from tensorflow.python.keras.losses import *
 from tensorflow.python.keras.applications.vgg19 import VGG19
 
 
-class ConvAutoencoder(object):
+class ConvAutoencoderBIG(object):
 
     def __init__(self, input_size, norm='instance', isTraining=None):
         """
@@ -43,13 +43,13 @@ class ConvAutoencoder(object):
         # decoder
         x = enc_out
         for i in range(4):
-            x = dec_block_leaky(x, int(256 / 2**i), i + 1, norm, isTraining, "autoenc_v6")
+            x = dec_block_leaky(x, int(256 / 2**i), i + 1, norm, isTraining, "autoenc_BIG")
         # final layer
         out = Conv2D(3, 3, activation='tanh', padding='same', strides=1, name='final_conv')(x)
 
-        self.autoencoder = Model(inputs=inputs, outputs=out, name='autoencoder')
+        self.autoencoder = Model(inputs=inputs, outputs=out, name='autoencoderBIG')
 
-        self.autoencoder.summary()
+        #self.autoencoder.summary()
         self.autoencoder = multi_gpu_model(self.autoencoder, gpus=2)
 
         self.autoencoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),
@@ -60,8 +60,8 @@ class ConvAutoencoder(object):
         self.autoencoder.trainable = False
         for l in self.autoencoder.layers:
             l.trainable = False
-        for l in self.autoencoder.get_layer('autoencoder').layers:
-            l.trainalbe = False
+        for l in self.autoencoder.get_layer('autoencoderBIG').layers:
+            l.trainable = False
 
 
-#mod = ConvAutoencoder(input_size=(128,128,3), norm='instance', isTraining=True)
+#mod = ConvAutoencoderBIG(input_size=(128,128,3), norm='instance', isTraining=True)

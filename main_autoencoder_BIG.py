@@ -21,7 +21,7 @@ tf.keras.backend.clear_session()
 batchsize = 64
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [128, 128, 3]
-current_model = ConvAutoencoder
+current_model = ConvAutoencoderBIG
 
 # name the model
 NAME = str(current_model.__name__) + "_BIG"
@@ -79,7 +79,7 @@ train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsiz
 val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, input_size)
 
 # ----- Model setup ----- #
-model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
+model = ConvAutoencoderBIG(input_size, norm='instance', isTraining=True)
 #model.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run3/weight_logs/auto_weights-improvement-95.hdf5')
 
 # create checkpoint callbacks to store the training weights

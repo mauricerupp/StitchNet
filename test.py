@@ -19,7 +19,8 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
-
+flipit = random.choice([True, False])
+print(flipit)
 te = np.load('/home/maurice/Dokumente/smalltrain_snaps_paths.npy')
 print(te.shape)
 

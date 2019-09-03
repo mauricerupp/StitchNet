@@ -61,7 +61,7 @@ class ConvAutoencoder(object):
         for l in self.autoencoder.layers:
             l.trainable = False
         for l in self.autoencoder.get_layer('autoencoder').layers:
-            l.trainalbe = False
+            l.trainable = False
 
 
 #mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)
