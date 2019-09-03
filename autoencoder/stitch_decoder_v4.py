@@ -33,26 +33,12 @@ class StitchDecoder(object):
 
         # encode each image individually through the pre-trained encoder
         encoded_img_list = []
-        debug_img_list = []
         index = 1
         for i in range(0, input_size[2], 3):
             x = Lambda(lambda x: x[:, :, :, i:i + 3], name='img_{}'.format(str(index)))(encoder_inputs)
             encoded_img_list.append(encoder_model(x))
-
-            debug_img_list.append(autoenc.autoencoder(x))
-
             index += 1
-        """
-        NAME = 'StitchDecoder_S2_20_80_fixedcallback_DEBUG'
-        logdir = "/data/cvg/maurice/logs/{}/tb_logs/".format(NAME) + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        # Creates a file writer for the log directory.
-        file_writer = tf.summary.create_file_writer(logdir)
-        
-        # Using the file writer, log the reshaped image.
-        with file_writer.as_default():
-            tf.summary.image("Training data", tf.concat(debug_img_list, axis=0), step=0)
 
-        """
         # concatenate the images and decode them to a final image
         x = Concatenate(axis=3, name='conc_img_features')(encoded_img_list)
 

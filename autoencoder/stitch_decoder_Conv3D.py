@@ -25,6 +25,7 @@ class StitchDecoder(object):
         # Initialize the small autoencoder
         autoenc_small = ConvAutoencoder([input_size[0], input_size[1], 3], norm="instance", isTraining=False)
         autoenc_small.autoencoder.load_weights(weights_path_small)
+        # freeze the weights
         autoenc_small.isNotTraining()
 
         # Initialize the big autoencoder
@@ -33,8 +34,7 @@ class StitchDecoder(object):
         autoenc_big.isNotTraining()
 
         # create the encoder E1
-        encoder_model = Model(inputs=autoenc_small.autoencoder.input,
-                              outputs=autoenc_small.autoencoder.get_layer('autoencoder').
+        encoder_model = Model(inputs=autoenc_small.autoencoder.input, outputs=autoenc_small.autoencoder.get_layer('autoencoder').
                               get_layer(name='bottleneck_relu_layer').output)
         encoder_model.trainable = False
 
@@ -49,7 +49,6 @@ class StitchDecoder(object):
             x = LeakyReLU()(x)
             x = Lambda(lambda x: K.expand_dims(x, axis=-1))(x)
             encoded_img_list.append(x)
-
             index += 1
 
         # Reshape the list into the form of (batchsize, 5, width, height, channels), (b,5,8,8,512)
@@ -66,9 +65,6 @@ class StitchDecoder(object):
         x = Lambda(lambda x: tf.keras.backend.squeeze(x, axis=1))(x)
 
         # pass this through the decoder part of the big Autoencoder
-        for layers in autoenc_big.autoencoder.get_layer('autoencoderBIG').layers:
-            print(layers.name)
-
         for i in range(37):
             x = autoenc_big.autoencoder.get_layer('autoencoderBIG').get_layer(index=i+42)(x)
 
