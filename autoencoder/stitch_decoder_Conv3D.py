@@ -66,7 +66,7 @@ class StitchDecoder(object):
         x = Lambda(lambda x: tf.keras.backend.squeeze(x, axis=1))(x)
 
         # pass this through the decoder part of the big Autoencoder
-        for layers in autoenc_big.autoencoder.layers:
+        for layers in autoenc_big.autoencoder.get_layer('autoencoderBIG').layers:
             print(layers.name)
 
         for i in range(37):
