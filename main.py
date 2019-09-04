@@ -30,7 +30,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 250 == 0:  # print samples every 50 images
+    if epoch % 5 == 0:  # print samples every 50 images
         for i in range(0,9):
             # load X
             set = ""
@@ -81,7 +81,7 @@ tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NA
 # create checkpoint callbacks to store the training weights
 SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/d2'.format(NAME)
 filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
-cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=400, save_weights_only=True)
+cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=5, save_weights_only=True)
 
 # ----- Batch-generator setup ----- #
 train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize)
