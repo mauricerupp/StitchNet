@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-from stitch_decoder_v4 import *
+from stitch_decoder_v5 import *
 from utilities import *
 
 # packages
@@ -19,7 +19,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "TESTEEE"
+NAME = str(current_model.__name__) + "_V5"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -88,8 +88,7 @@ train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsiz
 val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize)
 
 # ----- Model setup ----- #
-model = StitchDecoder(input_size, '/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run4/weight_logs/auto_weights-improvement-133.hdf5',
-                      normalizer='instance', isTraining=True)
+model = StitchDecoder(input_size, normalizer='instance', isTraining=True)
 #model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
 
 # train the model

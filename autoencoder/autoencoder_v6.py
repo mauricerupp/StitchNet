@@ -64,4 +64,4 @@ class ConvAutoencoder(object):
             l.trainable = False
 
 
-#mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)
+mod = ConvAutoencoder(input_size=(64,64,3), norm='instance', isTraining=True)
