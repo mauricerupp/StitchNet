@@ -63,6 +63,7 @@ class StitchDecoder(object):
         self.stitchdecoder.summary()
 
         # enable multi-gpu-processing
+        encoder_model = multi_gpu_model(encoder_model, gpus=2)
         self.stitchdecoder = multi_gpu_model(self.stitchdecoder, gpus=2)
 
         self.stitchdecoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),
