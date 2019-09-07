@@ -19,7 +19,8 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V520_80_Run2"
+DATASET = "S2"
+NAME = str(current_model.__name__) + "_V520_80_Run2_" + DATASET
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -42,7 +43,12 @@ def image_predictor(epoch, logs):
                 set += "test-"
 
             # create a random path
-            loaded_data = create_smooth_rand_path(list[i])
+            if DATASET == "S1":
+                loaded_data = create_fixed_path(list[i])
+            elif DATASET == "S2":
+                loaded_data = create_smooth_rand_path(list[i])
+            else:
+                loaded_data = create_very_rand_path(list[i])
             # preprocess x
             x = loaded_data[0]
             x = np.expand_dims(x, axis=0)
@@ -84,8 +90,8 @@ filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
 cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=5, save_weights_only=True)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize)
-val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize)
+train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, DATASET)
+val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
 
 # ----- Model setup ----- #
 model = StitchDecoder(input_size, normalizer='instance', isTraining=True)
