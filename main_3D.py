@@ -31,10 +31,10 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch % 5 == 0:  # print samples every 50 images
-        for i in range(0,9):
+        for i in range(0,25):
             # load X
             set = ""
-            if i % 2 == 0:
+            if i % 10 == 0:
                 list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
                 set += "train-"
             else:

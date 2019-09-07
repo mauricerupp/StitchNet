@@ -10,7 +10,7 @@ import l2_loss
 import random
 from utilities import *
 import cv2
-from autoencoder_v6 import *
+
 
 from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
 from tensorflow.python.keras.models import *
@@ -19,10 +19,10 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
-flipit = random.choice([True, False])
-print(flipit)
-te = np.load('/home/maurice/Dokumente/smalltrain_snaps_paths.npy')
-print(te.shape)
+
+te = np.load('/home/maurice/Dokumente/val_snaps_paths.npy')
+for i in range(26):
+    print(te[i])
 
 """
 

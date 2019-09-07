@@ -37,7 +37,7 @@ def image_predictor(epoch, logs):
         for i in range(0,25):
             # load X
             set = ""
-            if i % 2 == 0:
+            if i % 10 == 0:
                 list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
                 set += "train-"
             else:

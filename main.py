@@ -19,7 +19,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V520_80"
+NAME = str(current_model.__name__) + "_V520_80_Run2"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -31,10 +31,10 @@ def image_predictor(epoch, logs):
     :param logs: has to be given as argument in order to compile
     """
     if epoch % 5 == 0:  # print samples every 50 images
-        for i in range(0,9):
+        for i in range(0,25):
             # load X
             set = ""
-            if i % 2 == 0:
+            if i % 10 == 0:
                 list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
                 set += "train-"
             else:
@@ -89,7 +89,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize)
 
 # ----- Model setup ----- #
 model = StitchDecoder(input_size, normalizer='instance', isTraining=True)
-#model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
+model.load_weights('/data/cvg/maurice/logs/StitchDecoder_V520_80/weight_logs/d2_weights-improvement-10.hdf5')
 
 # train the model
 model.stitchdecoder.fit_generator(train_data_generator,  epochs=5502,
