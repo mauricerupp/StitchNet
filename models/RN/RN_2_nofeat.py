@@ -27,7 +27,7 @@ def create_model(pretrained_weights=None, input_size=None, filter_size=128, bloc
     global_conv1 = Conv2D(filter_size*2, kernel_size=7, activation='relu', padding='same', name='global_conv1')(inputs)
 
     global_conv2 = Conv2D(filter_size, kernel_size=7, padding='same', name='global_conv2')(global_conv1)
-    global_conv2 = normalize(name="globalconv2_norm1", input_layer=global_conv2, normalizer=normalizer)
+    global_conv2 = normalize(name="globalconv2_norm1", input_layer=global_conv2, normalizer=normalizer, training_flag=True)
     global_conv2 = Activation('relu')(global_conv2)
 
     # first RB
