@@ -101,7 +101,7 @@ val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsi
 
 # ----- Model setup ----- #
 model = create_model(input_size=input_size)
-model.load_weights('/data/cvg/maurice/logs/Benchmarks/unet/unet_S2/weight_logs/unet_weights-improvement-80.hdf5')
+model.load_weights('/data/cvg/maurice/logs/Benchmarks/unet/unet_S3/weight_logs/unet_weights-improvement-70.hdf5')
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=702,
