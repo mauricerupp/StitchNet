@@ -59,7 +59,10 @@ def image_predictor(epoch, logs):
             y_true = loaded_data[1]
             covered_area = y_true[:, :, -3:]
             y_true = y_true[:, :, :-3]
+            y_true = revert_zero_center(y_true) * 255
+            y_true = np.array(np.rint(y_true), dtype=int)
             covered_target = y_true * covered_area
+            covered_target = np.array(np.rint(covered_target), dtype=int)
 
             # predict y (since the model is trained on pictures in [-1,1])
             y_pred = model.predict(x)
