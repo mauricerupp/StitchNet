@@ -42,7 +42,7 @@ resnet.load_weights('/data/cvg/maurice/logs/RN2_S1/weight_logs/rn2_weights-impro
 
 y_pred = resnet.predict(x)
 y_pred = revert_zero_center(y_pred)*255
-#y_pred = np.array(np.rint(y_pred), dtype=int)
+y_pred = np.array(np.rint(y_pred), dtype=int)
 
 fig = plt.figure()
 fig.suptitle('Results of predicting {}Image {} \non epoch {}'.format(set, 1, 20 + 1), fontsize=20)
@@ -54,7 +54,7 @@ ax2.set_title('Y_True covered')
 plt.imshow(covered_target[..., ::-1], interpolation='nearest')
 ax3 = fig.add_subplot(1, 3, 3)
 ax3.set_title('Prediction of model')
-plt.imshow(y_pred[0][..., ::-1], interpolation='nearest', norm=True)
+plt.imshow(y_pred[0][..., ::-1], interpolation=None)
 plt.savefig("/data/cvg/maurice/predicts.png")
 plt.close()
 
