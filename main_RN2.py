@@ -21,8 +21,8 @@ paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 
 # name the model
-DATASET = "S2"
-NAME = "RN2_" + DATASET
+DATASET = "S1"
+NAME = "RN2_" + DATASET + "TEST"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -63,8 +63,6 @@ def image_predictor(epoch, logs):
 
             # predict y (since the model is trained on pictures in [-1,1])
             y_pred = model.predict(x)
-            y_pred = revert_zero_center(y_pred)*255
-            y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
             fig = plt.figure()
@@ -93,12 +91,12 @@ filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
 cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=5, save_weights_only=True)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, DATASET)
-val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
+train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, DATASET)
+val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, DATASET)
 
 # ----- Model setup ----- #
 model = create_model(input_size=input_size, block_amount=20, normalizer="instance", filter_size=128)
-#model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
+model.load_weights('/data/cvg/maurice/logs/RN2_S1/weight_logs/rn2_weights-improvement-20.hdf5')
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=702,

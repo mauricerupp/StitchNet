@@ -21,7 +21,7 @@ paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 
 # name the model
-DATASET = "S3"
+DATASET = "S1"
 NAME = "RN1_" + DATASET
 
 
@@ -63,8 +63,6 @@ def image_predictor(epoch, logs):
 
             # predict y (since the model is trained on pictures in [-1,1])
             y_pred = model.predict(x)
-            y_pred = revert_zero_center(y_pred)*255
-            y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
             fig = plt.figure()
@@ -98,7 +96,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, D
 
 # ----- Model setup ----- #
 model = create_model(input_size=input_size, block_amount=20, normalizer="instance", filter_size=128)
-#model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
+model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=702,

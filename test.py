@@ -21,9 +21,24 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
+img = create_fixed_path('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000002299.jpg')
+y_true_norm = img[1]
+y_true_norm = y_true_norm[:, :, :-3]
+y_true = revert_zero_center(y_true_norm)*255
+y_true = np.array(np.rint(y_true), dtype=int)
+fig = plt.figure()
+fig.suptitle('Results of predicting {}Image {} \non epoch {}'.format(2, 1, 20 + 1), fontsize=20)
+ax1 = fig.add_subplot(1, 3, 1)
+ax1.set_title('Y_True')
+plt.imshow(y_true_norm[..., ::-1], interpolation='nearest') # conversion to RGB
+ax2 = fig.add_subplot(1, 3, 2)
+ax2.set_title('Y_True covered')
+plt.imshow(y_true[..., ::-1], interpolation='nearest')
+plt.savefig("/home/maurice/Dokumente/predicts.png")
+plt.close()
 
 
-
+"""
 input_size=[64,64,15]
 
 img = create_fixed_path('/data/cvg/maurice/000000000030.jpg')
@@ -60,7 +75,7 @@ plt.close()
 
 
 
-"""
+
 input_size=[64,64,3]
 img = np.array(cv2.imread('/data/cvg/maurice/000000000030.jpg'))
 img = random_numpy_crop(img, input_size)
