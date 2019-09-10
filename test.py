@@ -10,6 +10,8 @@ import l2_loss
 import random
 from utilities import *
 import cv2
+from RN_2_nofeat import *
+from fixed_path_one_img import create_fixed_path
 
 
 from tensorflow.python.keras.applications.imagenet_utils import preprocess_input
@@ -20,52 +22,44 @@ import tensorflow as tf
 import datetime
 
 
-te = np.load('/home/maurice/Dokumente/val_snaps_paths.npy')
-for i in range(26):
-    print(te[i])
-
-"""
-
-input_size=[64,64,3]
-img = np.array(cv2.imread('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/000000000030.jpg'))
-img = random_numpy_crop(img, input_size)
-y_true = np.expand_dims(img, axis=0)
-y_true = np.array(zero_center(y_true/255.0), dtype=np.float32)
-
-autoenc = ConvAutoencoder(input_size, norm='instance', isTraining=False)
-
-weights = autoenc.encoder.get_layer(index=3).get_weights()
-weights = np.array(weights)
-print(weights[0][0])
-
-autoenc.encoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/encoder_logs/encepoch0.h5')
-
-weights = autoenc.encoder.get_layer(index=3).get_weights()
-weights = np.array(weights)
-print(weights[0][0])
-
-y_pred = autoenc.encoder.predict(y_true)
-y_pred = np.array(y_pred)
-print(y_pred.shape)
 
 
-y_pred = revert_zero_center(y_pred)*255.0
+input_size=[64,64,15]
+
+img = create_fixed_path('/data/cvg/maurice/000000000030.jpg')
+
+x = img[0]
+x = np.expand_dims(x, axis=0)
+# preprocess y
+y_true = img[1]
+covered_area = y_true[:, :, -3:]
+y_true = y_true[:, :, :-3]
+covered_target = y_true * covered_area
+
+resnet = create_model(input_size=input_size, block_amount=20, normalizer="instance", filter_size=128)
+
+resnet.load_weights('/data/cvg/maurice/logs/RN2_S1/weight_logs/rn2_weights-improvement-15.hdf5')
+
+y_pred = resnet.predict(x)
+y_pred = revert_zero_center(y_pred)*255
 y_pred = np.array(np.rint(y_pred), dtype=int)
 
 fig = plt.figure()
-fig.suptitle('Results of predicting', fontsize=20)
-ax1 = fig.add_subplot(1, 2, 1)
+fig.suptitle('Results of predicting {}Image {} \non epoch {}'.format(set, 1, 20 + 1), fontsize=20)
+ax1 = fig.add_subplot(1, 3, 1)
 ax1.set_title('Y_True')
-plt.imshow(img[..., ::-1], interpolation='nearest')  # conversion to RGB
-ax3 = fig.add_subplot(1, 2, 2)
+plt.imshow(y_true[..., ::-1], interpolation='nearest') # conversion to RGB
+ax2 = fig.add_subplot(1, 3, 2)
+ax2.set_title('Y_True covered')
+plt.imshow(covered_target[..., ::-1], interpolation='nearest')
+ax3 = fig.add_subplot(1, 3, 3)
 ax3.set_title('Prediction of model')
 plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
-plt.savefig("/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback/weight_logs/predicts.png")
+plt.savefig("/data/cvg/maurice/predicts.png")
 plt.close()
 
 
-
-
+"""
 input_size=[64,64,3]
 img = np.array(cv2.imread('/data/cvg/maurice/000000000030.jpg'))
 img = random_numpy_crop(img, input_size)
