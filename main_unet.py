@@ -21,7 +21,7 @@ paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 
 # name the model
-DATASET = "S3"
+DATASET = "S1"
 NAME = "unet_" + DATASET
 
 
@@ -96,12 +96,12 @@ filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
 cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=10, save_weights_only=True)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, DATASET)
-val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
+train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, DATASET)
+val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, DATASET)
 
 # ----- Model setup ----- #
 model = create_model(input_size=input_size)
-#model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
+model.load_weights('/data/cvg/maurice/logs/Benchmarks/unet/unet_S1/weight_logs/unet_weights-improvement-60.hdf5')
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=702,

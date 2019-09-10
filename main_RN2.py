@@ -21,8 +21,8 @@ paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 
 # name the model
-DATASET = "S1"
-NAME = "RN2_" + DATASET + "IMAGES"
+DATASET = "S2"
+NAME = "RN2_" + DATASET + "run2"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -97,8 +97,8 @@ filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
 cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=5, save_weights_only=True)
 
 # ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, DATASET)
-val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, DATASET)
+train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, DATASET)
+val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
 
 # ----- Model setup ----- #
 model = create_model(input_size=input_size, block_amount=20, normalizer="instance", filter_size=128)
