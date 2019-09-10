@@ -22,7 +22,7 @@ input_size = [64,64,15]
 
 # name the model
 DATASET = "S1"
-NAME = "RN2_" + DATASET + "TEST"
+NAME = "RN2_" + DATASET + "TEST2"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -58,11 +58,17 @@ def image_predictor(epoch, logs):
             # preprocess y
             y_true = loaded_data[1]
             covered_area = y_true[:, :, -3:]
+
             y_true = y_true[:, :, :-3]
+            y_true = revert_zero_center(y_true) * 255
+            y_true = np.array(np.rint(y_true), dtype=int)
+
             covered_target = y_true * covered_area
 
             # predict y (since the model is trained on pictures in [-1,1])
             y_pred = model.predict(x)
+            y_pred = revert_zero_center(y_pred) * 255
+            y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
             fig = plt.figure()
