@@ -64,7 +64,8 @@ def image_predictor(epoch, logs):
             y_true = np.array(np.rint(y_true), dtype=int)
             print(covered_area)
             covered_target = y_true * covered_area
-            print(covered_target)
+            covered_target = np.array(np.rint(covered_target), dtype=int)
+
 
             # predict y (since the model is trained on pictures in [-1,1])
             y_pred = model.predict(x)
