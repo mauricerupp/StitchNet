@@ -22,7 +22,7 @@ input_size = [64,64,15]
 
 # name the model
 DATASET = "S2"
-NAME = "RN2_" + DATASET + "run2"
+NAME = "RN2_" + DATASET
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -102,7 +102,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, D
 
 # ----- Model setup ----- #
 model = create_model(input_size=input_size, block_amount=20, normalizer="instance", filter_size=128)
-model.load_weights('/data/cvg/maurice/logs/RN2_S1/weight_logs/rn2_weights-improvement-20.hdf5')
+model.load_weights('/data/cvg/maurice/logs/RN2_S2/weight_logs/rn2_weights-improvement-20.hdf5')
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=702,
