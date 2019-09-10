@@ -66,6 +66,8 @@ def image_predictor(epoch, logs):
 
             # predict y (since the model is trained on pictures in [-1,1])
             y_pred = model.predict(x)
+            y_pred = revert_zero_center(y_pred) * 255
+            y_pred = np.array(np.rint(y_pred), dtype=int)
 
             # save the result
             fig = plt.figure()
