@@ -55,7 +55,7 @@ plt.imshow(covered_target[..., ::-1], interpolation='nearest')
 ax3 = fig.add_subplot(1, 3, 3)
 ax3.set_title('Prediction of model')
 plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
-plt.savefig("/data/cvg/maurice/rn2/predicts.png")
+plt.savefig("/data/cvg/maurice/predicts.png")
 plt.close()
 
 
