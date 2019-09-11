@@ -9,6 +9,8 @@ from tensorflow.python.keras.layers import *
 from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
+from tensorflow.python.keras.utils import multi_gpu_model
+
 
 
 def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=6, pixelvalue_range=None):
@@ -62,6 +64,7 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     out = Conv2D(3, kernel_size=3, padding='same')(out)
 
     model = Model(inputs=inputs, outputs=out)
+    model = multi_gpu_model(model, gpus=2)
     model.compile(optimizer='adam', loss=l1_loss.custom_loss, metrics=['accuracy', stitched_PSNR, stitched_ssim])
 
     model.summary()
