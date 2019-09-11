@@ -77,4 +77,4 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
 
     return model
 
-mod = create_model(input_size=(64,64,15), D=10, C=6, G0=320, G=64)
+#mod = create_model(input_size=(64,64,15), D=10, C=6, G0=320, G=64)
