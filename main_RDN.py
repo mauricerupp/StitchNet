@@ -1,6 +1,6 @@
 # own classes
 from batch_generator import *
-from RDN_3 import *
+from RDN_3 import create_model
 from utilities import *
 from fixed_path_one_img import *
 from smooth_random_path_one_img import *
