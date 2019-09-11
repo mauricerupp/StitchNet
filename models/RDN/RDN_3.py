@@ -32,9 +32,8 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     # extract features for every input image
     conv1 = feature_extract(inputs, 64, 3)
 
-
     # first RDB
-    RDB = create_RDB(conv1, 'RDB1', G0, G, C)
+    RDB = create_RDB(inputs, 'RDB1', G0, G, C)
     RDBlocks_list = [RDB, ]
 
     # add the remaining RDB

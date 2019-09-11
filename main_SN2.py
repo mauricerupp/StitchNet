@@ -20,7 +20,7 @@ current_model = StitchDecoder
 
 # name the model
 DATASET = "S2"
-NAME = str(current_model.__name__) + "_V520_80_Run2_" + DATASET
+NAME = str(current_model.__name__) + "_SN2_" + DATASET
 
 
 # ----- Callbacks / Helperfunctions ----- #
