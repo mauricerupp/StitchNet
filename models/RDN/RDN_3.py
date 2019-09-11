@@ -12,7 +12,6 @@ import datetime
 from tensorflow.python.keras.utils import multi_gpu_model
 
 
-
 def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=6, pixelvalue_range=None):
     """
     RDN implemented from paper 'Residual Dense Network for Image Super-Resolution
