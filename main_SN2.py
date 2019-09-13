@@ -19,7 +19,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-DATASET = "S1"
+DATASET = "S3"
 NAME = str(current_model.__name__) + "_SN2_" + DATASET
 
 
