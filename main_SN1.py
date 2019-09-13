@@ -94,7 +94,7 @@ cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verb
 
 # ----- Batch-generator setup ----- #
 train_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, DATASET)
-val_data_generator = MyGenerator(paths_dir + "smallval_snaps_paths.npy", batchsize, DATASET)
+val_data_generator = MyGenerator(paths_dir + "smalltrain_snaps_paths.npy", batchsize, DATASET)
 
 # ----- Model setup ----- #
 model = StitchDecoder(input_size, normalizer='instance', isTraining=True, weights_path='/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run4/weight_logs/auto_weights-improvement-133.hdf5')

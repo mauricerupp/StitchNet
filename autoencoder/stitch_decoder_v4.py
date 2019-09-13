@@ -42,7 +42,6 @@ class StitchDecoder(object):
         # concatenate the images and decode them to a final image
         x = Concatenate(axis=3, name='conc_img_features')(encoded_img_list)
 
-
         # global convolutions
         for i in range(2):
             x = Conv2D(int(2048 / 2 ** i), 3, activation=None, padding='same', strides=1,
