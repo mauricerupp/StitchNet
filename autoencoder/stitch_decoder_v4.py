@@ -51,7 +51,7 @@ class StitchDecoder(object):
 
         # decoder blocks
         for i in range(5):
-            x = big_dec_block_leaky(x, int(1024 / 2 ** i), i + 1, normalizer, isTraining, "D2")
+            x = dec_block_leaky(x, int(1024 / 2 ** i), i + 1, normalizer, isTraining, "D2")
         out = Conv2D(3, 3, activation='tanh', padding='same', name='final_conv')(x)
 
         self.stitchdecoder = Model(inputs=encoder_inputs, outputs=out, name='stitcher')
