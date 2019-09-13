@@ -61,7 +61,7 @@ class StitchDecoder(object):
         self.stitchdecoder = multi_gpu_model(self.stitchdecoder, gpus=2)
 
         self.stitchdecoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),
-                                   loss=vgg_loss, metrics=['accuracy', stitched_PSNR, stitched_ssim,
+                                   loss=vgg_loss, metrics=['accuracy', stitched_PSNR,
                                                            perceptual_stitched_loss, mae_loss])
 
     def load_weights(self, path):
