@@ -19,7 +19,7 @@ input_size = [64,64,15]
 current_model = StitchDecoder
 
 # name the model
-DATASET = "S2"
+DATASET = "S1"
 NAME = str(current_model.__name__) + "_SN1_" + DATASET
 
 
@@ -97,7 +97,7 @@ train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsiz
 val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
 
 # ----- Model setup ----- #
-model = StitchDecoder(input_size, normalizer='instance', isTraining=True)
+model = StitchDecoder(input_size, normalizer='instance', isTraining=True, weights_path='/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run4/weight_logs/auto_weights-improvement-133.hdf5')
 #model.load_weights('/data/cvg/maurice/logs/StitchDecoder_V520_80/weight_logs/d2_weights-improvement-10.hdf5')
 
 # train the model
