@@ -16,13 +16,13 @@ import matplotlib.pyplot as plt
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 24
+batchsize = 64
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 
 # name the model
 DATASET = "S1"
-NAME = "RDN_" + DATASET
+NAME = "RDN_" + DATASET + "w/o_Featextractor"
 
 
 # ----- Callbacks / Helperfunctions ----- #
