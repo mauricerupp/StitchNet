@@ -22,7 +22,7 @@ input_size = [64,64,15]
 
 # name the model
 DATASET = "S1"
-NAME = "RDN_" + DATASET + "w/o_Featextractor"
+NAME = "RDN_" + DATASET + "wo_Featextractor"
 
 
 # ----- Callbacks / Helperfunctions ----- #
