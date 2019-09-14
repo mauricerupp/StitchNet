@@ -21,6 +21,9 @@ from tensorflow.python.keras.utils import plot_model
 import tensorflow as tf
 import datetime
 
+path = np.load('/home/maurice/Dokumente/train_snaps_paths.npy')
+print(path[7])
+"""
 img = create_fixed_path('/home/maurice/Dokumente/Try_Models/coco_try/TR/000000002299.jpg')
 y_true_norm = img[1]
 y_true_norm = y_true_norm[:, :, :-3]
@@ -38,7 +41,7 @@ plt.savefig("/home/maurice/Dokumente/predicts.png")
 plt.close()
 
 
-"""
+
 input_size=[64,64,15]
 
 img = create_fixed_path('/data/cvg/maurice/000000000030.jpg')
