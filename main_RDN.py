@@ -101,7 +101,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, D
 
 # ----- Model setup ----- #
 model = create_model(input_size=input_size, D=10, C=6, G0=320, G=32)
-#model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
+model.load_weights('/data/cvg/maurice/logs/RDN_3_minus1_1/weight_logs/')
 
 # train the model
 model.fit_generator(train_data_generator,  epochs=702,
