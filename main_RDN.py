@@ -21,8 +21,8 @@ paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 
 # name the model
-DATASET = "S3"
-NAME = "RDN_" + DATASET + "wo_featureextractor"
+DATASET = "S1"
+NAME = "RDN_" + DATASET + "wo_featureextractor_rerun"
 
 
 # ----- Callbacks / Helperfunctions ----- #
@@ -33,7 +33,7 @@ def image_predictor(epoch, logs):
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 2 == 0:  # print samples every 50 images
+    if epoch % 1 == 0:  # print samples every 50 images
         for i in range(0,25):
             # load X
             set = ""
