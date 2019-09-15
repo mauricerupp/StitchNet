@@ -31,10 +31,10 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     inputs = Input(input_size)
 
     # extract features for every input image
-    conv1 = feature_extract(inputs, 64, 3)
+    #conv1 = feature_extract(inputs, 64, 3)
 
     # first RDB
-    RDB = create_RDB(conv1, 'RDB1', G0, G, C)
+    RDB = create_RDB(inputs, 'RDB1', G0, G, C)
     RDBlocks_list = [RDB, ]
 
     # add the remaining RDB
@@ -45,10 +45,10 @@ def create_model(pretrained_weights=None, input_size=None, G0=64, G=32, D=20, C=
     RDB_out = Concatenate(axis=3)(RDBlocks_list)
     RDB_out = Conv2D(G0, kernel_size=1, padding='same', name='global_1x1_conv')(RDB_out)
     RDB_out = Conv2D(G0, kernel_size=3, padding='same', name='global_conv3')(RDB_out)
-    out = Add()([RDB_out, conv1])
+    out = Add()([RDB_out, inputs])
 
     # concatenate the very first extracted features with the output of the residual learning
-    out = Concatenate(axis=3)([out, conv1])
+    out = Concatenate(axis=3)([out, inputs])
 
     # Upscaling / depth to space
     out = Conv2D(256, kernel_size=3, padding='same', name='upscale_conv_1')(out)
