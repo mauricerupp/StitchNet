@@ -4,8 +4,8 @@ This is the code of my Bachelor's thesis 'StitchNet: Image Stitching using Autoe
 and Deep Convolutional Neural Networks'.
 
 ### Abstract of Thesis
-This thesis explores the prospect of artificial neural networks for image process-
-ing tasks. More specifically, it aims to achieve the goal of stitching multiple
+This thesis explores the prospect of artificial neural networks for image processing tasks. 
+More specifically, it aims to achieve the goal of stitching multiple
 overlapping images to form a bigger, panoramic picture. Until now, this task
 is solely approached with ”classical”, hardcoded algorithms while deep learning
 is at most used for specific subtasks. This thesis introduces a novel end-to-end
