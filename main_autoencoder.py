@@ -1,20 +1,16 @@
 # own classes
 from batch_generator_autoencoder import *
-from autoencoder_v6 import *
+from autoencoder_64x64 import *
 from utilities import *
-from encoder_callback import *
 
 # packages
 from tensorflow import keras
 from tensorflow.python.keras.callbacks import TensorBoard
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import tensorflow as tf
-from tensorflow.python.keras.backend import set_session
 
-#os.environ['CUDA_VISIBLE_DEVICES'] = str(1)
 tf.keras.backend.clear_session()
 
 # set the constants
@@ -24,18 +20,17 @@ input_size = [64, 64, 3]
 current_model = ConvAutoencoder
 
 # name the model
-NAME = str(current_model.__name__) + "_V6_instance_20_80_newcallback_run4"
+NAME = str(current_model.__name__)
 
 
 # ----- Callbacks / Helperfunctions ----- #
 def image_predictor(epoch, logs):
     """
-    creates a tester, that predicts the same few images after every epoch and stores them as png
-    we take 4 from the training and 4 from the validation set
+    creates a tester, which predicts a few images after a certain amount of epochs and stores them as png
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 20 == 0:  # print samples every 50 images
+    if epoch % 20 == 0:  # print samples every 20 images
         for i in range(1, 15):
             # load the ground truth
             set = ""
@@ -48,7 +43,7 @@ def image_predictor(epoch, logs):
                 img = np.array(cv2.imread(list[i]))
                 set += "test-"
 
-            # predict y (since the model is trained on pictures in [-1,1]) and we always take the same crop
+            # predict y (since the model is trained on pictures in [-1,1], it has to be preprocessed)
             img = random_numpy_crop(img, input_size)
             y_true = np.expand_dims(img, axis=0)
             y_pred = model.autoencoder.predict(zero_center(y_true/255.0))
@@ -68,11 +63,14 @@ def image_predictor(epoch, logs):
             plt.close()
 
 
+# ----- Callbacks ----- #
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
+SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/auto'.format(NAME)
+filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
+cp_callback = keras.callbacks.ModelCheckpoint
 
 # create a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME), histogram_freq=0)
-
 
 # ----- Batch-generator setup ----- #
 train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, input_size)
@@ -82,13 +80,7 @@ val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, i
 model = ConvAutoencoder(input_size, norm='instance', isTraining=True)
 model.autoencoder.load_weights('/data/cvg/maurice/logs/ConvAutoencoder_V6_instance_20_80_newcallback_run3/weight_logs/auto_weights-improvement-95.hdf5')
 
-# create checkpoint callbacks to store the training weights
-SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/auto'.format(NAME)
-filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
-cp_callback = keras.callbacks.ModelCheckpointv
-
-
-# train the model
+# ----- Training ----- #
 model.autoencoder.fit_generator(train_data_generator,  epochs=800,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator, max_queue_size=64, workers=12)

@@ -1,8 +1,6 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
-import logging
 import tensorflow as tf
 from tensorflow.python.keras.layers import *
 import random
@@ -10,6 +8,10 @@ import cv2
 import tensorflow.keras.backend as K
 from tensorflow.python.keras import initializers, regularizers, constraints
 import numpy as np
+
+"""
+This is a file where all the shared utility functions and layers are stored
+"""
 
 
 # ---- Functions ---- #
@@ -52,7 +54,7 @@ def revert_zero_center(in_img):
     return in_img / 2 + 0.5
 
 
-def random_numpy_crop_BIG(in_img, crop_size):
+def random_numpy_crop(in_img, crop_size):
     img_size = in_img.shape
     assert img_size[2] == crop_size[2]
 
@@ -60,17 +62,6 @@ def random_numpy_crop_BIG(in_img, crop_size):
     if img_size[0] <= crop_size[0] or img_size[1] <= crop_size[1]:
         in_img = scale_img(in_img, crop_size)
         img_size = in_img.shape
-    """
-    Avoid this part for experimental reasons for autoenc_v6, v5 was trained with this line
-    # if the image is too big, we scale it down in order to have some detail in the image and not only blurry background
-    if img_size[0] > 5*crop_size[0] or img_size[1] > 5*crop_size[1]:
-        new_size = np.array(crop_size)
-
-        new_size[0] = 2*new_size[0]
-        new_size[1] = 2*new_size[1]
-        in_img = scale_img(in_img, new_size)
-        img_size = in_img.shape
-    """
 
     top_left_corner = [random.randint(0, int(img_size[0]-crop_size[0])),
                        random.randint(0, int(img_size[1]-crop_size[1]))]
@@ -83,37 +74,6 @@ def random_numpy_crop_BIG(in_img, crop_size):
     if flipit:
         out = np.fliplr(out)
 
-    assert out.shape[0] == crop_size[0]
-    assert out.shape[1] == crop_size[1]
-    assert out.shape[2] == crop_size[2]
-    return out
-
-
-def random_numpy_crop(in_img, crop_size):
-    img_size = in_img.shape
-    assert img_size[2] == crop_size[2]
-
-    # if the image is too small rescale it to atleast the crop_size
-    if img_size[0] <= crop_size[0] or img_size[1] <= crop_size[1]:
-        in_img = scale_img(in_img, crop_size)
-        img_size = in_img.shape
-    """
-    Avoid this part for experimental reasons for autoenc_v6, v5 was trained with this line
-    # if the image is too big, we scale it down in order to have some detail in the image and not only blurry background
-    if img_size[0] > 5*crop_size[0] or img_size[1] > 5*crop_size[1]:
-        new_size = np.array(crop_size)
-
-        new_size[0] = 2*new_size[0]
-        new_size[1] = 2*new_size[1]
-        in_img = scale_img(in_img, new_size)
-        img_size = in_img.shape
-    """
-
-    top_left_corner = [random.randint(0, int(img_size[0]-crop_size[0])),
-                       random.randint(0, int(img_size[1]-crop_size[1]))]
-
-    out = in_img[top_left_corner[0]:top_left_corner[0]+crop_size[0],
-           top_left_corner[1]:top_left_corner[1]+crop_size[1], :]
     assert out.shape[0] == crop_size[0]
     assert out.shape[1] == crop_size[1]
     assert out.shape[2] == crop_size[2]
@@ -137,10 +97,18 @@ def scale_img(img, des_size):
 
 
 def resize_img(img, desired_size):
+    """
+    Difference to scale_img(): Where scale_img just upscales an image with a certain factor
+    resize_img() resize an image to a fixed size and eventually cuts away a part of the image in order not to wrap it
+    :param img:
+    :param desired_size:
+    :return:
+    """
     # scale the image until it covers the whole desired size
     img = scale_img(img, desired_size)
 
     (h, w) = img.shape[:2]
+
     # cut the image so that the cut frame is centered
     h_cut = h - desired_size[0]
     space_h = int(h_cut / 2)
@@ -190,6 +158,7 @@ def crop(img, center, size):
         right = size[1]
     img = img[up:under, left:right]
     assert img.shape[:2] == (size[0], size[1])
+
     return img
 
 
@@ -202,6 +171,9 @@ def depth_to_space(input_layer, blocksize):
 
 
 def create_resblock(prior_layer, block_name, n_filters, kernel_size, stride, dilation, normalizer, isTraining=True):
+    """
+    creates a resblock with two convolution layers and one skip connection
+    """
     x = Conv2D(filters=n_filters, kernel_size=kernel_size,
                strides=stride, dilation_rate=dilation,
                name=block_name + "_conv1",
@@ -240,10 +212,15 @@ def create_RDB(prior_layer, block_name, G0=64, G=32, C=6):
 
     # append the last convolutional layer of the RDB to the rest of conv layers
     layerlist.append(conv_layer)
+
     out = Concatenate(axis=3, name=block_name+'_conc')(layerlist)
-    # the last conv layer which has a kernel_size of 1
+
+    # the last conv layer which has a kernel_size of 1 as in the paper
     feat = Conv2D(G0, kernel_size=1, padding='same', activation='relu', name=block_name+'_local_Conv')(out)
+
+    # the last skip connection
     feat = Add()([feat, prior_layer])
+
     return feat
 
 
@@ -267,64 +244,11 @@ def feature_extract(input_tensor, filter, kernel):
     return Concatenate(axis=3, name='conc_img_features')(in_conv_list)
 
 
-def encode(input_tensor, kernel):
-    """
-    a simple encoder which uses strided convolutions and an increasing amount of filters
-    conv + norm (add trainable variables to graph colleciton) + activation
-    :param input_tensor:
-    """
-
-    conv = Conv2D(64, kernel, activation='relu', padding='same', name='encoder_conv1')(input_tensor)
-    conv = Conv2D(64, kernel, activation='relu', padding='same', name='encoder_conv2')(conv)
-    conv = Conv2D(128, kernel, activation='relu', padding='same', name='encoder_conv3', strides=2)(conv)
-    conv = Conv2D(128, kernel, activation='relu', padding='same', name='encoder_conv4')(conv)
-    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv5', strides=2)(conv)
-    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv6')(conv)
-    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv7', strides=2)(conv)
-    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv8')(conv)
-    conv = Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv9', strides=2)(conv)
-    return Conv2D(256, kernel, activation='relu', padding='same', name='encoder_conv10')(conv)
-
-
-def single_decode(input_tensor, kernel):
-    """
-    a decoder fitting for function encode
-    :param input_tensor:
-    """
-    conv = Conv2DTranspose(128, kernel, activation='relu', padding='same', name='decoder_conv1', strides=2)(input_tensor)
-    conv = Conv2D(128, kernel, activation='relu', padding='same', name='decoder_conv2')(conv)
-    conv = Conv2DTranspose(64, kernel, activation='relu', padding='same', name='decoder_conv3', strides=2)(conv)
-    conv = Conv2D(64, kernel, activation='relu', padding='same', name='decoder_conv4')(conv)
-    conv = Conv2DTranspose(32, kernel, activation='relu', padding='same', name='decoder_conv5', strides=2)(conv)
-    conv = Conv2D(32, kernel, activation='relu', padding='same', name='decoder_conv6')(conv)
-    conv = Conv2DTranspose(16, kernel, activation='relu', padding='same', name='decoder_conv7', strides=2)(conv)
-    conv = Conv2D(16, kernel, activation='relu', padding='same', name='decoder_conv8')(conv)
-    return Conv2DTranspose(3, kernel, activation='tanh', padding='same', name='decoder_conv9', strides=1)(conv)
-
-
-def enc_block(input_layer, filters, index, normalizer, isTraining):
-    if filters > 256:
-        filters = 256
-    if index == 1:
-        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_1'.format(index))(input_layer)
-        x = Activation('relu')(x)
-    else:
-        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_1'.format(index))(input_layer)
-        x = normalize(x, 'encoder_norm{}_1'.format(index), normalizer, isTraining)
-        x = Activation('relu')(x)
-
-    x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='encoder_conv{}_2'.format(index))(x)
-    x = normalize(x, 'encoder_norm{}_2'.format(index), normalizer, isTraining)
-    x = Activation('relu')(x)
-    if filters < 512:
-        x = Conv2D(filters*2, 3, activation=None, padding='same', strides=2, name='encoder_conv{}_3'.format(index))(x)
-    else:
-        x = Conv2D(filters, 3, activation=None, padding='same', strides=2, name='encoder_conv{}_3'.format(index))(x)
-    x = normalize(x, 'encoder_norm{}_3'.format(index), normalizer, isTraining)
-    return Activation('relu')(x)
-
-
 def enc_block_leaky(input_layer, filters, index, normalizer, isTraining):
+    """
+    An encoderblock with three convolutions used inside the autoencoder with leakyRelu activation functions
+    and a filtersize, which is restrained to 512.
+    """
     if filters > 256:
         filters = 256
     if index == 1:
@@ -343,22 +267,14 @@ def enc_block_leaky(input_layer, filters, index, normalizer, isTraining):
     else:
         x = Conv2D(filters, 3, activation=None, padding='same', strides=2, name='encoder_conv{}_3'.format(index))(x)
     x = normalize(x, 'encoder_norm{}_3'.format(index), normalizer, isTraining)
+
     return LeakyReLU()(x)
 
 
-def dec_block(input_layer, filters, index, normalizer, isTraining, modelname):
-    x = Conv2DTranspose(filters, 3, activation=None, padding='same', name='{}_decoder_conv{}_1'.format(modelname, index), strides=2)(input_layer)
-    x = normalize(x, '{}_decoder_norm{}_1'.format(modelname, index), normalizer, isTraining)
-    x = Activation('relu')(x)
-    for i in range(2):
-        x = Conv2D(filters, 3, activation=None, padding='same', strides=1, name='{}_decoder_conv{}_{}'.format(modelname, index, i +2))(x)
-        x = normalize(x, '{}_decoder_norm{}_{}'.format(modelname, index, i+2), normalizer, isTraining)
-        x = Activation('relu')(x)
-
-    return x
-
-
 def dec_block_leaky(input_layer, filters, index, normalizer, isTraining, modelname):
+    """
+    A decoderblock with three convolutions used inside the autoencoder with leakyRelu activation functions.
+    """
     x = Conv2DTranspose(filters, 3, activation=None, padding='same', name='{}_decoder_conv{}_1'.format(modelname, index), strides=2)(input_layer)
     x = normalize(x, '{}_decoder_norm{}_1'.format(modelname, index), normalizer, isTraining)
     x = LeakyReLU()(x)
@@ -382,7 +298,7 @@ def big_dec_block_leaky(input_layer, filters, index, normalizer, isTraining, mod
     return x
 
 
-# ---- Normalization ---- #
+# ---- Normalization Layers ---- #
 def normalize(input_layer, name, normalizer, training_flag):
     if normalizer.lower() == 'batch':
         return BatchNormalization(name=name, axis=3, trainable=training_flag)(input_layer)

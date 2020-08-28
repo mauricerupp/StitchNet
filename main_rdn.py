@@ -1,6 +1,6 @@
 # own classes
 from batch_generator_stitching import *
-from unet import *
+from rdn import *
 from S1_fixed_path_one_img import *
 from S2_smooth_random_path_one_img import *
 from S3_very_random_path_one_img import *
@@ -19,14 +19,15 @@ paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
 
 # name the model and choose the dataset
-DATASET = "S3"
-NAME = "unet_" + DATASET
+DATASET = "S1"
+NAME = "RDN_" + DATASET
 
 
 # ----- Callbacks / Helperfunctions ----- #
 def image_predictor(epoch, logs):
     """
     creates a tester, which predicts a few images after a certain amount of epochs and stores them as png
+    we take 4 from the training and 4 from the validation set
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
@@ -52,6 +53,7 @@ def image_predictor(epoch, logs):
             # preprocess x
             x = loaded_data[0]
             x = np.expand_dims(x, axis=0)
+
             # preprocess y
             y_true = loaded_data[1]
             covered_area = y_true[:, :, -3:]
@@ -84,10 +86,9 @@ def image_predictor(epoch, logs):
 
 # ----- Callbacks ----- #
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
-SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/unet'.format(NAME)
+SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/rdn'.format(NAME)
 filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
 cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=10, save_weights_only=True)
-
 
 # create a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
@@ -97,7 +98,7 @@ train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsiz
 val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
 
 # ----- Model setup ----- #
-model = create_model(input_size=input_size)
+model = create_model(input_size=input_size, D=10, C=6, G0=320, G=32)
 
 # ----- Training ----- #
 model.fit_generator(train_data_generator,  epochs=702,

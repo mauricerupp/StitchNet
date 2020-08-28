@@ -1,9 +1,7 @@
 # own classes
 from batch_generator_stitching import *
-from unet import *
-from S1_fixed_path_one_img import *
-from S2_smooth_random_path_one_img import *
-from S3_very_random_path_one_img import *
+from stitchnet2 import *
+from utilities import *
 
 # packages
 from tensorflow import keras
@@ -14,24 +12,26 @@ import matplotlib.pyplot as plt
 tf.keras.backend.clear_session()
 
 # set the constants
-batchsize = 64
+batchsize = 32
 paths_dir = '/data/cvg/maurice/unprocessed/'
 input_size = [64,64,15]
+current_model = StitchDecoder
 
 # name the model and choose the dataset
-DATASET = "S3"
-NAME = "unet_" + DATASET
+DATASET = "S2"
+NAME = str(current_model.__name__) + "v1_" + DATASET
 
 
 # ----- Callbacks / Helperfunctions ----- #
 def image_predictor(epoch, logs):
     """
-    creates a tester, which predicts a few images after a certain amount of epochs and stores them as png
+    createy a tester, that predicts the same few images after every epoch and stores them as png
+    we take 4 from the training and 4 from the validation set
     :param epoch:
     :param logs: has to be given as argument in order to compile
     """
-    if epoch % 10 == 0:  # print samples every 10 images
-        for i in range(0,25):
+    if epoch % 5 == 0:  # print samples every 50 images
+        for i in range(0,9):
             # load X
             set = ""
             if i % 2 == 0:
@@ -62,7 +62,7 @@ def image_predictor(epoch, logs):
             covered_target = np.array(np.rint(covered_target), dtype=int)
 
             # predict y (since the model is trained on pictures in [-1,1], the post-processing reverts it to [0,255])
-            y_pred = model.predict(x)
+            y_pred = model.stitchdecoder.predict(x)
             y_pred = revert_zero_center(y_pred)*255
             y_pred = np.array(np.rint(y_pred), dtype=int)
 
@@ -82,24 +82,27 @@ def image_predictor(epoch, logs):
             plt.close()
 
 
-# ----- Callbacks ----- #
 cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
-SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/unet'.format(NAME)
-filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
-cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=10, save_weights_only=True)
-
 
 # create a TensorBoard
 tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
+
+# create checkpoint callbacks to store the training weights
+SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/d2'.format(NAME)
+filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
+cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=5, save_weights_only=True)
 
 # ----- Batch-generator setup ----- #
 train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, DATASET)
 val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
 
 # ----- Model setup ----- #
-model = create_model(input_size=input_size)
+model = StitchDecoder(input_size, normalizer='instance', isTraining=True)
+#model.load_weights('/data/cvg/maurice/logs/StitchDecoder_AEv6_D2v4_MAE/weight_logs/')
 
-# ----- Training ----- #
-model.fit_generator(train_data_generator,  epochs=702,
+# train the model
+model.stitchdecoder.fit_generator(train_data_generator,  epochs=5502,
                     callbacks=[cp_callback, tensorboard, cb_imagepredict],
                     validation_data=val_data_generator, max_queue_size=64, workers=12)
+
+model.stitchdecoder.save(SAVE_PATH)
