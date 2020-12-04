@@ -23,17 +23,17 @@ quantitative as well as qualitative results.
 <img src="https://github.com/mauricerupp/StitchNet/blob/master/images/autoencresult.jpg?raw=true" alt="drawing" width="400"/>
 </p>
 
-### Network Architecture
+### StitchNet Architecture
 <p align="center">
 <img src="https://github.com/mauricerupp/StitchNet/blob/master/images/stitchnet.jpg" alt="drawing" width="650"/>
 </p>
 
-### Pre-Trained StitchNet with Dataset 1 - Results
+### Pre-Trained StitchNet applied on Dataset 1 - Results
 <p align="center">
 <img src="https://github.com/mauricerupp/StitchNet/blob/master/images/sn1_s1.jpg" alt="drawing" width="700"/>
 </p>
 
-### Pre-Trained StitchNet with Dataset 2 - Results
+### Pre-Trained StitchNet applied on Dataset 2 - Results
 <p align="center">
 <img src="https://github.com/mauricerupp/StitchNet/blob/master/images/sn1_s2.jpg" alt="drawing" width="700"/>
 </p>
