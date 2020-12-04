@@ -4,101 +4,61 @@ from rn1 import *
 from S1_fixed_path_one_img import *
 from S2_smooth_random_path_one_img import *
 from S3_very_random_path_one_img import *
+from utilities import image_predictor
 
 # packages
 from tensorflow import keras
 from tensorflow.python.keras.callbacks import TensorBoard
 import numpy as np
 import matplotlib.pyplot as plt
-
-tf.keras.backend.clear_session()
-
-# set the constants
-batchsize = 64
-paths_dir = '/data/cvg/maurice/unprocessed/'
-input_size = [64,64,15]
-
-# name the model and choose the dataset
-DATASET = "S1"
-NAME = "RN1_" + DATASET
+import argparse
 
 
-# ----- Callbacks / Helperfunctions ----- #
-def image_predictor(epoch, logs):
-    """
-    creates a tester, which predicts a few images after a certain amount of epochs and stores them as png
-    :param epoch:
-    :param logs: has to be given as argument in order to compile
-    """
-    if epoch % 10 == 0:  # print samples every 10 images
-        for i in range(0,25):
-            # load X
-            set = ""
-            if i % 2 == 0:
-                list = np.load('/data/cvg/maurice/unprocessed/train_snaps_paths.npy')
-                set += "train-"
-            else:
-                list = np.load('/data/cvg/maurice/unprocessed/val_snaps_paths.npy')
-                set += "test-"
+def main():
+    # parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--batchsize", type=int, default=64)
+    parser.add_argument("--inputdir", type=str, default='/data/cvg/maurice/unprocessed/')
+    parser.add_argument("--storagedir", type=str, default='/data/cvg/maurice/logs/')
+    parser.add_argument("--epochs", type=int, default=700)
+    parser.add_argument("--datasettype", type=str, default='S1')
+    parser.add_argument("--norm", type=str, default='instance')
+    parser.add_argument("--blockamount", type=int, default=20)
+    parser.add_argument("--filtersize", type=int, default=128)
+    args = parser.parse_args()
 
-            # create the path
-            if DATASET == "S1":
-                loaded_data = create_fixed_path(list[i])
-            elif DATASET == "S2":
-                loaded_data = create_smooth_rand_path(list[i])
-            else:
-                loaded_data = create_very_rand_path(list[i])
+    tf.keras.backend.clear_session()
 
-            # preprocess x
-            x = loaded_data[0]
-            x = np.expand_dims(x, axis=0)
-            # preprocess y
-            y_true = loaded_data[1]
-            covered_area = y_true[:, :, -3:]
-            y_true = y_true[:, :, :-3]
-            y_true = revert_zero_center(y_true) * 255
-            y_true = np.array(np.rint(y_true), dtype=int)
-            covered_target = y_true * covered_area
-            covered_target = np.array(np.rint(covered_target), dtype=int)
+    # set the constants
+    batchsize = args.batchsize
+    paths_dir = args.inputdir
+    input_size = [64,64,15]
 
-            # predict y (since the model is trained on pictures in [-1,1], the post-processing reverts it to [0,255])
-            y_pred = model.predict(x)
-            y_pred = revert_zero_center(y_pred)*255
-            y_pred = np.array(np.rint(y_pred), dtype=int)
+    # name the model and choose the dataset
+    DATASET = args.datasettype
+    NAME = "RN1_" + DATASET
 
-            # save the result
-            fig = plt.figure()
-            fig.suptitle('Results of predicting {}Image {} \non epoch {}'.format(set, i, epoch + 1), fontsize=20)
-            ax1 = fig.add_subplot(1, 3, 1)
-            ax1.set_title('Y_True')
-            plt.imshow(y_true[..., ::-1], interpolation='nearest') # conversion to RGB
-            ax2 = fig.add_subplot(1, 3, 2)
-            ax2.set_title('Y_True covered')
-            plt.imshow(covered_target[..., ::-1], interpolation='nearest')
-            ax3 = fig.add_subplot(1, 3, 3)
-            ax3.set_title('Prediction of model')
-            plt.imshow(y_pred[0][..., ::-1], interpolation='nearest')
-            plt.savefig("/data/cvg/maurice/logs/{}/Prediction-img{}-epoch{}.png".format(NAME, i, epoch + 1))
-            plt.close()
+    # ----- Callbacks ----- #
+    cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
+    SAVE_PATH = args.storagedir + '/{}/weight_logs/rn1'.format(NAME)
+    filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
+    cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=10, save_weights_only=True)
+
+    # create a TensorBoard
+    tensorboard = TensorBoard(log_dir=args.storagedir + '{}/tb_logs/'.format(NAME))
+
+    # ----- Batch-generator setup ----- #
+    train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, DATASET)
+    val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
+
+    # ----- Model setup ----- #
+    model = create_model(input_size=input_size, block_amount=args.blockamount, normalizer=args.norm, filter_size=args.filtersize)
+
+    # ----- Training ----- #
+    model.fit_generator(train_data_generator,  epochs=args.epochs,
+                        callbacks=[cp_callback, tensorboard, cb_imagepredict],
+                        validation_data=val_data_generator, max_queue_size=64, workers=12)
 
 
-# ----- Callbacks ----- #
-cb_imagepredict = keras.callbacks.LambdaCallback(on_epoch_end=image_predictor)
-SAVE_PATH = '/data/cvg/maurice/logs/{}/weight_logs/rn1'.format(NAME)
-filepath = SAVE_PATH + '_weights-improvement-{epoch:02d}.hdf5'
-cp_callback = keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=False, mode='max', period=10, save_weights_only=True)
-
-# create a TensorBoard
-tensorboard = TensorBoard(log_dir='/data/cvg/maurice/logs/{}/tb_logs/'.format(NAME))
-
-# ----- Batch-generator setup ----- #
-train_data_generator = MyGenerator(paths_dir + "train_snaps_paths.npy", batchsize, DATASET)
-val_data_generator = MyGenerator(paths_dir + "val_snaps_paths.npy", batchsize, DATASET)
-
-# ----- Model setup ----- #
-model = create_model(input_size=input_size, block_amount=20, normalizer="instance", filter_size=128)
-
-# ----- Training ----- #
-model.fit_generator(train_data_generator,  epochs=702,
-                    callbacks=[cp_callback, tensorboard, cb_imagepredict],
-                    validation_data=val_data_generator, max_queue_size=64, workers=12)
+if __name__ == '__main__':
+    main()
